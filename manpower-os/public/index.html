@@ -21,12 +21,6 @@
         .gradient-violet { background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); }
         .gradient-sky { background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%); }
         .gradient-night { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); }
-
-        .bg-morning { background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 30%); color: #92400e; } 
-        .bg-focus { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 30%); color: #1e40af; }   
-        .bg-creative { background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 30%); color: #166534; } 
-        .bg-sunset { background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 30%); color: #9a3412; }  
-        .bg-night { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #94a3b8; }   
         
         .cell-input { width: 100%; height: 100%; min-height: 42px; padding: 4px; border: none; background: transparent; font-size: 0.7rem; outline: none; appearance: none; }
         .sticky-col { position: sticky; left: 0; background: #0f172a; z-index: 10; font-weight: 700; border-right: 1px solid rgba(255,255,255,0.1); }
@@ -35,13 +29,6 @@
         .custom-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
 
         .day-cell { aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 900; border-radius: 12px; cursor: pointer; transition: all 0.2s; border: 1px solid rgba(255,255,255,0.03); }
-        .day-clean { background: rgba(16, 185, 129, 0.2); color: #10b981; }
-        .day-dirty { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
-        .day-future { background: rgba(255, 255, 255, 0.02); color: rgba(255,255,255,0.1); }
-        .day-today { border: 2px solid #06b6d4; box-shadow: 0 0 10px rgba(6, 182, 212, 0.3); }
-        .saving-active { background: #06b6d4 !important; color: white !important; box-shadow: 0 0 15px rgba(6, 182, 212, 0.3); border: none; }
-
-        .star-active { color: #fbbf24 !important; fill: #fbbf24 !important; }
         
         .input-finance-action { background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: white; outline: none; width: 100%; text-align: right; }
         .input-finance-action:focus { border-color: #06b6d4; }
@@ -50,9 +37,6 @@
         .btn-action-save { width: 100%; padding: 12px; border-radius: 14px; font-size: 0.75rem; font-weight: 900; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; }
         .btn-action-save:active { transform: scale(0.95); opacity: 0.8; }
 
-        .markdown-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.75rem; }
-        .markdown-table th, .markdown-table td { border: 1px solid rgba(255,255,255,0.1); padding: 6px; text-align: left; }
-        .markdown-table th { background-color: rgba(255,255,255,0.05); font-weight: bold; }
         .loader { border: 2px solid #f3f3f3; border-top: 2px solid #3b82f6; border-radius: 50%; width: 16px; height: 16px; animation: spin 1s linear infinite; display: inline-block; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
@@ -77,19 +61,19 @@
 <body class="flex flex-col select-none overflow-hidden text-slate-200 bg-[#020617]">
 
     <!-- PANTALLA DE CARGA GLOBAL -->
-    <div id="loading-overlay" class="absolute inset-0 z-[200] bg-[#020617] flex flex-col justify-center items-center transition-opacity duration-300">
+    <div id="loading-overlay" class="absolute inset-0 z-[200] bg-[#020617] flex-col justify-center items-center transition-opacity duration-300" style="display: flex;">
         <div class="loader mb-4 border-t-cyan-500 w-10 h-10 border-4"></div>
-        <p class="text-[10px] font-black text-cyan-500 uppercase tracking-widest italic animate-pulse">Sincronizando Módulos Tácticos...</p>
+        <p class="text-[10px] font-black text-cyan-500 uppercase tracking-widest italic animate-pulse">Iniciando Protocolos Tácticos...</p>
     </div>
 
     <!-- PANTALLA DE INGRESO (LOGIN) -->
-    <div id="login-view" class="hidden absolute inset-0 z-[100] bg-[#020617] flex flex-col justify-center items-center p-6 animate-in fade-in duration-500">
+    <div id="login-view" class="absolute inset-0 z-[100] bg-[#020617] flex-col justify-center items-center p-6 animate-in fade-in duration-500" style="display: none;">
         <div class="w-full max-w-sm glass p-8 rounded-[3rem] border-t-4 border-cyan-500 flex flex-col items-center shadow-[0_0_50px_rgba(6,182,212,0.1)]">
             <div class="w-20 h-20 rounded-full bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(6,182,212,0.2)]">
                 <i data-lucide="cpu" class="w-10 h-10 text-cyan-400"></i>
             </div>
             <h1 class="text-2xl font-black italic tracking-tighter uppercase text-white mb-1 glitch-effect">MAN POWER</h1>
-            <p class="text-[10px] font-mono text-cyan-500 uppercase tracking-widest mb-8 text-center">Protocolo de Seguridad<br>Nivel de Acceso: Crítico</p>
+            <p class="text-[10px] font-mono text-cyan-500 uppercase tracking-widest mb-8 text-center">Bóveda Operativa Local</p>
             
             <div class="w-full space-y-4">
                 <div>
@@ -105,7 +89,7 @@
     </div>
 
     <!-- CONTENEDOR PRINCIPAL DE LA APP -->
-    <div id="app-container" class="hidden flex-col h-full w-full">
+    <div id="app-container" class="h-full w-full flex-col" style="display: none;">
         <header class="z-50 px-5 py-4 glass border-b border-white/5 flex justify-between items-center shrink-0">
             <div class="flex items-center gap-3">
                 <div id="status-indicator" class="w-2 h-2 rounded-full bg-amber-500 animate-pulse shadow-[0_0_8px_#f59e0b]"></div>
@@ -155,7 +139,8 @@
                 </div>
             </div>
 
-            <div id="module-view" class="hidden absolute inset-0 glass bg-[#020617]/98 z-40 p-5 flex-col animate-in slide-in-from-bottom duration-200">
+            <!-- MODAL DINÁMICO PRINCIPAL -->
+            <div id="module-view" class="absolute inset-0 glass bg-[#020617]/98 z-40 p-5 flex-col animate-in slide-in-from-bottom duration-200" style="display: none;">
                 <div class="flex items-center justify-between mb-4 shrink-0">
                     <button onclick="closeModule()" class="p-2 bg-white/5 rounded-xl text-slate-400 active:scale-90"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
                     <h2 id="module-title" class="text-lg font-black italic uppercase tracking-tighter">MÓDULO</h2>
@@ -164,7 +149,7 @@
             </div>
 
             <!-- MODAL: DOSSIER INTEL -->
-            <div id="dossier-view" class="hidden absolute inset-0 glass bg-[#050a18] z-50 p-6 flex-col animate-in zoom-in-95 duration-200 overflow-y-auto custom-scroll text-white">
+            <div id="dossier-view" class="absolute inset-0 glass bg-[#050a18] z-50 p-6 flex-col animate-in zoom-in-95 duration-200 overflow-y-auto custom-scroll text-white" style="display: none;">
                 <div class="flex justify-between items-start mb-6 shrink-0">
                     <button onclick="closeDossier()" class="p-3 bg-white/5 rounded-2xl active:scale-90"><i data-lucide="x" class="w-6 h-6"></i></button>
                     <div class="text-right">
@@ -176,7 +161,7 @@
             </div>
 
             <!-- MODAL: FORMULARIO DE ALTA INTEL -->
-            <div id="add-asset-view" class="hidden absolute inset-0 glass bg-[#050a18] z-[60] p-6 flex-col animate-in slide-in-from-bottom duration-200 overflow-y-auto custom-scroll text-white">
+            <div id="add-asset-view" class="absolute inset-0 glass bg-[#050a18] z-[60] p-6 flex-col animate-in slide-in-from-bottom duration-200 overflow-y-auto custom-scroll text-white" style="display: none;">
                 <div class="flex justify-between items-start mb-6 shrink-0 border-b border-red-500/30 pb-4">
                     <div>
                         <h2 class="text-xl font-black italic tracking-tighter text-red-500 uppercase">Nuevo Expediente</h2>
@@ -212,7 +197,8 @@
                 </div>
             </div>
 
-            <div id="vice-editor" class="hidden absolute inset-0 glass bg-slate-950/95 z-50 p-6 flex-col animate-in fade-in duration-200 rounded-3xl text-white">
+            <!-- EDITORES TRACKERS -->
+            <div id="vice-editor" class="absolute inset-0 glass bg-slate-950/95 z-50 p-6 flex-col animate-in fade-in duration-200 rounded-3xl text-white" style="display: none;">
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-lg font-black italic uppercase" id="vice-editor-date">DÍA</h3>
                     <button onclick="closeViceEditor()" class="p-2 bg-white/5 rounded-xl"><i data-lucide="x" class="w-5 h-5"></i></button>
@@ -220,7 +206,7 @@
                 <div class="space-y-4" id="vice-checklist"></div>
             </div>
 
-            <div id="habit-editor" class="hidden absolute inset-0 glass bg-slate-950/95 z-50 p-6 flex-col animate-in fade-in duration-200 rounded-3xl text-white">
+            <div id="habit-editor" class="absolute inset-0 glass bg-slate-950/95 z-50 p-6 flex-col animate-in fade-in duration-200 rounded-3xl text-white" style="display: none;">
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-lg font-black italic uppercase" id="habit-editor-date">DÍA</h3>
                     <button onclick="closeHabitEditor()" class="p-2 bg-white/5 rounded-xl"><i data-lucide="x" class="w-5 h-5"></i></button>
@@ -228,7 +214,7 @@
                 <div class="space-y-4 overflow-y-auto custom-scroll" id="habit-checklist"></div>
             </div>
             
-            <div id="study-editor" class="hidden absolute inset-0 glass bg-slate-950/95 z-50 p-6 flex-col animate-in fade-in duration-200 rounded-3xl text-white">
+            <div id="study-editor" class="absolute inset-0 glass bg-slate-950/95 z-50 p-6 flex-col animate-in fade-in duration-200 rounded-3xl text-white" style="display: none;">
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-lg font-black italic uppercase text-violet-400" id="study-editor-date">DÍA</h3>
                     <button onclick="closeStudyEditor()" class="p-2 bg-white/5 rounded-xl"><i data-lucide="x" class="w-5 h-5"></i></button>
@@ -247,9 +233,33 @@
 
     <!-- MOTOR CORE (HÍBRIDO: NUBE + LOCAL) -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        // Manejador Global de Errores: Previene congelamientos de pantalla.
+        window.addEventListener('error', function(e) {
+            const loader = document.getElementById('loading-overlay');
+            if (loader && loader.style.display !== 'none') {
+                loader.innerHTML = `
+                    <div class="p-6 text-center max-w-xs mx-auto">
+                        <i data-lucide="alert-triangle" class="w-12 h-12 text-rose-500 mx-auto mb-4"></i>
+                        <p class="text-rose-500 font-black text-xs uppercase mb-2">Fallo en Boot Secuencia</p>
+                        <p class="text-[10px] text-slate-400 font-mono mb-4">${e.message}</p>
+                        <button onclick="forceLocalStart()" class="p-4 bg-slate-800 border border-slate-600 text-white rounded-xl text-xs font-black uppercase tracking-widest active:scale-95 w-full">Forzar Bóveda Local</button>
+                    </div>`;
+                updateIcons();
+            }
+        });
+
+        window.forceLocalStart = function() {
+            hide('loading-overlay');
+            if (localStorage.getItem('man_session') === 'auth') {
+                show('app-container', 'flex');
+            } else {
+                show('login-view', 'flex');
+            }
+        };
+
+        function show(id, displayType = 'flex') { document.getElementById(id).style.display = displayType; }
+        function hide(id) { document.getElementById(id).style.display = 'none'; }
+        function updateIcons() { try { if (typeof lucide !== 'undefined') lucide.createIcons(); } catch(e) {} }
 
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'manpower-os';
         const rawConfig = typeof __firebase_config !== 'undefined' ? __firebase_config : null;
@@ -259,7 +269,7 @@
         let user = null;
         let currentModule = null;
 
-        // Estado Global (Mantenemos toda tu estructura intacta)
+        // Estado Global Intacto
         const defaultAppState = {
             profile: { name: 'Operador Alfa', alias: 'Alfa-01', division: 'División Operativa', photo: null },
             contacts: [],
@@ -281,57 +291,59 @@
         window.appState = JSON.parse(JSON.stringify(defaultAppState));
         let fViewDate = new Date();
 
-        // 1. CARGA RÁPIDA LOCAL (LocalStorage)
-        const localData = localStorage.getItem('manpower_data_v2');
-        if (localData) {
+        // ARRANQUE ASÍNCRONO BLINDADO
+        async function bootSystem() {
             try {
-                window.appState = { ...defaultAppState, ...JSON.parse(localData) };
-            } catch (e) { console.error("Error leyendo local:", e); }
-        }
-
-        // 2. INICIALIZACIÓN DE ENTORNO (Intenta Nube, si falla usa Local)
-        try {
-            if (!rawConfig) throw new Error("Entorno externo detectado (Netlify/Local). Activando Bóveda Local.");
-            
-            const firebaseConfig = JSON.parse(rawConfig);
-            app = initializeApp(firebaseConfig);
-            auth = getAuth(app);
-            db = getFirestore(app);
-
-            // Auth Protocol
-            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                signInWithCustomToken(auth, __initial_auth_token).catch(fallbackToOffline);
-            } else {
-                signInAnonymously(auth).catch(fallbackToOffline);
-            }
-
-            onAuthStateChanged(auth, (u) => {
-                user = u;
-                if (u) {
-                    const docRef = doc(db, 'artifacts', appId, 'users', user.uid, 'app_state', 'global_state');
-                    onSnapshot(docRef, (snap) => {
-                        if (snap.exists()) {
-                            window.appState = snap.data();
-                            saveToLocal(); // Backup
-                        }
-                        finalizeLoad(true);
-                    }, fallbackToOffline);
+                // 1. Carga Rápida de Memoria Local (Siempre funciona)
+                const localData = localStorage.getItem('manpower_data_v2');
+                if (localData) {
+                    try { window.appState = { ...defaultAppState, ...JSON.parse(localData) }; } catch (e) {}
                 }
-            });
 
-        } catch (error) {
-            fallbackToOffline(error);
-        }
+                // 2. Comprobar si estamos en entorno externo (Ej: Netlify)
+                if (!rawConfig) {
+                    throw new Error("No se detectó configuración de nube. Desplegando bóveda local.");
+                }
 
-        function fallbackToOffline(err) {
-            console.warn("MODO SUPERVIVENCIA ACTIVADO:", err.message || "Fallo de conexión");
-            isOfflineMode = true;
-            finalizeLoad(false);
+                // 3. Importación dinámica (Si falla la red, no crashea el script principal)
+                const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js");
+                const { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js");
+                const { getFirestore, doc, setDoc, onSnapshot } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
+
+                app = initializeApp(JSON.parse(rawConfig));
+                auth = getAuth(app);
+                db = getFirestore(app);
+
+                // Protocolo de Auth
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+
+                onAuthStateChanged(auth, (u) => {
+                    user = u;
+                    if (u) {
+                        const docRef = doc(db, 'artifacts', appId, 'users', user.uid, 'app_state', 'global_state');
+                        onSnapshot(docRef, (snap) => {
+                            if (snap.exists()) {
+                                window.appState = snap.data();
+                                saveToLocal(); // Backup
+                            }
+                            finalizeLoad(true);
+                        }, (err) => { throw err; });
+                    }
+                });
+
+            } catch (error) {
+                console.warn("MODO AUTÓNOMO LOCAL:", error.message);
+                isOfflineMode = true;
+                finalizeLoad(false);
+            }
         }
 
         function finalizeLoad(isCloud) {
-            document.getElementById('loading-overlay').classList.add('hidden');
-            document.getElementById('login-view').classList.remove('hidden');
+            hide('loading-overlay');
             
             const dot = document.getElementById('status-indicator');
             const icon = document.getElementById('cloud-icon');
@@ -345,35 +357,36 @@
                 icon.setAttribute('data-lucide', 'database');
                 icon.className = "w-4 h-4 text-amber-500";
             }
-            lucide.createIcons();
+            updateIcons();
             
             if (localStorage.getItem('man_session') === 'auth') {
                 proceedToApp();
+            } else {
+                show('login-view', 'flex');
             }
         }
 
         // MOTOR DE GUARDADO UNIVERSAL
         window.saveData = async () => {
-            // 1. Siempre guardamos local (Respaldo blindado)
+            // 1. Siempre guardamos localmente (Respaldo blindado)
             saveToLocal();
 
-            // 2. Si hay nube disponible, empujamos
+            // 2. Si hay nube, empujamos
             if (!isOfflineMode && user && db) {
                 const icon = document.getElementById('cloud-icon');
                 icon.classList.add('animate-pulse', 'text-cyan-500');
                 try {
+                    const { doc, setDoc } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
                     const docRef = doc(db, 'artifacts', appId, 'users', user.uid, 'app_state', 'global_state');
                     await setDoc(docRef, window.appState);
                     setTimeout(() => icon.classList.remove('animate-pulse', 'text-cyan-500'), 500);
                 } catch (e) {
-                    console.error("Fallo Cloud:", e);
+                    console.error("Fallo Nube:", e);
                 }
             }
         };
 
-        function saveToLocal() {
-            localStorage.setItem('manpower_data_v2', JSON.stringify(window.appState));
-        }
+        function saveToLocal() { localStorage.setItem('manpower_data_v2', JSON.stringify(window.appState)); }
 
         // CONTROL DE ACCESO
         window.attemptLogin = () => {
@@ -389,17 +402,14 @@
         };
 
         function proceedToApp() {
-            document.getElementById('login-view').classList.add('hidden');
-            document.getElementById('app-container').classList.remove('hidden');
-            document.getElementById('app-container').classList.add('flex');
+            hide('login-view');
+            show('app-container', 'flex');
             if(currentModule) renderModule(currentModule);
         }
 
         window.logout = () => { localStorage.removeItem('man_session'); location.reload(); };
 
         // HERRAMIENTAS GLOBALES
-        const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-        const dayNames = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
         const presetOptions = ['', 'Trabajar', 'Comer', 'Dormir', 'Ejercicios', 'Correr', 'Limpiar', 'Compras', 'Mantenimiento', 'Estudiar', 'Ocio', 'Otro'];
 
         setInterval(() => {
@@ -409,13 +419,12 @@
         // NAVEGACIÓN MÓDULOS
         window.openModule = (id, title) => {
             currentModule = id;
-            document.getElementById('module-view').classList.remove('hidden');
-            document.getElementById('module-view').classList.add('flex');
+            show('module-view', 'flex');
             document.getElementById('module-title').textContent = title;
             renderModule(id);
         };
-        window.closeModule = () => { currentModule = null; document.getElementById('module-view').classList.add('hidden'); };
-        window.closeDossier = () => document.getElementById('dossier-view').classList.add('hidden');
+        window.closeModule = () => { currentModule = null; hide('module-view'); };
+        window.closeDossier = () => hide('dossier-view');
 
         window.renderModule = (id) => {
             const container = document.getElementById('module-content');
@@ -429,7 +438,7 @@
             if (id === 'routine') renderRoutine(container);
             if (id === 'profile') renderProfile(container);
             if (id === 'settings') renderSettings(container);
-            lucide.createIcons();
+            updateIcons();
         };
 
         // --- MÓDULO: PESO ---
@@ -445,7 +454,7 @@
             `;
             window.saveW = () => {
                 const val = document.getElementById('w-input').value;
-                if(val) { window.appState.weight[today] = Number(val); window.saveData(); alert("Dato registrado correctamente."); }
+                if(val) { window.appState.weight[today] = Number(val); window.saveData(); alert("Dato guardado localmente."); }
             };
         }
 
@@ -455,16 +464,7 @@
             const format = (v) => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }).format(v);
             const dateStr = fViewDate.toISOString().split('T')[0];
             const dData = f.history[dateStr] || { inc: {}, exp: {} };
-            const mPrefix = `${fViewDate.getFullYear()}-${String(fViewDate.getMonth()+1).padStart(2,'0')}`;
             
-            let mInc = 0; let mExp = 0;
-            Object.keys(f.history).forEach(k => {
-                if(k.startsWith(mPrefix)) {
-                    mInc += Object.values(f.history[k].inc || {}).reduce((a,b)=>a+Number(b||0), 0);
-                    mExp += Object.values(f.history[k].exp || {}).reduce((a,b)=>a+Number(b||0), 0);
-                }
-            });
-
             const pending = f.debts.reduce((a, c) => !c.isPaid ? a + c.amount : a, 0);
 
             container.innerHTML = `
@@ -551,12 +551,8 @@
                     </div>
                 </div>
             `;
-            window.openAddAsset = () => {
-                document.getElementById('add-asset-view').classList.remove('hidden'); document.getElementById('add-asset-view').classList.add('flex');
-            };
-            window.closeAddAsset = () => {
-                document.getElementById('add-asset-view').classList.add('hidden'); document.getElementById('add-asset-view').classList.remove('flex');
-            };
+            window.openAddAsset = () => { show('add-asset-view', 'flex'); };
+            window.closeAddAsset = () => { hide('add-asset-view'); };
             window.previewAssetPhoto = (e) => {
                 const file = e.target.files[0]; if(file) { const reader = new FileReader(); reader.onload = (ev) => { tempAssetPhoto = ev.target.result; document.getElementById('asset-photo-preview').src = tempAssetPhoto; document.getElementById('asset-photo-preview').classList.remove('hidden'); document.getElementById('asset-photo-icon').classList.add('hidden'); }; reader.readAsDataURL(file); }
             };
@@ -581,7 +577,7 @@
                         <p class="text-[10px] font-mono text-slate-300">${c.utility || 'No especificada.'}</p>
                     </div>
                 `;
-                document.getElementById('dossier-view').classList.remove('hidden'); document.getElementById('dossier-view').classList.add('flex'); lucide.createIcons();
+                show('dossier-view', 'flex'); updateIcons();
             };
         }
 
@@ -614,26 +610,26 @@
         function renderStudy(c) { renderTracker(c, 'study', 'Estudio', 'text-violet-400', 'border-violet-500', 'bg-violet-500/10'); }
 
         window.openEditor = (date, type) => {
-            const modal = document.getElementById(`${type === 'vices' ? 'vice' : type === 'habits' ? 'habit' : 'study'}-editor`);
+            const modalId = `${type === 'vices' ? 'vice' : type === 'habits' ? 'habit' : 'study'}-editor`;
             const listEl = document.getElementById(`${type === 'vices' ? 'vice' : type === 'habits' ? 'habit' : 'study'}-checklist`);
             document.getElementById(`${type === 'vices' ? 'vice' : type === 'habits' ? 'habit' : 'study'}-editor-date`).textContent = date;
             
             if(type === 'vices') {
                 const data = window.appState.vices[date] || {};
                 const vicios = [{id:'alc',name:'Alcohol'},{id:'weed',name:'Marihuana'},{id:'porno',name:'Pornografía'},{id:'fap',name:'Masturbación'},{id:'cig',name:'Cigarrillo'}];
-                listEl.innerHTML = vicios.map(v => `<div onclick="toggleV('${date}','${v.id}')" class="glass p-5 rounded-2xl flex justify-between items-center border ${data[v.id] ? 'border-rose-500 bg-rose-500/10' : 'border-white/5'}"><span class="font-bold text-white uppercase italic">${v.name}</span><div class="w-6 h-6 rounded border-2 ${data[v.id] ? 'bg-rose-500 border-rose-500' : 'border-white/20'}"></div></div>`).join('');
+                listEl.innerHTML = vicios.map(v => `<div onclick="toggleV('${date}','${v.id}')" class="glass p-5 rounded-2xl flex justify-between items-center border ${data[v.id] ? 'border-rose-500 bg-rose-500/10' : 'border-white/5'} cursor-pointer"><span class="font-bold text-white uppercase italic">${v.name}</span><div class="w-6 h-6 rounded border-2 ${data[v.id] ? 'bg-rose-500 border-rose-500' : 'border-white/20'}"></div></div>`).join('');
             } else {
                 const data = window.appState[type].logs[date] || {}; const list = type === 'habits' ? window.appState.habits.list : window.appState.study.subjects;
-                listEl.innerHTML = list.map((item, i) => `<div onclick="toggleT('${date}',${i},'${type}')" class="glass p-5 rounded-2xl flex justify-between items-center border ${data[i] ? 'border-cyan-500 bg-cyan-500/10' : 'border-white/5'}"><span class="font-bold text-white uppercase italic">${item}</span><div class="w-6 h-6 rounded border-2 ${data[i] ? 'bg-cyan-500 border-cyan-500' : 'border-white/20'}"></div></div>`).join('');
+                listEl.innerHTML = list.map((item, i) => `<div onclick="toggleT('${date}',${i},'${type}')" class="glass p-5 rounded-2xl flex justify-between items-center border ${data[i] ? 'border-cyan-500 bg-cyan-500/10' : 'border-white/5'} cursor-pointer"><span class="font-bold text-white uppercase italic">${item}</span><div class="w-6 h-6 rounded border-2 ${data[i] ? 'bg-cyan-500 border-cyan-500' : 'border-white/20'}"></div></div>`).join('');
             }
-            modal.classList.remove('hidden'); modal.classList.add('flex');
+            show(modalId, 'flex');
         };
 
         window.toggleV = (d, id) => { if(!window.appState.vices[d]) window.appState.vices[d] = {}; window.appState.vices[d][id] = !window.appState.vices[d][id]; window.saveData(); window.openEditor(d, 'vices'); };
         window.toggleT = (d, i, t) => { if(!window.appState[t].logs[d]) window.appState[t].logs[d] = {}; window.appState[t].logs[d][i] = !window.appState[t].logs[d][i]; window.saveData(); window.openEditor(d, t); };
-        window.closeViceEditor = () => { document.getElementById('vice-editor').classList.add('hidden'); renderModule('vices'); };
-        window.closeHabitEditor = () => { document.getElementById('habit-editor').classList.add('hidden'); renderModule('habits'); };
-        window.closeStudyEditor = () => { document.getElementById('study-editor').classList.add('hidden'); renderModule('study'); };
+        window.closeViceEditor = () => { hide('vice-editor'); renderModule('vices'); };
+        window.closeHabitEditor = () => { hide('habit-editor'); renderModule('habits'); };
+        window.closeStudyEditor = () => { hide('study-editor'); renderModule('study'); };
 
         // --- MÓDULO: RUTINA 24H ---
         function renderRoutine(container) {
@@ -643,10 +639,10 @@
             htm += '</tr></thead><tbody>';
             for(let h=0; h<24; h+=0.5) {
                 const t = `${Math.floor(h).toString().padStart(2,'0')}:${h%1===0?"00":"30"}`;
-                htm += `<tr class="border-b border-white/5"><td class="p-2 text-[9px] text-slate-500 sticky-col font-mono">${t}</td>`;
+                htm += `<tr class="border-b border-white/5"><td class="p-2 text-[9px] text-slate-500 sticky-col font-mono bg-[#0f172a]">${t}</td>`;
                 for(let d=0; d<7; d++) {
                     const id = `c-${d}-${t.replace(':','-')}`; const val = window.appState.routine[id] || '';
-                    htm += `<td class="p-0"><select id="${id}" onchange="saveR(this)" class="cell-input text-slate-300 bg-white/5 font-bold">${presetOptions.map(o => `<option value="${o}" ${o===val?'selected':''}>${o}</option>`).join('')}</select></td>`;
+                    htm += `<td class="p-0 min-w-[80px]"><select id="${id}" onchange="saveR(this)" class="cell-input text-slate-300 bg-transparent font-bold w-full">${presetOptions.map(o => `<option value="${o}" ${o===val?'selected':''}>${o}</option>`).join('')}</select></td>`;
                 }
                 htm += '</tr>';
             }
@@ -679,7 +675,7 @@
                 <div class="glass p-6 rounded-[3rem] border-l-4 border-slate-500 space-y-4">
                     <h3 class="text-lg font-black uppercase text-white italic">Extracción de Datos</h3>
                     <p class="text-[10px] text-slate-400 font-mono">Compila el historial de Finanzas, Intel y Biometría en un documento imprimible.</p>
-                    <button onclick="exportToPDF()" class="w-full py-4 bg-white text-black rounded-xl text-xs font-black uppercase flex items-center justify-center gap-2"><i data-lucide="printer" class="w-4 h-4"></i> Generar PDF (Print)</button>
+                    <button onclick="exportToPDF()" class="w-full py-4 bg-white text-black rounded-xl text-xs font-black uppercase flex items-center justify-center gap-2 active:scale-95"><i data-lucide="printer" class="w-4 h-4"></i> Generar PDF (Print)</button>
                 </div>
             `;
             window.exportToPDF = () => {
@@ -690,6 +686,9 @@
                 document.body.appendChild(pr); window.print(); document.body.removeChild(pr);
             };
         }
+
+        // Ejecutar Boot Inicial
+        bootSystem();
 
     </script>
 </body>
