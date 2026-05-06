@@ -41,13 +41,15 @@
 <body class="flex flex-col select-none overflow-hidden text-slate-200 bg-[#020617]">
 
     <!-- PANTALLA DE CARGA -->
-    <div id="loading-overlay" class="fixed inset-0 z-[200] bg-[#020617] flex flex-col justify-center items-center">
-        <div class="loader mb-4 border-t-cyan-500 w-10 h-10 border-4"></div>
-        <p class="text-[10px] font-black text-cyan-500 uppercase tracking-widest italic">Estableciendo Enlace con la Nube...</p>
+    <div id="loading-overlay" class="fixed inset-0 z-[200] bg-[#020617] flex flex-col justify-center items-center p-6">
+        <div id="loading-content" class="flex flex-col items-center">
+            <div class="loader mb-4 border-t-cyan-500 w-10 h-10 border-4"></div>
+            <p class="text-[10px] font-black text-cyan-500 uppercase tracking-widest italic">Estableciendo Enlace con la Nube...</p>
+        </div>
     </div>
 
     <!-- LOGIN -->
-    <div id="login-view" class="absolute inset-0 z-[100] bg-[#020617] flex flex-col justify-center items-center p-6">
+    <div id="login-view" class="absolute inset-0 z-[100] bg-[#020617] flex flex-col justify-center items-center p-6 hidden">
         <div class="w-full max-w-sm glass p-8 rounded-[3rem] border-t-4 border-cyan-500 flex flex-col items-center">
             <i data-lucide="shield-check" class="w-12 h-12 text-cyan-400 mb-4"></i>
             <h1 class="text-2xl font-black italic uppercase text-white mb-8 glitch-effect">MAN POWER CLOUD</h1>
@@ -120,12 +122,49 @@
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Firebase Config
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'manpower-os-cloud';
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+        let app, auth, db, appId;
+
+        try {
+            // DETECCIÓN DE ENTORNO: Canvas vs Netlify
+            const envConfig = typeof __firebase_config !== 'undefined' ? __firebase_config : null;
+            appId = typeof __app_id !== 'undefined' ? __app_id : 'manpower-os';
+
+            // =====================================================================
+            // ¡OPERADOR! SI DESPLEGÁS EN NETLIFY, PEGÁ TU CONFIG DE FIREBASE ACÁ:
+            // =====================================================================
+            const manualConfig = {
+                apiKey: "TU_API_KEY",
+                authDomain: "TU_PROYECTO.firebaseapp.com",
+                projectId: "TU_PROYECTO",
+                storageBucket: "TU_PROYECTO.appspot.com",
+                messagingSenderId: "TU_SENDER",
+                appId: "TU_APP_ID"
+            };
+
+            const firebaseConfig = envConfig ? JSON.parse(envConfig) : manualConfig;
+
+            // Freno de emergencia si estás en Netlify y no pusiste la config
+            if (!envConfig && (!firebaseConfig.apiKey || firebaseConfig.apiKey === "TU_API_KEY")) {
+                throw new Error("FALTAN CREDENCIALES DE FIREBASE. REEMPLAZÁ 'manualConfig' EN EL CÓDIGO.");
+            }
+
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+
+        } catch (error) {
+            console.error(error);
+            document.getElementById('loading-content').innerHTML = `
+                <div class="glass p-6 rounded-3xl text-center border border-rose-500 bg-rose-950/20 max-w-sm">
+                    <i data-lucide="alert-triangle" class="w-12 h-12 text-rose-500 mx-auto mb-4"></i>
+                    <h2 class="text-rose-500 font-black uppercase text-xl mb-2">Nodo Desconectado</h2>
+                    <p class="text-xs text-slate-300 font-mono mb-4">Para correr esta app fuera del entorno de pruebas (ej: Netlify), necesitás enlazar tu propia base de datos.</p>
+                    <p class="text-[10px] text-rose-400 font-mono bg-black/50 p-2 rounded">${error.message}</p>
+                </div>
+            `;
+            lucide.createIcons();
+            throw error; // Detiene la ejecución para no causar loops
+        }
 
         const defaultState = {
             profile: { name: 'Operador Alfa', alias: 'ALFA-01', photo: null },
@@ -138,7 +177,7 @@
         window.appState = JSON.parse(JSON.stringify(defaultState));
         let user = null;
 
-        // MOTOR DE NUBE (Siguiendo Regla 3: Auth ANTES de Consultas)
+        // MOTOR DE NUBE
         const initCloudAuth = async () => {
             try {
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
@@ -148,49 +187,60 @@
                 }
             } catch (e) {
                 console.error("Fallo de Autenticación Crítico:", e);
-                // Mostrar error al usuario si falla el enlace
-                document.getElementById('loading-overlay').innerHTML = `
-                    <p class="text-rose-500 font-black uppercase p-6 text-center">Fallo de Enlace Táctico: Error de Permisos.</p>
+                document.getElementById('loading-content').innerHTML = `
+                    <div class="glass p-6 rounded-3xl text-center border border-rose-500">
+                        <p class="text-rose-500 font-black uppercase text-xs">Error de Permisos al Autenticar.</p>
+                        <p class="text-[10px] text-slate-400 mt-2">${e.message}</p>
+                    </div>
                 `;
             }
         };
 
         // Listener de Estado de Auth
-        onAuthStateChanged(auth, (u) => {
-            user = u;
-            if (u) {
-                // RULE 1: Ruta estricta /artifacts/{appId}/public/data/{collectionName}
-                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'app_state', 'global_state');
-                
-                // onSnapshot con callbacks de éxito y error requeridos
-                onSnapshot(docRef, (snap) => {
-                    if (snap.exists()) {
-                        window.appState = snap.data();
-                        updateUI();
-                    } else {
-                        // Si el documento no existe en la nube, inicializarlo
-                        window.saveToCloud();
-                    }
-                    document.getElementById('loading-overlay').classList.add('hidden');
-                    checkSession();
-                }, (error) => {
-                    console.error("Error en Snapshot de Firestore:", error);
-                    if (error.code === 'permission-denied') {
-                        console.error("Permiso denegado. Verifique la ruta del documento y la autenticación.");
-                    }
-                });
-            }
-        });
+        if (auth) {
+            onAuthStateChanged(auth, (u) => {
+                user = u;
+                if (u) {
+                    // RULE 1: Ruta estricta PRIVADA vinculada a tu ID único
+                    const docRef = doc(db, 'artifacts', appId, 'users', user.uid, 'app_state', 'global_state');
+                    
+                    onSnapshot(docRef, (snap) => {
+                        if (snap.exists()) {
+                            window.appState = snap.data();
+                            updateUI();
+                        } else {
+                            window.saveToCloud();
+                        }
+                        
+                        // Si carga bien, ocultamos el loader y vamos al login/app
+                        document.getElementById('loading-overlay').classList.add('hidden');
+                        document.getElementById('login-view').classList.remove('hidden');
+                        checkSession();
+                        
+                    }, (error) => {
+                        console.error("Error en Snapshot de Firestore:", error);
+                        if (error.code === 'permission-denied') {
+                            document.getElementById('loading-content').innerHTML = `
+                                <div class="glass p-6 rounded-3xl text-center border border-amber-500">
+                                    <p class="text-amber-500 font-black uppercase text-xs mb-2">PERMISO DENEGADO EN FIRESTORE</p>
+                                    <p class="text-[10px] text-slate-300">Asegurate de haber configurado las Reglas de Firestore en tu consola de Firebase.</p>
+                                </div>
+                            `;
+                        }
+                    });
+                }
+            });
+        }
 
         // Guardado en la Nube
         window.saveToCloud = async () => {
-            if (!user) return; // Guard Rule 3: No operar sin usuario
+            if (!user) return; 
             
             const statusIcon = document.getElementById('cloud-icon');
             const statusDot = document.getElementById('cloud-status-dot');
             statusIcon.classList.add('cloud-syncing');
             
-            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'app_state', 'global_state');
+            const docRef = doc(db, 'artifacts', appId, 'users', user.uid, 'app_state', 'global_state');
             try {
                 await setDoc(docRef, window.appState);
                 statusIcon.classList.remove('cloud-syncing');
@@ -338,7 +388,7 @@
         }, 1000);
 
         // Inicializar Autenticación
-        initCloudAuth();
+        if(auth) initCloudAuth();
         lucide.createIcons();
     </script>
 </body>
