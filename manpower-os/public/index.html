@@ -3,422 +3,342 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MAN POWER - Control Total</title>
+    <title>MAN POWER - Control Total Cloud</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root { --glass: rgba(10, 15, 30, 0.96); --border: rgba(255, 255, 255, 0.08); }
         body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f1f5f9; overflow: hidden; height: 100vh; }
-        .glass { background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--border); }
+        .glass { background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--border); }
         .app-card:active { transform: scale(0.92); transition: transform 0.1s; }
         
         .gradient-cyan { background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%); }
-        .gradient-indigo { background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%); }
         .gradient-emerald { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
         .gradient-red { background: linear-gradient(135deg, #ef4444 0%, #991b1b 100%); }
         .gradient-amber { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
-        .gradient-violet { background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); }
-        .gradient-sky { background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%); }
-        .gradient-night { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); }
+        .gradient-indigo { background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%); }
 
-        .bg-morning { background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 30%); color: #92400e; } 
-        .bg-focus { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 30%); color: #1e40af; }   
-        .bg-creative { background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 30%); color: #166534; } 
-        .bg-sunset { background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 30%); color: #9a3412; }  
-        .bg-night { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #94a3b8; }   
-        
-        .cell-input { width: 100%; height: 100%; min-height: 42px; padding: 4px; border: none; background: transparent; font-size: 0.7rem; outline: none; appearance: none; }
-        .sticky-col { position: sticky; left: 0; background: #0f172a; z-index: 10; font-weight: 700; border-right: 1px solid rgba(255,255,255,0.1); }
-        
+        .cell-input { width: 100%; height: 100%; padding: 4px; border: none; background: transparent; font-size: 0.7rem; outline: none; }
         .custom-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
 
         .day-cell { aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 900; border-radius: 12px; cursor: pointer; transition: all 0.2s; border: 1px solid rgba(255,255,255,0.03); }
         .day-clean { background: rgba(16, 185, 129, 0.2); color: #10b981; }
         .day-dirty { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
-        .day-future { background: rgba(255, 255, 255, 0.02); color: rgba(255,255,255,0.1); }
         .day-today { border: 2px solid #06b6d4; box-shadow: 0 0 10px rgba(6, 182, 212, 0.3); }
-        .saving-active { background: #06b6d4 !important; color: white !important; box-shadow: 0 0 15px rgba(6, 182, 212, 0.3); border: none; }
 
-        .star-active { color: #fbbf24 !important; fill: #fbbf24 !important; }
-        
-        .input-finance-action { background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: white; outline: none; width: 100%; text-align: right; }
-        .input-finance-action:focus { border-color: #06b6d4; }
-        .input-balance { background: transparent; border: none; font-family: 'JetBrains Mono', monospace; font-weight: 900; font-size: 1.1rem; color: white; outline: none; width: 100%; text-align: right; }
-        .label-action { font-size: 0.65rem; font-weight: 900; color: #64748b; text-transform: uppercase; margin-bottom: 4px; display: block; }
-        .btn-action-save { width: 100%; padding: 12px; border-radius: 14px; font-size: 0.75rem; font-weight: 900; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; }
-        .btn-action-save:active { transform: scale(0.95); opacity: 0.8; }
-
-        .markdown-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.75rem; }
-        .markdown-table th, .markdown-table td { border: 1px solid rgba(255,255,255,0.1); padding: 6px; text-align: left; }
-        .markdown-table th { background-color: rgba(255,255,255,0.05); font-weight: bold; }
-        .loader { border: 2px solid #f3f3f3; border-top: 2px solid #3b82f6; border-radius: 50%; width: 16px; height: 16px; animation: spin 1s linear infinite; display: inline-block; }
+        .loader { border: 2px solid #f3f3f3; border-top: 2px solid #3b82f6; border-radius: 50%; width: 16px; height: 16px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        .profile-input { background: transparent; border-bottom: 1px solid rgba(255,255,255,0.2); color: white; font-weight: 900; outline: none; width: 100%; text-align: center; transition: border-color 0.2s; }
-        .profile-input:focus { border-bottom-color: #06b6d4; }
-
+        .profile-input { background: transparent; border-bottom: 1px solid rgba(255,255,255,0.2); color: white; font-weight: 900; outline: none; width: 100%; text-align: center; }
         .glitch-effect { text-shadow: 0 0 10px rgba(6,182,212,0.8); }
 
-        @media print {
-            body * { visibility: hidden; }
-            #print-area, #print-area * { visibility: visible; }
-            #print-area { position: absolute; left: 0; top: 0; width: 100%; background: white !important; color: black !important; padding: 20px; font-family: 'JetBrains Mono', monospace; }
-            #print-area table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 12px; }
-            #print-area th, #print-area td { border: 1px solid #000; padding: 8px; text-align: left; }
-            #print-area th { background-color: #f0f0f0 !important; -webkit-print-color-adjust: exact; }
-            #print-area h1, #print-area h2 { font-family: 'Inter', sans-serif; text-transform: uppercase; font-weight: 900; margin-bottom: 10px; border-bottom: 2px solid black; padding-bottom: 5px; }
-            .no-print { display: none !important; }
-        }
+        .cloud-syncing { color: #06b6d4; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
     </style>
 </head>
 <body class="flex flex-col select-none overflow-hidden text-slate-200 bg-[#020617]">
 
-    <!-- PANTALLA DE CARGA GLOBAL -->
+    <!-- PANTALLA DE CARGA -->
     <div id="loading-overlay" class="fixed inset-0 z-[200] bg-[#020617] flex flex-col justify-center items-center">
         <div class="loader mb-4 border-t-cyan-500 w-10 h-10 border-4"></div>
-        <p class="text-[10px] font-black text-cyan-500 uppercase tracking-widest italic animate-pulse">Sincronizando Nodo en Tiempo Real...</p>
+        <p class="text-[10px] font-black text-cyan-500 uppercase tracking-widest italic">Estableciendo Enlace con la Nube...</p>
     </div>
 
     <!-- LOGIN -->
-    <div id="login-view" class="absolute inset-0 z-[100] bg-[#020617] flex flex-col justify-center items-center p-6 animate-in fade-in duration-500">
-        <div class="w-full max-w-sm glass p-8 rounded-[3rem] border-t-4 border-cyan-500 flex flex-col items-center shadow-[0_0_50px_rgba(6,182,212,0.1)]">
-            <div class="w-20 h-20 rounded-full bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(6,182,212,0.2)]">
-                <i data-lucide="cpu" class="w-10 h-10 text-cyan-400"></i>
-            </div>
-            <h1 class="text-2xl font-black italic tracking-tighter uppercase text-white mb-1 glitch-effect">MAN POWER</h1>
-            <p class="text-[10px] font-mono text-cyan-500 uppercase tracking-widest mb-8 text-center">Protocolo de Seguridad</p>
-            
+    <div id="login-view" class="absolute inset-0 z-[100] bg-[#020617] flex flex-col justify-center items-center p-6">
+        <div class="w-full max-w-sm glass p-8 rounded-[3rem] border-t-4 border-cyan-500 flex flex-col items-center">
+            <i data-lucide="shield-check" class="w-12 h-12 text-cyan-400 mb-4"></i>
+            <h1 class="text-2xl font-black italic uppercase text-white mb-8 glitch-effect">MAN POWER CLOUD</h1>
             <div class="w-full space-y-4">
-                <input type="text" id="login-user" class="w-full bg-black/50 border border-white/10 rounded-xl p-3 text-sm font-bold text-white outline-none focus:border-cyan-500 text-center" placeholder="ID de Usuario">
-                <input type="password" id="login-pass" class="w-full bg-black/50 border border-white/10 rounded-xl p-3 text-sm font-bold text-white outline-none focus:border-cyan-500 text-center" placeholder="••••••">
-                <button onclick="attemptLogin()" class="w-full py-4 bg-cyan-600 hover:bg-cyan-500 rounded-xl text-xs font-black uppercase italic tracking-widest flex justify-center items-center gap-2 active:scale-95">
-                    <i data-lucide="unlock" class="w-4 h-4"></i> Iniciar Enlace
-                </button>
+                <input type="password" id="login-pass" class="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-sm font-bold text-white text-center outline-none focus:border-cyan-500" placeholder="CLAVE DE ENCRIPTACIÓN">
+                <button onclick="attemptLogin()" class="w-full py-4 bg-cyan-600 rounded-xl text-xs font-black uppercase italic tracking-widest active:scale-95">Verificar Identidad</button>
             </div>
-            <p id="login-error" class="hidden mt-4 text-[10px] font-black text-rose-500 uppercase tracking-widest italic animate-pulse">ACCESO DENEGADO</p>
+            <p id="login-error" class="hidden mt-4 text-[10px] font-black text-rose-500 uppercase">CREDENCIALES INVÁLIDAS</p>
         </div>
     </div>
 
     <!-- APP CONTAINER -->
     <div id="app-container" class="hidden flex-col h-full w-full">
-        <header class="z-50 px-5 py-4 glass border-b border-white/5 flex justify-between items-center shrink-0">
+        <header class="z-50 px-5 py-4 glass border-b border-white/5 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]"></div>
-                <h1 class="text-sm font-black italic tracking-tighter uppercase leading-none text-white">MAN <span class="text-cyan-500 text-[10px]">POWER OS</span></h1>
+                <div id="cloud-status-dot" class="w-2 h-2 rounded-full bg-slate-500"></div>
+                <h1 class="text-sm font-black italic uppercase text-white">MAN <span class="text-cyan-500 text-[10px]">POWER OS</span></h1>
             </div>
-            <div id="clock" class="text-[10px] font-mono font-bold text-slate-300 italic tracking-widest text-right">00:00:00</div>
+            <div class="flex items-center gap-2">
+                <i id="cloud-icon" data-lucide="cloud-check" class="w-4 h-4 text-slate-500"></i>
+                <div id="clock" class="text-[10px] font-mono font-bold text-slate-400">00:00</div>
+            </div>
         </header>
 
         <main class="flex-1 p-4 relative overflow-hidden flex flex-col">
             <div id="dashboard-view" class="grid grid-cols-2 gap-3 pb-24 overflow-y-auto custom-scroll">
-                <div onclick="openModule('weight', 'Peso Diario')" class="app-card glass rounded-[2.2rem] p-5 flex flex-col items-center justify-center text-center">
-                    <div class="w-12 h-12 rounded-2xl gradient-cyan flex items-center justify-center mb-2"><i data-lucide="scale" class="w-6 h-6 text-white"></i></div>
-                    <span class="text-[11px] font-black uppercase italic">Peso Diario</span>
-                </div>
-                <div onclick="openModule('routine', 'Rutina 24 Horas')" class="app-card glass rounded-[2.2rem] p-5 flex flex-col items-center justify-center text-center">
-                    <div class="w-12 h-12 rounded-2xl gradient-indigo flex items-center justify-center mb-2"><i data-lucide="clock" class="w-6 h-6 text-white"></i></div>
-                    <span class="text-[11px] font-black uppercase italic">Rutina</span>
-                </div>
-                <div onclick="openModule('finances', 'Finanzas')" class="app-card glass rounded-[2.2rem] p-5 flex flex-col items-center justify-center text-center border-t-2 border-emerald-500/30">
+                <div onclick="openModule('finances', 'Bóveda Financiera')" class="app-card glass rounded-[2.2rem] p-5 flex flex-col items-center border-t-2 border-emerald-500/30">
                     <div class="w-12 h-12 rounded-2xl gradient-emerald flex items-center justify-center mb-2"><i data-lucide="wallet" class="w-6 h-6 text-white"></i></div>
                     <span class="text-[11px] font-black uppercase italic text-emerald-400">Finanzas</span>
                 </div>
-                <div onclick="openModule('habits', 'Hábitos')" class="app-card glass rounded-[2.2rem] p-5 flex flex-col items-center justify-center text-center border-t-2 border-sky-500/30">
-                    <div class="w-12 h-12 rounded-2xl gradient-sky flex items-center justify-center mb-2"><i data-lucide="check-circle-2" class="w-6 h-6 text-white"></i></div>
-                    <span class="text-[11px] font-black uppercase italic text-sky-400">Hábitos</span>
+                <div onclick="openModule('intel', 'Red de Inteligencia')" class="app-card glass rounded-[2.2rem] p-5 flex flex-col items-center border-t-2 border-red-500/30">
+                    <div class="w-12 h-12 rounded-2xl gradient-red flex items-center justify-center mb-2"><i data-lucide="eye" class="w-6 h-6 text-white"></i></div>
+                    <span class="text-[11px] font-black uppercase italic text-red-500">Intel</span>
                 </div>
-                <div onclick="openModule('vices', 'Vicios')" class="app-card glass rounded-[2.2rem] p-5 flex flex-col items-center justify-center text-center border-t-2 border-amber-500/30">
+                <div onclick="openModule('weight', 'Biometría')" class="app-card glass rounded-[2.2rem] p-5 flex flex-col items-center border-t-2 border-cyan-500/30">
+                    <div class="w-12 h-12 rounded-2xl gradient-cyan flex items-center justify-center mb-2"><i data-lucide="activity" class="w-6 h-6 text-white"></i></div>
+                    <span class="text-[11px] font-black uppercase italic text-cyan-400">Biometría</span>
+                </div>
+                <div onclick="openModule('vices', 'Pureza de Sistema')" class="app-card glass rounded-[2.2rem] p-5 flex flex-col items-center border-t-2 border-amber-500/30">
                     <div class="w-12 h-12 rounded-2xl gradient-amber flex items-center justify-center mb-2"><i data-lucide="zap-off" class="w-6 h-6 text-white"></i></div>
                     <span class="text-[11px] font-black uppercase italic text-amber-500">Vicios</span>
                 </div>
-                <div onclick="openModule('study', 'Estudio')" class="app-card glass rounded-[2.2rem] p-5 flex flex-col items-center justify-center text-center border-t-2 border-violet-500/30">
-                    <div class="w-12 h-12 rounded-2xl gradient-violet flex items-center justify-center mb-2"><i data-lucide="book-open" class="w-6 h-6 text-white"></i></div>
-                    <span class="text-[11px] font-black uppercase italic text-violet-400">Estudio</span>
-                </div>
-                <div onclick="openModule('intel', 'Contrainteligencia')" class="app-card glass rounded-[2.2rem] p-5 flex flex-col items-center justify-center text-center border-t-2 border-red-500/50">
-                    <div class="w-12 h-12 rounded-2xl gradient-red flex items-center justify-center mb-2"><i data-lucide="shield-alert" class="w-6 h-6 text-white"></i></div>
-                    <span class="text-[11px] font-black uppercase italic text-red-500">Intel</span>
-                </div>
-                <div onclick="openModule('profile', 'Perfil')" class="app-card glass rounded-[2.2rem] p-5 flex flex-col items-center justify-center text-center border-t-2 border-slate-500/50">
-                    <div class="w-12 h-12 rounded-2xl gradient-night flex items-center justify-center mb-2"><i data-lucide="user" class="w-6 h-6 text-white"></i></div>
-                    <span class="text-[11px] font-black uppercase italic text-white">Perfil</span>
+                <div onclick="openModule('profile', 'Perfil Operador')" class="col-span-2 app-card glass rounded-[2.2rem] p-5 flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-full bg-slate-800 border border-white/10 overflow-hidden" id="dash-photo"></div>
+                    <div>
+                        <p class="text-xs font-black uppercase italic text-white" id="dash-name">Operador Desconocido</p>
+                        <p class="text-[9px] font-mono text-cyan-500" id="dash-alias">ALFA-01</p>
+                    </div>
                 </div>
             </div>
 
-            <div id="module-view" class="hidden absolute inset-0 glass bg-[#020617]/98 z-40 p-5 flex-col animate-in slide-in-from-bottom duration-200">
-                <div class="flex items-center justify-between mb-4 shrink-0">
-                    <button onclick="closeModule()" class="p-2 bg-white/5 rounded-xl text-slate-400 active:scale-90"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
-                    <h2 id="module-title" class="text-lg font-black italic uppercase tracking-tighter">MÓDULO</h2>
+            <!-- MODAL DINÁMICO -->
+            <div id="module-view" class="hidden absolute inset-0 glass bg-[#020617]/98 z-40 p-5 flex-col">
+                <div class="flex items-center justify-between mb-4">
+                    <button onclick="closeModule()" class="p-2 bg-white/5 rounded-xl"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
+                    <h2 id="module-title" class="text-lg font-black italic uppercase">MÓDULO</h2>
                 </div>
                 <div id="module-content" class="flex-1 overflow-y-auto custom-scroll pb-24"></div>
             </div>
-
-            <!-- MODAL: DOSSIER INTEL -->
-            <div id="dossier-view" class="hidden absolute inset-0 glass bg-[#050a18] z-50 p-6 flex-col animate-in zoom-in-95 duration-200 overflow-y-auto custom-scroll text-white">
-                <div class="flex justify-between items-start mb-6 shrink-0">
-                    <button onclick="closeDossier()" class="p-3 bg-white/5 rounded-2xl active:scale-90"><i data-lucide="x" class="w-6 h-6"></i></button>
-                    <div class="text-right">
-                        <p class="text-[10px] font-black text-red-500 uppercase italic">Intel Dossier</p>
-                        <p id="dossier-id" class="text-[8px] font-mono text-slate-600 tracking-widest uppercase font-bold">ID: ACT-000</p>
-                    </div>
-                </div>
-                <div id="dossier-content" class="space-y-8"></div>
-            </div>
-
-            <!-- MODAL: ALTA INTEL -->
-            <div id="add-asset-view" class="hidden absolute inset-0 glass bg-[#050a18] z-[60] p-6 flex-col animate-in slide-in-from-bottom duration-200 overflow-y-auto custom-scroll text-white">
-                <div class="flex justify-between items-start mb-6 shrink-0 border-b border-red-500/30 pb-4">
-                    <h2 class="text-xl font-black italic tracking-tighter text-red-500 uppercase">Nuevo Expediente</h2>
-                    <button onclick="closeAddAsset()" class="p-2 bg-white/5 rounded-xl active:scale-90"><i data-lucide="x" class="w-5 h-5"></i></button>
-                </div>
-                <div class="space-y-5">
-                    <input type="text" id="asset-name" class="w-full bg-black/40 border border-red-500/20 rounded-xl p-3 text-sm font-bold text-white" placeholder="Nombre completo...">
-                    <input type="tel" id="asset-phone" class="w-full bg-black/40 border border-red-500/20 rounded-xl p-3 text-sm font-mono font-bold text-white" placeholder="+54 9 11...">
-                    <textarea id="asset-utility" rows="2" class="w-full bg-cyan-900/10 border border-cyan-500/30 rounded-xl p-3 text-xs font-medium text-white" placeholder="Utilidad operativa..."></textarea>
-                    <button onclick="saveNewAsset()" class="w-full py-4 bg-red-600 rounded-xl text-xs font-black uppercase italic tracking-widest flex items-center justify-center gap-2">Archivar Expediente</button>
-                </div>
-            </div>
-            
-            <div id="vice-editor" class="hidden absolute inset-0 glass bg-slate-950/95 z-50 p-6 flex-col animate-in fade-in duration-200 text-white">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-lg font-black italic uppercase" id="vice-editor-date">DÍA</h3>
-                    <button onclick="closeViceEditor()" class="p-2 bg-white/5 rounded-xl"><i data-lucide="x" class="w-5 h-5"></i></button>
-                </div>
-                <div class="space-y-4" id="vice-checklist"></div>
-            </div>
-
-            <div id="habit-editor" class="hidden absolute inset-0 glass bg-slate-950/95 z-50 p-6 flex-col animate-in fade-in duration-200 text-white">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-lg font-black italic uppercase" id="habit-editor-date">DÍA</h3>
-                    <button onclick="closeHabitEditor()" class="p-2 bg-white/5 rounded-xl"><i data-lucide="x" class="w-5 h-5"></i></button>
-                </div>
-                <div class="space-y-4" id="habit-checklist"></div>
-            </div>
-
         </main>
 
-        <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[85%] max-w-xs glass rounded-[2rem] p-1.5 flex justify-around items-center z-50">
-            <button onclick="closeModule(); closeDossier();" class="p-4 rounded-2xl text-cyan-400 bg-cyan-500/10 active:scale-90"><i data-lucide="layout-grid" class="w-6 h-6"></i></button>
-            <button onclick="openModule('profile', 'Resumen Táctico')" class="p-4 rounded-2xl text-slate-500 active:scale-90"><i data-lucide="user" class="w-6 h-6"></i></button>
-            <button onclick="logout()" class="p-4 rounded-2xl text-rose-500 active:scale-90"><i data-lucide="log-out" class="w-6 h-6"></i></button>
+        <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[85%] max-w-xs glass rounded-[2rem] p-2 flex justify-around items-center">
+            <button onclick="closeModule()" class="p-4 rounded-2xl text-cyan-400 bg-cyan-500/10"><i data-lucide="layout-grid" class="w-6 h-6"></i></button>
+            <button onclick="logout()" class="p-4 rounded-2xl text-rose-500"><i data-lucide="log-out" class="w-6 h-6"></i></button>
         </nav>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+        // Firebase Config
         const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'manpower-os';
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'manpower-os-cloud';
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        window.apiKey = ""; // Empty string for environment
-
-        const defaultAppState = {
-            profile: { name: 'Operador Alfa', alias: 'Alfa-01', division: 'Sombra', photo: null },
+        const defaultState = {
+            profile: { name: 'Operador Alfa', alias: 'ALFA-01', photo: null },
+            finances: { mpBalance: 0, cashBalance: 0, debts: [] },
             contacts: [],
-            vices: {},
             weight: {},
-            routine: {},
-            routineGoal: "",
-            habits: { list: ['Lectura', 'Gym', 'Running'], logs: {} },
-            study: { subjects: ['Inglés', 'Inteligencia'], logs: {} },
-            finances: {
-                specialSavingUnit: 15000, savingsLog: {}, mpBalance: 0, cashBalance: 0, history: {}, 
-                debts: [{ id: 'alquiler', name: 'Alquiler', amount: 250000, isPaid: false }]
-            }
+            vices: {}
         };
 
-        window.appState = JSON.parse(JSON.stringify(defaultAppState));
+        window.appState = JSON.parse(JSON.stringify(defaultState));
         let user = null;
-        let dataLoaded = false;
-        let currentModuleId = null;
 
-        // AUTH & SYNC ENGINE
-        const initAuth = async () => {
+        // MOTOR DE NUBE (Siguiendo Regla 3: Auth ANTES de Consultas)
+        const initCloudAuth = async () => {
             try {
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                     await signInWithCustomToken(auth, __initial_auth_token);
                 } else {
                     await signInAnonymously(auth);
                 }
-            } catch (e) { console.error("Auth Error", e); }
+            } catch (e) {
+                console.error("Fallo de Autenticación Crítico:", e);
+                // Mostrar error al usuario si falla el enlace
+                document.getElementById('loading-overlay').innerHTML = `
+                    <p class="text-rose-500 font-black uppercase p-6 text-center">Fallo de Enlace Táctico: Error de Permisos.</p>
+                `;
+            }
         };
 
+        // Listener de Estado de Auth
         onAuthStateChanged(auth, (u) => {
             user = u;
             if (u) {
-                // RULE 1 & 3: Mandatory pathing and auth guard
+                // RULE 1: Ruta estricta /artifacts/{appId}/public/data/{collectionName}
                 const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'app_state', 'global_state');
+                
+                // onSnapshot con callbacks de éxito y error requeridos
                 onSnapshot(docRef, (snap) => {
                     if (snap.exists()) {
                         window.appState = snap.data();
+                        updateUI();
                     } else {
-                        window.syncData();
+                        // Si el documento no existe en la nube, inicializarlo
+                        window.saveToCloud();
                     }
-                    dataLoaded = true;
-                    hideLoading();
-                }, (err) => console.error("Sync Error", err));
+                    document.getElementById('loading-overlay').classList.add('hidden');
+                    checkSession();
+                }, (error) => {
+                    console.error("Error en Snapshot de Firestore:", error);
+                    if (error.code === 'permission-denied') {
+                        console.error("Permiso denegado. Verifique la ruta del documento y la autenticación.");
+                    }
+                });
             }
         });
 
-        window.syncData = async () => {
-            if (!user) return;
+        // Guardado en la Nube
+        window.saveToCloud = async () => {
+            if (!user) return; // Guard Rule 3: No operar sin usuario
+            
+            const statusIcon = document.getElementById('cloud-icon');
+            const statusDot = document.getElementById('cloud-status-dot');
+            statusIcon.classList.add('cloud-syncing');
+            
             const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'app_state', 'global_state');
-            await setDoc(docRef, window.appState);
+            try {
+                await setDoc(docRef, window.appState);
+                statusIcon.classList.remove('cloud-syncing');
+                statusIcon.style.color = "#10b981";
+                statusDot.style.backgroundColor = "#10b981";
+                lucide.createIcons();
+            } catch (e) {
+                console.error("Fallo de Escritura Cloud:", e);
+                statusIcon.style.color = "#ef4444";
+                statusDot.style.backgroundColor = "#ef4444";
+            }
         };
 
-        function hideLoading() {
-            if (dataLoaded) {
-                document.getElementById('loading-overlay').classList.add('hidden');
-                if (localStorage.getItem('man_session')) {
-                    document.getElementById('login-view').classList.add('hidden');
-                    document.getElementById('app-container').classList.remove('hidden');
-                    document.getElementById('app-container').classList.add('flex');
-                }
+        const updateUI = () => {
+            if (!window.appState.profile) return;
+            document.getElementById('dash-name').textContent = window.appState.profile.name || 'Operador Desconocido';
+            document.getElementById('dash-alias').textContent = window.appState.profile.alias || 'ALFA-01';
+            if (window.appState.profile.photo) {
+                document.getElementById('dash-photo').innerHTML = `<img src="${window.appState.profile.photo}" class="w-full h-full object-cover">`;
+            } else {
+                document.getElementById('dash-photo').innerHTML = `<div class="w-full h-full bg-slate-800 flex items-center justify-center"><i data-lucide="user" class="w-6 h-6 text-slate-500"></i></div>`;
+                lucide.createIcons();
             }
-        }
+        };
 
         window.attemptLogin = () => {
-            const u = document.getElementById('login-user').value;
             const p = document.getElementById('login-pass').value;
             if (p === "10797851") {
-                localStorage.setItem('man_session', 'active');
-                location.reload();
+                localStorage.setItem('man_session', 'auth');
+                checkSession();
             } else {
                 document.getElementById('login-error').classList.remove('hidden');
             }
         };
 
-        window.logout = () => {
-            localStorage.removeItem('man_session');
-            location.reload();
+        const checkSession = () => {
+            if (localStorage.getItem('man_session') === 'auth') {
+                document.getElementById('login-view').classList.add('hidden');
+                document.getElementById('app-container').classList.remove('hidden');
+                document.getElementById('app-container').classList.add('flex');
+            }
         };
 
-        // UI HELPERS
-        const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-        const dayNames = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
-        const presetOptions = ['', 'Trabajar', 'Comer', 'Dormir', 'Ejercicios', 'Estudiar', 'Limpiar'];
+        window.logout = () => { localStorage.removeItem('man_session'); location.reload(); };
 
+        // MÓDULOS (Actualizados para persistencia)
         window.openModule = (id, title) => {
-            currentModuleId = id;
             document.getElementById('module-view').classList.remove('hidden');
             document.getElementById('module-view').classList.add('flex');
             document.getElementById('module-title').textContent = title;
-            renderModule(id);
-        };
+            const content = document.getElementById('module-content');
+            
+            if (id === 'weight') {
+                const today = new Date().toISOString().split('T')[0];
+                content.innerHTML = `
+                    <div class="glass p-6 rounded-3xl space-y-4">
+                        <p class="text-xs font-black text-cyan-500 uppercase">Registro Biométrico (kg)</p>
+                        <input type="number" id="w-input" step="0.1" value="${window.appState.weight[today] || ''}" class="w-full bg-black/40 p-5 rounded-2xl text-4xl font-black text-center text-white outline-none focus:border-cyan-500" placeholder="00.0">
+                        <button onclick="saveW()" class="w-full py-4 bg-cyan-600 rounded-xl font-black uppercase active:scale-95 transition-transform">Confirmar en Nube</button>
+                    </div>
+                `;
+                window.saveW = () => {
+                    const val = document.getElementById('w-input').value;
+                    if (!val) return;
+                    window.appState.weight[today] = Number(val);
+                    window.saveToCloud();
+                };
+            }
 
-        window.closeModule = () => {
-            currentModuleId = null;
-            document.getElementById('module-view').classList.add('hidden');
-        };
+            if (id === 'finances') {
+                const f = window.appState.finances;
+                content.innerHTML = `
+                    <div class="space-y-4">
+                        <div class="glass p-5 rounded-3xl flex justify-between">
+                            <div><p class="text-[8px] font-black text-slate-500">MERCADO PAGO</p><p class="text-2xl font-black text-blue-400 font-mono">$${f.mpBalance}</p></div>
+                            <div class="text-right"><p class="text-[8px] font-black text-slate-500">EFECTIVO</p><p class="text-2xl font-black text-emerald-400 font-mono">$${f.cashBalance}</p></div>
+                        </div>
+                        <div class="glass p-5 rounded-3xl space-y-4">
+                            <p class="text-xs font-black text-emerald-500 uppercase italic">Ajuste de Saldo Directo</p>
+                            <div class="grid grid-cols-2 gap-2">
+                                <input type="number" id="new-mp" class="bg-black/40 p-3 rounded-xl text-white text-center outline-none" placeholder="MP">
+                                <input type="number" id="new-cash" class="bg-black/40 p-3 rounded-xl text-white text-center outline-none" placeholder="Cash">
+                            </div>
+                            <button onclick="saveFin()" class="w-full py-4 bg-emerald-600 rounded-xl font-black uppercase active:scale-95">Actualizar Bóveda</button>
+                        </div>
+                    </div>
+                `;
+                window.saveFin = () => {
+                    const mp = document.getElementById('new-mp').value;
+                    const cash = document.getElementById('new-cash').value;
+                    if(mp !== "") window.appState.finances.mpBalance = Number(mp);
+                    if(cash !== "") window.appState.finances.cashBalance = Number(cash);
+                    window.saveToCloud();
+                    renderModule('finances');
+                };
+            }
 
-        window.renderModule = (id) => {
-            const container = document.getElementById('module-content');
-            container.innerHTML = '';
-            if (id === 'weight') renderWeight(container);
-            if (id === 'finances') renderFinances(container);
-            if (id === 'habits') renderHabits(container);
-            if (id === 'vices') renderVices(container);
-            if (id === 'profile') renderProfile(container);
-            if (id === 'intel') renderIntel(container);
+            if (id === 'profile') {
+                const p = window.appState.profile;
+                content.innerHTML = `
+                    <div class="glass p-6 rounded-[3rem] flex flex-col items-center gap-4">
+                        <div class="w-24 h-24 rounded-3xl bg-slate-800 border-2 border-cyan-500 flex items-center justify-center overflow-hidden cursor-pointer" onclick="document.getElementById('p-file').click()">
+                             ${p.photo ? `<img src="${p.photo}" class="w-full h-full object-cover">` : `<i data-lucide="camera" class="w-8 h-8 text-cyan-500"></i>`}
+                        </div>
+                        <input type="file" id="p-file" class="hidden" accept="image/*" onchange="upPhoto(event)">
+                        <input type="text" id="p-name" value="${p.name}" class="profile-input text-xl" placeholder="NOMBRE">
+                        <input type="text" id="p-alias" value="${p.alias}" class="profile-input text-xs text-cyan-400" placeholder="ALIAS">
+                        <button onclick="saveProf()" class="w-full py-4 bg-slate-100 text-black rounded-xl font-black uppercase mt-4 active:scale-95">Sincronizar Perfil</button>
+                    </div>
+                `;
+                window.upPhoto = (e) => {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => { 
+                        window.appState.profile.photo = ev.target.result; 
+                        window.saveToCloud();
+                        renderModule('profile');
+                    };
+                    if(e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
+                };
+                window.saveProf = () => {
+                    window.appState.profile.name = document.getElementById('p-name').value;
+                    window.appState.profile.alias = document.getElementById('p-alias').value;
+                    window.saveToCloud();
+                };
+            }
+
+            if (id === 'intel') {
+                content.innerHTML = `
+                    <div class="space-y-4">
+                        <button onclick="alert('Funcionalidad de Intel en desarrollo')" class="w-full glass p-4 text-red-500 font-black text-xs uppercase tracking-widest border-red-500/20">Añadir Activo (Beta)</button>
+                        <p class="text-center text-[10px] text-slate-500 italic uppercase">El módulo de Intel requiere limpieza de nodo para alta disponibilidad.</p>
+                    </div>
+                `;
+            }
+
             lucide.createIcons();
         };
 
-        // MODULES LOGIC
-        function renderWeight(container) {
-            const today = new Date().toISOString().split('T')[0];
-            const current = window.appState.weight[today] || "";
-            container.innerHTML = `
-                <div class="glass p-6 rounded-[2.5rem] space-y-4">
-                    <p class="text-[10px] font-black uppercase text-cyan-500">Peso de Hoy (kg)</p>
-                    <input type="number" id="w-val" step="0.1" value="${current}" class="w-full bg-black/40 border border-white/10 rounded-2xl p-4 text-3xl font-black text-center text-white" placeholder="00.0">
-                    <button onclick="saveW()" class="btn-action-save bg-cyan-600 text-white w-full">Confirmar</button>
-                </div>
-            `;
-            window.saveW = () => {
-                window.appState.weight[today] = Number(document.getElementById('w-val').value);
-                window.syncData();
-                alert("Peso actualizado");
-            };
-        }
+        window.closeModule = () => document.getElementById('module-view').classList.add('hidden');
 
-        function renderFinances(container) {
-            const f = window.appState.finances;
-            const format = (v) => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }).format(v);
-            container.innerHTML = `
-                <div class="space-y-4">
-                    <div class="glass p-4 rounded-2xl flex justify-between">
-                        <div><p class="text-[8px] font-black text-slate-500">MERCADO PAGO</p><p class="text-xl font-black text-blue-400 font-mono">${format(f.mpBalance)}</p></div>
-                        <div><p class="text-[8px] font-black text-slate-500">EFECTIVO</p><p class="text-xl font-black text-emerald-400 font-mono text-right">${format(f.cashBalance)}</p></div>
-                    </div>
-                    <div class="glass p-5 rounded-[2.5rem] space-y-3">
-                        <p class="text-[10px] font-black text-emerald-500 italic">INGRESOS DIARIOS</p>
-                        <input type="number" id="f-mp" class="w-full bg-black/40 p-3 rounded-xl border border-white/5" placeholder="Sumar a MP...">
-                        <button onclick="addFinance()" class="btn-action-save bg-emerald-600 text-white w-full">Cargar Saldo</button>
-                    </div>
-                </div>
-            `;
-            window.addFinance = () => {
-                const val = Number(document.getElementById('f-mp').value);
-                window.appState.finances.mpBalance += val;
-                window.syncData();
-                renderFinances(container);
-            };
-        }
-
-        function renderIntel(container) {
-            container.innerHTML = `
-                <button onclick="openAddAsset()" class="w-full glass p-4 mb-4 text-red-500 font-black text-[10px] uppercase">+ Nuevo Activo</button>
-                <div class="space-y-2">
-                    ${window.appState.contacts.map((c, i) => `
-                        <div class="glass p-4 rounded-xl flex justify-between" onclick="openDossier(${i})">
-                            <span class="font-bold text-white">${c.name}</span>
-                            <span class="text-red-500 font-mono text-[9px]">${c.phone.slice(-4)}</span>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-        }
-
-        window.openAddAsset = () => document.getElementById('add-asset-view').classList.remove('hidden');
-        window.closeAddAsset = () => document.getElementById('add-asset-view').classList.add('hidden');
-        window.saveNewAsset = () => {
-            const name = document.getElementById('asset-name').value;
-            const phone = document.getElementById('asset-phone').value;
-            if(!name) return;
-            window.appState.contacts.unshift({ name, phone, utility: document.getElementById('asset-utility').value });
-            window.syncData();
-            closeAddAsset();
-            renderIntel(document.getElementById('module-content'));
-        };
-
-        window.openDossier = (i) => {
-            const c = window.appState.contacts[i];
-            document.getElementById('dossier-content').innerHTML = `
-                <div class="text-center">
-                    <h2 class="text-3xl font-black italic">${c.name}</h2>
-                    <p class="text-red-500 font-mono">${c.phone}</p>
-                    <p class="mt-4 text-slate-400 italic">${c.utility || 'Sin descripción'}</p>
-                </div>
-            `;
-            document.getElementById('dossier-view').classList.remove('hidden');
-        };
-
-        window.closeDossier = () => document.getElementById('dossier-view').classList.add('hidden');
-
-        // CLOCK
+        // Clock Update
         setInterval(() => {
             const now = new Date();
-            document.getElementById('clock').textContent = now.toLocaleTimeString();
+            document.getElementById('clock').textContent = now.toLocaleTimeString('es-AR', { hour12: false });
         }, 1000);
 
-        initAuth();
+        // Inicializar Autenticación
+        initCloudAuth();
         lucide.createIcons();
     </script>
 </body>
