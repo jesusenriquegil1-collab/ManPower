@@ -233,27 +233,19 @@
 
     <!-- MOTOR CORE (HÍBRIDO: NUBE + LOCAL) -->
     <script type="module">
-        // Manejador Global de Errores: Previene congelamientos de pantalla.
+        // Manejador Global de Errores Silenciado
         window.addEventListener('error', function(e) {
-            const loader = document.getElementById('loading-overlay');
-            if (loader && loader.style.display !== 'none') {
-                loader.innerHTML = `
-                    <div class="p-6 text-center max-w-xs mx-auto">
-                        <i data-lucide="alert-triangle" class="w-12 h-12 text-rose-500 mx-auto mb-4"></i>
-                        <p class="text-rose-500 font-black text-xs uppercase mb-2">Fallo en Boot Secuencia</p>
-                        <p class="text-[10px] text-slate-400 font-mono mb-4">${e.message}</p>
-                        <button onclick="forceLocalStart()" class="p-4 bg-slate-800 border border-slate-600 text-white rounded-xl text-xs font-black uppercase tracking-widest active:scale-95 w-full">Forzar Bóveda Local</button>
-                    </div>`;
-                updateIcons();
-            }
+            console.error("Error silenciado:", e);
+            window.forceLocalStart();
         });
 
         window.forceLocalStart = function() {
-            hide('loading-overlay');
+            document.getElementById('loading-overlay').style.display = 'none';
             if (localStorage.getItem('man_session') === 'auth') {
-                show('app-container', 'flex');
+                document.getElementById('app-container').style.display = 'flex';
+                if(window.currentModule) window.renderModule(window.currentModule);
             } else {
-                show('login-view', 'flex');
+                document.getElementById('login-view').style.display = 'flex';
             }
         };
 
@@ -262,12 +254,11 @@
         function updateIcons() { try { if (typeof lucide !== 'undefined') lucide.createIcons(); } catch(e) {} }
 
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'manpower-os';
-        const rawConfig = typeof __firebase_config !== 'undefined' ? __firebase_config : null;
         
         let app, auth, db;
-        let isOfflineMode = false;
+        let isOfflineMode = true; // Por defecto es local en Netlify
         let user = null;
-        let currentModule = null;
+        window.currentModule = null;
 
         // Estado Global Intacto
         const defaultAppState = {
@@ -291,21 +282,25 @@
         window.appState = JSON.parse(JSON.stringify(defaultAppState));
         let fViewDate = new Date();
 
-        // ARRANQUE ASÍNCRONO BLINDADO
+        // ARRANQUE ASÍNCRONO DIRECTO
         async function bootSystem() {
+            // 1. Carga Rápida de Memoria Local
+            const localData = localStorage.getItem('manpower_data_v2');
+            if (localData) {
+                try { window.appState = { ...defaultAppState, ...JSON.parse(localData) }; } catch (e) {}
+            }
+
+            // 2. Comprobar si estamos en entorno externo (Ej: Netlify)
+            const rawConfig = typeof __firebase_config !== 'undefined' ? __firebase_config : null;
+            
+            if (!rawConfig) {
+                console.warn("Modo Local Activo.");
+                finalizeLoad(false);
+                return; // Cortamos acá, no intentamos cargar Firebase para no bloquear
+            }
+
+            // 3. Importación dinámica (Solo en el entorno Canvas)
             try {
-                // 1. Carga Rápida de Memoria Local (Siempre funciona)
-                const localData = localStorage.getItem('manpower_data_v2');
-                if (localData) {
-                    try { window.appState = { ...defaultAppState, ...JSON.parse(localData) }; } catch (e) {}
-                }
-
-                // 2. Comprobar si estamos en entorno externo (Ej: Netlify)
-                if (!rawConfig) {
-                    throw new Error("No se detectó configuración de nube. Desplegando bóveda local.");
-                }
-
-                // 3. Importación dinámica (Si falla la red, no crashea el script principal)
                 const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js");
                 const { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js");
                 const { getFirestore, doc, setDoc, onSnapshot } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
@@ -314,7 +309,6 @@
                 auth = getAuth(app);
                 db = getFirestore(app);
 
-                // Protocolo de Auth
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                     await signInWithCustomToken(auth, __initial_auth_token);
                 } else {
@@ -324,21 +318,20 @@
                 onAuthStateChanged(auth, (u) => {
                     user = u;
                     if (u) {
+                        isOfflineMode = false;
                         const docRef = doc(db, 'artifacts', appId, 'users', user.uid, 'app_state', 'global_state');
                         onSnapshot(docRef, (snap) => {
                             if (snap.exists()) {
                                 window.appState = snap.data();
-                                saveToLocal(); // Backup
+                                saveToLocal();
                             }
                             finalizeLoad(true);
-                        }, (err) => { throw err; });
+                        }, (err) => { window.forceLocalStart(); });
                     }
                 });
 
             } catch (error) {
-                console.warn("MODO AUTÓNOMO LOCAL:", error.message);
-                isOfflineMode = true;
-                finalizeLoad(false);
+                window.forceLocalStart();
             }
         }
 
@@ -368,10 +361,7 @@
 
         // MOTOR DE GUARDADO UNIVERSAL
         window.saveData = async () => {
-            // 1. Siempre guardamos localmente (Respaldo blindado)
             saveToLocal();
-
-            // 2. Si hay nube, empujamos
             if (!isOfflineMode && user && db) {
                 const icon = document.getElementById('cloud-icon');
                 icon.classList.add('animate-pulse', 'text-cyan-500');
@@ -380,9 +370,7 @@
                     const docRef = doc(db, 'artifacts', appId, 'users', user.uid, 'app_state', 'global_state');
                     await setDoc(docRef, window.appState);
                     setTimeout(() => icon.classList.remove('animate-pulse', 'text-cyan-500'), 500);
-                } catch (e) {
-                    console.error("Fallo Nube:", e);
-                }
+                } catch (e) {}
             }
         };
 
@@ -404,7 +392,7 @@
         function proceedToApp() {
             hide('login-view');
             show('app-container', 'flex');
-            if(currentModule) renderModule(currentModule);
+            if(window.currentModule) window.renderModule(window.currentModule);
         }
 
         window.logout = () => { localStorage.removeItem('man_session'); location.reload(); };
@@ -418,12 +406,12 @@
 
         // NAVEGACIÓN MÓDULOS
         window.openModule = (id, title) => {
-            currentModule = id;
+            window.currentModule = id;
             show('module-view', 'flex');
             document.getElementById('module-title').textContent = title;
-            renderModule(id);
+            window.renderModule(id);
         };
-        window.closeModule = () => { currentModule = null; hide('module-view'); };
+        window.closeModule = () => { window.currentModule = null; hide('module-view'); };
         window.closeDossier = () => hide('dossier-view');
 
         window.renderModule = (id) => {
@@ -454,7 +442,7 @@
             `;
             window.saveW = () => {
                 const val = document.getElementById('w-input').value;
-                if(val) { window.appState.weight[today] = Number(val); window.saveData(); alert("Dato guardado localmente."); }
+                if(val) { window.appState.weight[today] = Number(val); window.saveData(); alert("Dato guardado."); }
             };
         }
 
@@ -516,7 +504,7 @@
                     </div>
                 </div>
             `;
-            window.changeFDay = (d) => { fViewDate.setDate(fViewDate.getDate()+d); renderModule('finances'); };
+            window.changeFDay = (d) => { fViewDate.setDate(fViewDate.getDate()+d); window.renderModule('finances'); };
             window.updAcc = (k, v) => { window.appState.finances[k] = Number(v); window.saveData(); };
             window.saveFin = (type) => {
                 const ds = fViewDate.toISOString().split('T')[0];
@@ -526,7 +514,7 @@
                 } else {
                     f.history[ds].exp = { naf: document.getElementById('f-out-naf').value, com: document.getElementById('f-out-com').value, kio: document.getElementById('f-out-kio').value, otr: document.getElementById('f-out-otr').value };
                 }
-                window.saveData(); renderModule('finances');
+                window.saveData(); window.renderModule('finances');
             };
         }
 
@@ -559,7 +547,7 @@
             window.saveNewAsset = () => {
                 const name = document.getElementById('asset-name').value.trim(); if(!name) return;
                 window.appState.contacts.unshift({ name: name, phone: document.getElementById('asset-phone').value, utility: document.getElementById('asset-utility').value, photo: tempAssetPhoto });
-                window.saveData(); window.closeAddAsset(); renderModule('intel');
+                window.saveData(); window.closeAddAsset(); window.renderModule('intel');
             };
             window.openDossier = (idx) => {
                 const c = window.appState.contacts[idx];
@@ -627,9 +615,9 @@
 
         window.toggleV = (d, id) => { if(!window.appState.vices[d]) window.appState.vices[d] = {}; window.appState.vices[d][id] = !window.appState.vices[d][id]; window.saveData(); window.openEditor(d, 'vices'); };
         window.toggleT = (d, i, t) => { if(!window.appState[t].logs[d]) window.appState[t].logs[d] = {}; window.appState[t].logs[d][i] = !window.appState[t].logs[d][i]; window.saveData(); window.openEditor(d, t); };
-        window.closeViceEditor = () => { hide('vice-editor'); renderModule('vices'); };
-        window.closeHabitEditor = () => { hide('habit-editor'); renderModule('habits'); };
-        window.closeStudyEditor = () => { hide('study-editor'); renderModule('study'); };
+        window.closeViceEditor = () => { hide('vice-editor'); window.renderModule('vices'); };
+        window.closeHabitEditor = () => { hide('habit-editor'); window.renderModule('habits'); };
+        window.closeStudyEditor = () => { hide('study-editor'); window.renderModule('study'); };
 
         // --- MÓDULO: RUTINA 24H ---
         function renderRoutine(container) {
@@ -665,7 +653,7 @@
                     <button onclick="saveProf()" class="w-full py-4 bg-slate-200 text-black rounded-xl font-black uppercase mt-4 active:scale-95">Grabar Perfil</button>
                 </div>
             `;
-            window.upPhoto = (e) => { const r = new FileReader(); r.onload = (ev) => { window.appState.profile.photo = ev.target.result; window.saveData(); renderModule('profile'); }; if(e.target.files[0]) r.readAsDataURL(e.target.files[0]); };
+            window.upPhoto = (e) => { const r = new FileReader(); r.onload = (ev) => { window.appState.profile.photo = ev.target.result; window.saveData(); window.renderModule('profile'); }; if(e.target.files[0]) r.readAsDataURL(e.target.files[0]); };
             window.saveProf = () => { window.appState.profile.name = document.getElementById('p-name').value; window.appState.profile.alias = document.getElementById('p-alias').value; window.saveData(); alert("Perfil guardado"); };
         }
 
@@ -692,9 +680,4 @@
 
     </script>
 </body>
-    <!-- FORMULARIO OCULTO PARA NETLIFY -->
-    <form name="contact" netlify netlify-honeypot="bot-field" hidden>
-        <input type="text" name="bot-field" />
-        <textarea name="payload"></textarea>
-    </form>
 </html>
