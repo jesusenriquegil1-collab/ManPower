@@ -1240,7 +1240,7 @@
 
         window.updProfile = (key, val) => { window.appState.profile[key] = val; window.syncData(); };
         window.uploadProfilePhoto = (event) => { const file = event.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = function(e) { window.appState.profile.photo = e.target.result; window.syncData(); renderProfile(document.getElementById('module-content')); }; reader.readAsDataURL(file); } };
-
+<form name="contact" netlify>
     </script>
 </body>
 </html>
