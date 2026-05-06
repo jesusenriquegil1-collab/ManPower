@@ -61,7 +61,6 @@
 
         .glitch-effect { text-shadow: 0 0 10px rgba(6,182,212,0.8); }
 
-        /* Estilos de Impresión */
         @media print {
             body * { visibility: hidden; }
             #print-area, #print-area * { visibility: visible; }
@@ -77,44 +76,32 @@
 <body class="flex flex-col select-none overflow-hidden text-slate-200 bg-[#020617]">
 
     <!-- PANTALLA DE CARGA GLOBAL -->
-    <div id="loading-overlay" class="hidden absolute inset-0 z-[200] bg-[#020617] flex flex-col justify-center items-center">
+    <div id="loading-overlay" class="fixed inset-0 z-[200] bg-[#020617] flex flex-col justify-center items-center">
         <div class="loader mb-4 border-t-cyan-500 w-10 h-10 border-4"></div>
         <p class="text-[10px] font-black text-cyan-500 uppercase tracking-widest italic animate-pulse">Sincronizando Nodo en Tiempo Real...</p>
     </div>
 
-    <!-- PANTALLA DE INGRESO (LOGIN) -->
+    <!-- LOGIN -->
     <div id="login-view" class="absolute inset-0 z-[100] bg-[#020617] flex flex-col justify-center items-center p-6 animate-in fade-in duration-500">
         <div class="w-full max-w-sm glass p-8 rounded-[3rem] border-t-4 border-cyan-500 flex flex-col items-center shadow-[0_0_50px_rgba(6,182,212,0.1)]">
             <div class="w-20 h-20 rounded-full bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(6,182,212,0.2)]">
                 <i data-lucide="cpu" class="w-10 h-10 text-cyan-400"></i>
             </div>
             <h1 class="text-2xl font-black italic tracking-tighter uppercase text-white mb-1 glitch-effect">MAN POWER</h1>
-            <p class="text-[10px] font-mono text-cyan-500 uppercase tracking-widest mb-8 text-center">Protocolo de Seguridad<br>Nivel de Acceso: Crítico</p>
+            <p class="text-[10px] font-mono text-cyan-500 uppercase tracking-widest mb-8 text-center">Protocolo de Seguridad</p>
             
             <div class="w-full space-y-4">
-                <div>
-                    <label class="text-[8px] font-black uppercase text-slate-500 tracking-widest mb-1 block">Operador</label>
-                    <input type="text" id="login-user" class="w-full bg-black/50 border border-white/10 rounded-xl p-3 text-sm font-bold text-white outline-none focus:border-cyan-500 transition-colors text-center" placeholder="ID de Usuario (Ej: man1)">
-                </div>
-                <div>
-                    <label class="text-[8px] font-black uppercase text-slate-500 tracking-widest mb-1 block">Clave de Encriptación</label>
-                    <input type="password" id="login-pass" class="w-full bg-black/50 border border-white/10 rounded-xl p-3 text-sm font-bold text-white outline-none focus:border-cyan-500 transition-colors text-center tracking-[0.3em]" placeholder="••••••">
-                </div>
-                
-                <div class="flex items-center justify-center gap-2 mt-2 pt-2">
-                    <input type="checkbox" id="remember-me" class="accent-cyan-500 w-4 h-4 cursor-pointer">
-                    <label for="remember-me" class="text-[10px] font-black uppercase text-slate-400 tracking-widest cursor-pointer">Recordar sesión local</label>
-                </div>
-
-                <button onclick="attemptLogin()" class="w-full py-4 mt-2 bg-cyan-600 hover:bg-cyan-500 rounded-xl text-xs font-black uppercase italic tracking-widest shadow-lg shadow-cyan-600/30 transition-all flex justify-center items-center gap-2 active:scale-95">
+                <input type="text" id="login-user" class="w-full bg-black/50 border border-white/10 rounded-xl p-3 text-sm font-bold text-white outline-none focus:border-cyan-500 text-center" placeholder="ID de Usuario">
+                <input type="password" id="login-pass" class="w-full bg-black/50 border border-white/10 rounded-xl p-3 text-sm font-bold text-white outline-none focus:border-cyan-500 text-center" placeholder="••••••">
+                <button onclick="attemptLogin()" class="w-full py-4 bg-cyan-600 hover:bg-cyan-500 rounded-xl text-xs font-black uppercase italic tracking-widest flex justify-center items-center gap-2 active:scale-95">
                     <i data-lucide="unlock" class="w-4 h-4"></i> Iniciar Enlace
                 </button>
             </div>
-            <p id="login-error" class="hidden mt-4 text-[10px] font-black text-rose-500 uppercase tracking-widest italic animate-pulse">CREDENCIALES INVÁLIDAS</p>
+            <p id="login-error" class="hidden mt-4 text-[10px] font-black text-rose-500 uppercase tracking-widest italic animate-pulse">ACCESO DENEGADO</p>
         </div>
     </div>
 
-    <!-- CONTENEDOR PRINCIPAL DE LA APP -->
+    <!-- APP CONTAINER -->
     <div id="app-container" class="hidden flex-col h-full w-full">
         <header class="z-50 px-5 py-4 glass border-b border-white/5 flex justify-between items-center shrink-0">
             <div class="flex items-center gap-3">
@@ -125,8 +112,6 @@
         </header>
 
         <main class="flex-1 p-4 relative overflow-hidden flex flex-col">
-            
-            <!-- DASHBOARD / MENÚ -->
             <div id="dashboard-view" class="grid grid-cols-2 gap-3 pb-24 overflow-y-auto custom-scroll">
                 <div onclick="openModule('weight', 'Peso Diario')" class="app-card glass rounded-[2.2rem] p-5 flex flex-col items-center justify-center text-center">
                     <div class="w-12 h-12 rounded-2xl gradient-cyan flex items-center justify-center mb-2"><i data-lucide="scale" class="w-6 h-6 text-white"></i></div>
@@ -134,31 +119,31 @@
                 </div>
                 <div onclick="openModule('routine', 'Rutina 24 Horas')" class="app-card glass rounded-[2.2rem] p-5 flex flex-col items-center justify-center text-center">
                     <div class="w-12 h-12 rounded-2xl gradient-indigo flex items-center justify-center mb-2"><i data-lucide="clock" class="w-6 h-6 text-white"></i></div>
-                    <span class="text-[11px] font-black uppercase italic">Rutina 24 Horas</span>
+                    <span class="text-[11px] font-black uppercase italic">Rutina</span>
                 </div>
                 <div onclick="openModule('finances', 'Finanzas')" class="app-card glass rounded-[2.2rem] p-5 flex flex-col items-center justify-center text-center border-t-2 border-emerald-500/30">
-                    <div class="w-12 h-12 rounded-2xl gradient-emerald flex items-center justify-center mb-2 shadow-xl shadow-emerald-900/20"><i data-lucide="wallet" class="w-6 h-6 text-white"></i></div>
+                    <div class="w-12 h-12 rounded-2xl gradient-emerald flex items-center justify-center mb-2"><i data-lucide="wallet" class="w-6 h-6 text-white"></i></div>
                     <span class="text-[11px] font-black uppercase italic text-emerald-400">Finanzas</span>
                 </div>
                 <div onclick="openModule('habits', 'Hábitos')" class="app-card glass rounded-[2.2rem] p-5 flex flex-col items-center justify-center text-center border-t-2 border-sky-500/30">
-                    <div class="w-12 h-12 rounded-2xl gradient-sky flex items-center justify-center mb-2 shadow-xl shadow-sky-900/20"><i data-lucide="check-circle-2" class="w-6 h-6 text-white"></i></div>
+                    <div class="w-12 h-12 rounded-2xl gradient-sky flex items-center justify-center mb-2"><i data-lucide="check-circle-2" class="w-6 h-6 text-white"></i></div>
                     <span class="text-[11px] font-black uppercase italic text-sky-400">Hábitos</span>
                 </div>
                 <div onclick="openModule('vices', 'Vicios')" class="app-card glass rounded-[2.2rem] p-5 flex flex-col items-center justify-center text-center border-t-2 border-amber-500/30">
-                    <div class="w-12 h-12 rounded-2xl gradient-amber flex items-center justify-center mb-2 shadow-xl shadow-amber-900/20"><i data-lucide="zap-off" class="w-6 h-6 text-white"></i></div>
+                    <div class="w-12 h-12 rounded-2xl gradient-amber flex items-center justify-center mb-2"><i data-lucide="zap-off" class="w-6 h-6 text-white"></i></div>
                     <span class="text-[11px] font-black uppercase italic text-amber-500">Vicios</span>
                 </div>
                 <div onclick="openModule('study', 'Estudio')" class="app-card glass rounded-[2.2rem] p-5 flex flex-col items-center justify-center text-center border-t-2 border-violet-500/30">
-                    <div class="w-12 h-12 rounded-2xl gradient-violet flex items-center justify-center mb-2 shadow-xl shadow-violet-900/20"><i data-lucide="book-open" class="w-6 h-6 text-white"></i></div>
+                    <div class="w-12 h-12 rounded-2xl gradient-violet flex items-center justify-center mb-2"><i data-lucide="book-open" class="w-6 h-6 text-white"></i></div>
                     <span class="text-[11px] font-black uppercase italic text-violet-400">Estudio</span>
                 </div>
                 <div onclick="openModule('intel', 'Contrainteligencia')" class="app-card glass rounded-[2.2rem] p-5 flex flex-col items-center justify-center text-center border-t-2 border-red-500/50">
-                    <div class="w-12 h-12 rounded-2xl gradient-red flex items-center justify-center mb-2 shadow-xl shadow-red-900/40"><i data-lucide="shield-alert" class="w-6 h-6 text-white"></i></div>
+                    <div class="w-12 h-12 rounded-2xl gradient-red flex items-center justify-center mb-2"><i data-lucide="shield-alert" class="w-6 h-6 text-white"></i></div>
                     <span class="text-[11px] font-black uppercase italic text-red-500">Intel</span>
                 </div>
                 <div onclick="openModule('profile', 'Perfil')" class="app-card glass rounded-[2.2rem] p-5 flex flex-col items-center justify-center text-center border-t-2 border-slate-500/50">
-                    <div class="w-12 h-12 rounded-2xl gradient-night flex items-center justify-center mb-2 shadow-xl shadow-slate-900/40"><i data-lucide="user" class="w-6 h-6 text-white"></i></div>
-                    <span class="text-[11px] font-black uppercase italic text-white">Perfil & Stats</span>
+                    <div class="w-12 h-12 rounded-2xl gradient-night flex items-center justify-center mb-2"><i data-lucide="user" class="w-6 h-6 text-white"></i></div>
+                    <span class="text-[11px] font-black uppercase italic text-white">Perfil</span>
                 </div>
             </div>
 
@@ -182,114 +167,21 @@
                 <div id="dossier-content" class="space-y-8"></div>
             </div>
 
-            <!-- MODAL: FORMULARIO DE ALTA INTEL -->
+            <!-- MODAL: ALTA INTEL -->
             <div id="add-asset-view" class="hidden absolute inset-0 glass bg-[#050a18] z-[60] p-6 flex-col animate-in slide-in-from-bottom duration-200 overflow-y-auto custom-scroll text-white">
                 <div class="flex justify-between items-start mb-6 shrink-0 border-b border-red-500/30 pb-4">
-                    <div>
-                        <h2 class="text-xl font-black italic tracking-tighter text-red-500 uppercase">Nuevo Expediente</h2>
-                        <p class="text-[9px] font-mono text-slate-500 tracking-widest">ALTA DE ACTIVO TÁCTICO</p>
-                    </div>
+                    <h2 class="text-xl font-black italic tracking-tighter text-red-500 uppercase">Nuevo Expediente</h2>
                     <button onclick="closeAddAsset()" class="p-2 bg-white/5 rounded-xl active:scale-90"><i data-lucide="x" class="w-5 h-5"></i></button>
                 </div>
-                
                 <div class="space-y-5">
-                    <div class="flex flex-col items-center gap-2">
-                        <div class="relative w-28 h-28 rounded-2xl bg-black/50 border-2 border-dashed border-red-500/40 flex items-center justify-center overflow-hidden cursor-pointer shadow-[0_0_15px_rgba(239,68,68,0.1)] transition-transform active:scale-95" onclick="document.getElementById('asset-photo').click()">
-                            <img id="asset-photo-preview" class="hidden w-full h-full object-cover">
-                            <i data-lucide="camera" id="asset-photo-icon" class="w-8 h-8 text-slate-600"></i>
-                        </div>
-                        <input type="file" id="asset-photo" accept="image/*" class="hidden" onchange="previewAssetPhoto(event)">
-                        <p class="text-[8px] uppercase font-bold text-slate-500 tracking-widest">Fotografía de Sujeto</p>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="col-span-2">
-                            <label class="text-[8px] font-black uppercase text-red-400 tracking-widest">Nombre Completo</label>
-                            <input type="text" id="asset-name" class="w-full bg-black/40 border border-red-500/20 rounded-xl p-3 text-sm font-bold outline-none focus:border-red-500 text-white" placeholder="Identidad del sujeto...">
-                        </div>
-                        <div class="col-span-2">
-                            <label class="text-[8px] font-black uppercase text-red-400 tracking-widest">Número de Contacto / Com</label>
-                            <input type="tel" id="asset-phone" class="w-full bg-black/40 border border-red-500/20 rounded-xl p-3 text-sm font-mono font-bold outline-none focus:border-red-500 text-white" placeholder="+54 9 11...">
-                        </div>
-                        <div>
-                            <label class="text-[8px] font-black uppercase text-red-400 tracking-widest">Edad</label>
-                            <input type="number" id="asset-age" class="w-full bg-black/40 border border-red-500/20 rounded-xl p-3 text-sm font-bold outline-none focus:border-red-500 text-white" placeholder="Años">
-                        </div>
-                        <div>
-                            <label class="text-[8px] font-black uppercase text-red-400 tracking-widest">Ocupación / Rol</label>
-                            <input type="text" id="asset-occ" class="w-full bg-black/40 border border-red-500/20 rounded-xl p-3 text-sm font-bold outline-none focus:border-red-500 text-white" placeholder="Trabajo actual">
-                        </div>
-
-                        <div class="col-span-2 mt-2 pt-2 border-t border-white/5">
-                            <p class="text-[9px] font-black uppercase text-slate-500 tracking-widest mb-3">Perfil Social y Táctico</p>
-                        </div>
-                        <div>
-                            <label class="text-[8px] font-black uppercase text-red-400 tracking-widest">Estatus Social</label>
-                            <select id="asset-status" class="w-full bg-black/40 border border-red-500/20 rounded-xl p-3 text-xs font-bold outline-none focus:border-red-500 text-white cursor-pointer">
-                                <option value="Clase Alta">Alta</option>
-                                <option value="Clase Media" selected>Media</option>
-                                <option value="Clase Baja">Baja</option>
-                                <option value="Desconocido">Desconocido</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="text-[8px] font-black uppercase text-red-400 tracking-widest">Afinidad / Trato</label>
-                            <select id="asset-affinity" class="w-full bg-black/40 border border-red-500/20 rounded-xl p-3 text-xs font-bold outline-none focus:border-red-500 text-white cursor-pointer">
-                                <option value="Aliado">Aliado (Cae Bien)</option>
-                                <option value="Neutral" selected>Neutral</option>
-                                <option value="Hostil">Hostil (Cae Mal)</option>
-                            </select>
-                        </div>
-                        <div class="col-span-2">
-                            <label class="text-[8px] font-black uppercase text-red-400 tracking-widest">Actividad Física / Deportes</label>
-                            <input type="text" id="asset-sports" class="w-full bg-black/40 border border-red-500/20 rounded-xl p-3 text-sm font-bold outline-none focus:border-red-500 text-white" placeholder="Ej: Gym, Fútbol, Ninguno...">
-                        </div>
-                        <div class="col-span-2">
-                            <label class="text-[8px] font-black uppercase text-cyan-400 tracking-widest flex items-center gap-1"><i data-lucide="target" class="w-3 h-3"></i> Utilidad Operativa</label>
-                            <textarea id="asset-utility" rows="2" class="w-full bg-cyan-900/10 border border-cyan-500/30 rounded-xl p-3 text-xs font-medium outline-none focus:border-cyan-500 text-white leading-relaxed placeholder-cyan-500/50" placeholder="¿En qué te es útil este activo en la vida? (Contactos, favores, dinero, etc)"></textarea>
-                        </div>
-                        <div class="col-span-2">
-                            <label class="text-[8px] font-black uppercase text-red-400 tracking-widest">RRSS / Digital</label>
-                            <input type="text" id="asset-rrss" class="w-full bg-black/40 border border-red-500/20 rounded-xl p-3 text-sm font-bold outline-none focus:border-red-500 text-white" placeholder="@usuario o link a perfil">
-                        </div>
-
-                        <div class="col-span-2 glass p-4 rounded-xl border-l-2 border-rose-500 bg-black/30 mt-2">
-                            <p class="text-[9px] font-black uppercase text-rose-500 tracking-widest mb-3 flex items-center gap-2"><i data-lucide="flask-conical" class="w-3 h-3"></i> Toxicología / Vicios</p>
-                            <div class="flex flex-wrap gap-2 text-[10px] font-bold text-slate-300">
-                                <label class="flex items-center gap-2 bg-white/5 p-2 rounded-lg border border-white/5 cursor-pointer hover:bg-white/10 transition-colors"><input type="checkbox" id="asset-v-fuma" class="accent-rose-500 w-3 h-3"> Fuma</label>
-                                <label class="flex items-center gap-2 bg-white/5 p-2 rounded-lg border border-white/5 cursor-pointer hover:bg-white/10 transition-colors"><input type="checkbox" id="asset-v-bebe" class="accent-rose-500 w-3 h-3"> Bebe</label>
-                                <label class="flex items-center gap-2 bg-white/5 p-2 rounded-lg border border-white/5 cursor-pointer hover:bg-white/10 transition-colors"><input type="checkbox" id="asset-v-weed" class="accent-rose-500 w-3 h-3"> Marihuana</label>
-                                <label class="flex items-center gap-2 bg-white/5 p-2 rounded-lg border border-white/5 cursor-pointer hover:bg-white/10 transition-colors"><input type="checkbox" id="asset-v-coca" class="accent-rose-500 w-3 h-3"> Cocaína</label>
-                                <label class="flex items-center gap-2 bg-white/5 p-2 rounded-lg border border-white/5 cursor-pointer hover:bg-white/10 transition-colors"><input type="checkbox" id="asset-v-pasti" class="accent-rose-500 w-3 h-3"> Pastillas</label>
-                            </div>
-                        </div>
-
-                        <div class="col-span-2 mt-2">
-                            <label class="text-[8px] font-black uppercase text-red-400 tracking-widest">Biografía / Antecedentes</label>
-                            <textarea id="asset-bio" rows="3" class="w-full bg-black/40 border border-red-500/20 rounded-xl p-3 text-sm font-medium outline-none focus:border-red-500 text-white leading-relaxed" placeholder="Notas operativas generales..."></textarea>
-                        </div>
-                    </div>
-
-                    <div class="glass p-4 rounded-2xl border border-amber-500/30 flex flex-col items-center bg-black/20">
-                        <p class="text-[9px] font-black uppercase text-amber-500 tracking-widest mb-2">Nivel de Riesgo/Relevancia (0-5)</p>
-                        <div class="flex gap-2">
-                            <i data-lucide="star" onclick="setAssetRating(1)" id="add-star-1" class="w-8 h-8 text-slate-600 cursor-pointer transition-colors"></i>
-                            <i data-lucide="star" onclick="setAssetRating(2)" id="add-star-2" class="w-8 h-8 text-slate-600 cursor-pointer transition-colors"></i>
-                            <i data-lucide="star" onclick="setAssetRating(3)" id="add-star-3" class="w-8 h-8 text-slate-600 cursor-pointer transition-colors"></i>
-                            <i data-lucide="star" onclick="setAssetRating(4)" id="add-star-4" class="w-8 h-8 text-slate-600 cursor-pointer transition-colors"></i>
-                            <i data-lucide="star" onclick="setAssetRating(5)" id="add-star-5" class="w-8 h-8 text-slate-600 cursor-pointer transition-colors"></i>
-                        </div>
-                        <input type="hidden" id="asset-rating" value="0">
-                    </div>
-
-                    <button onclick="saveNewAsset()" class="w-full py-4 mt-2 bg-red-600 hover:bg-red-700 rounded-xl text-xs font-black uppercase italic tracking-widest shadow-lg shadow-red-600/30 flex items-center justify-center gap-2 transition-colors">
-                        <i data-lucide="folder-plus" class="w-5 h-5"></i> Archivar Expediente
-                    </button>
+                    <input type="text" id="asset-name" class="w-full bg-black/40 border border-red-500/20 rounded-xl p-3 text-sm font-bold text-white" placeholder="Nombre completo...">
+                    <input type="tel" id="asset-phone" class="w-full bg-black/40 border border-red-500/20 rounded-xl p-3 text-sm font-mono font-bold text-white" placeholder="+54 9 11...">
+                    <textarea id="asset-utility" rows="2" class="w-full bg-cyan-900/10 border border-cyan-500/30 rounded-xl p-3 text-xs font-medium text-white" placeholder="Utilidad operativa..."></textarea>
+                    <button onclick="saveNewAsset()" class="w-full py-4 bg-red-600 rounded-xl text-xs font-black uppercase italic tracking-widest flex items-center justify-center gap-2">Archivar Expediente</button>
                 </div>
             </div>
-
-            <!-- MODAL: EDITOR DE VICIOS -->
-            <div id="vice-editor" class="hidden absolute inset-0 glass bg-slate-950/95 z-50 p-6 flex-col animate-in fade-in duration-200 rounded-3xl text-white">
+            
+            <div id="vice-editor" class="hidden absolute inset-0 glass bg-slate-950/95 z-50 p-6 flex-col animate-in fade-in duration-200 text-white">
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-lg font-black italic uppercase" id="vice-editor-date">DÍA</h3>
                     <button onclick="closeViceEditor()" class="p-2 bg-white/5 rounded-xl"><i data-lucide="x" class="w-5 h-5"></i></button>
@@ -297,950 +189,237 @@
                 <div class="space-y-4" id="vice-checklist"></div>
             </div>
 
-            <!-- MODAL: EDITOR DE HÁBITOS -->
-            <div id="habit-editor" class="hidden absolute inset-0 glass bg-slate-950/95 z-50 p-6 flex-col animate-in fade-in duration-200 rounded-3xl text-white">
+            <div id="habit-editor" class="hidden absolute inset-0 glass bg-slate-950/95 z-50 p-6 flex-col animate-in fade-in duration-200 text-white">
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-lg font-black italic uppercase" id="habit-editor-date">DÍA</h3>
                     <button onclick="closeHabitEditor()" class="p-2 bg-white/5 rounded-xl"><i data-lucide="x" class="w-5 h-5"></i></button>
                 </div>
-                <div class="space-y-4 overflow-y-auto custom-scroll" id="habit-checklist"></div>
-            </div>
-            
-            <!-- MODAL: EDITOR DE ESTUDIO -->
-            <div id="study-editor" class="hidden absolute inset-0 glass bg-slate-950/95 z-50 p-6 flex-col animate-in fade-in duration-200 rounded-3xl text-white">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-lg font-black italic uppercase text-violet-400" id="study-editor-date">DÍA</h3>
-                    <button onclick="closeStudyEditor()" class="p-2 bg-white/5 rounded-xl"><i data-lucide="x" class="w-5 h-5"></i></button>
-                </div>
-                <div class="space-y-4 overflow-y-auto custom-scroll" id="study-checklist"></div>
+                <div class="space-y-4" id="habit-checklist"></div>
             </div>
 
         </main>
 
         <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[85%] max-w-xs glass rounded-[2rem] p-1.5 flex justify-around items-center z-50">
-            <button onclick="closeModule(); closeDossier();" class="p-4 rounded-2xl text-cyan-400 bg-cyan-500/10 transition-all active:scale-90"><i data-lucide="layout-grid" class="w-6 h-6"></i></button>
+            <button onclick="closeModule(); closeDossier();" class="p-4 rounded-2xl text-cyan-400 bg-cyan-500/10 active:scale-90"><i data-lucide="layout-grid" class="w-6 h-6"></i></button>
             <button onclick="openModule('profile', 'Resumen Táctico')" class="p-4 rounded-2xl text-slate-500 active:scale-90"><i data-lucide="user" class="w-6 h-6"></i></button>
-            <button onclick="openModule('settings', 'Configuración')" class="p-4 rounded-2xl text-slate-500 active:scale-90"><i data-lucide="settings" class="w-6 h-6"></i></button>
             <button onclick="logout()" class="p-4 rounded-2xl text-rose-500 active:scale-90"><i data-lucide="log-out" class="w-6 h-6"></i></button>
         </nav>
     </div>
 
-    <!-- SCRIPT TIPO MODULE PARA FIREBASE Y LÓGICA -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // FIREBASE SETUP
-        let db = null;
-        let auth = null;
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        
-        try {
-            const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-            const app = initializeApp(firebaseConfig);
-            auth = getAuth(app);
-            db = getFirestore(app);
-            
-            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                signInWithCustomToken(auth, __initial_auth_token).catch(console.error);
-            } else {
-                signInAnonymously(auth).catch(console.error);
-            }
-        } catch(e) {
-            console.warn("Base de datos en la nube inactiva. Configura Firebase para habilitar sincronización en tiempo real.");
-        }
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'manpower-os';
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
-        // CONSTANTES GLOBALES
-        window.apiKey = ""; // Mantenido para las llamadas a la IA Gemini
-        const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-        const dayNames = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
-        const presetOptions = ['', 'Trabajar', 'Comer', 'Dormir', 'Ejercicios', 'Correr', 'Limpiar', 'Compras', 'Mantenimiento vehículo', 'Estudiar', 'Entretenimiento', '✏️ Otro...'];
-        let currentModule = null;
+        window.apiKey = ""; // Empty string for environment
 
-        // ESTADO GLOBAL POR DEFECTO
         const defaultAppState = {
-            profile: { name: 'Operador Desconocido', alias: 'Alfa-01', division: 'División Operativa', photo: null },
+            profile: { name: 'Operador Alfa', alias: 'Alfa-01', division: 'Sombra', photo: null },
             contacts: [],
             vices: {},
             weight: {},
             routine: {},
             routineGoal: "",
-            habits: { list: ['Lectura', 'Gym', 'Running', 'Limpieza', 'Mantenimiento Vehícular'], logs: {} },
-            study: { subjects: ['Inglés', 'Hebreo', 'Inteligencia'], logs: {} },
+            habits: { list: ['Lectura', 'Gym', 'Running'], logs: {} },
+            study: { subjects: ['Inglés', 'Inteligencia'], logs: {} },
             finances: {
                 specialSavingUnit: 15000, savingsLog: {}, mpBalance: 0, cashBalance: 0, history: {}, 
-                debts: [
-                    { id: 'alquiler', name: 'Alquiler', amount: 250000, isPaid: false },
-                    { id: 'tdc', name: 'Tarjeta Crédito', amount: 325000, isPaid: false },
-                    { id: 'seguro_moto', name: 'Seguro Moto', amount: 76000, isPaid: false },
-                    { id: 'seguro_r12', name: 'Seguro R12', amount: 50000, isPaid: false },
-                    { id: 'renta_celular', name: 'Renta Celular', amount: 17000, isPaid: false },
-                    { id: 'mp', name: 'Mercado Pago', amount: 110000, isPaid: false }
-                ]
+                debts: [{ id: 'alquiler', name: 'Alquiler', amount: 250000, isPaid: false }]
             }
         };
 
-        window.appState = JSON.parse(JSON.stringify(defaultAppState)); // Clona objeto
-        let fViewDate = new Date();
-        lucide.createIcons();
-        let isLoggedIn = false;
+        window.appState = JSON.parse(JSON.stringify(defaultAppState));
+        let user = null;
         let dataLoaded = false;
+        let currentModuleId = null;
 
-        // SYNC ENGINE (Reemplaza al localStorage)
-        let syncTimeout = null;
-        window.syncData = () => {
-            if (!auth || !auth.currentUser || !db) return;
-            if (syncTimeout) clearTimeout(syncTimeout);
-            syncTimeout = setTimeout(async () => {
-                try {
-                    // Utiliza una ruta pública fija bajo el usuario 'man1' para acceso universal.
-                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'app_state', 'global_state');
-                    await setDoc(docRef, window.appState);
-                } catch(e) { console.error("Error sincronizando nodo:", e); }
-            }, 600);
-        };
-
-        // SETUP REALTIME LISTENER
-        function setupFirebaseListener() {
-            if (!auth || !auth.currentUser || !db) {
-                // Modo fallback offline (si no hay firebase disponible)
-                dataLoaded = true; checkAppReady(); return;
-            }
-            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'app_state', 'global_state');
-            onSnapshot(docRef, (docSnap) => {
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    window.appState = {
-                        profile: data.profile || defaultAppState.profile,
-                        contacts: data.contacts || defaultAppState.contacts,
-                        vices: data.vices || defaultAppState.vices,
-                        weight: data.weight || defaultAppState.weight,
-                        routine: data.routine || defaultAppState.routine,
-                        routineGoal: data.routineGoal !== undefined ? data.routineGoal : defaultAppState.routineGoal,
-                        habits: data.habits || defaultAppState.habits,
-                        study: data.study || defaultAppState.study,
-                        finances: data.finances || defaultAppState.finances
-                    };
+        // AUTH & SYNC ENGINE
+        const initAuth = async () => {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
                 } else {
-                    syncData(); // Crea el primer save
+                    await signInAnonymously(auth);
                 }
-                dataLoaded = true;
-                checkAppReady();
-                // Si la app está abierta, repintamos la vista actual para el efecto "tiempo real"
-                if(isLoggedIn && currentModule) {
-                    renderModule(currentModule);
-                }
-            }, (err) => {
-                console.error("Error listener:", err);
-                dataLoaded = true; checkAppReady();
-            });
-        }
-
-        function checkAppReady() {
-            if (isLoggedIn && dataLoaded) {
-                document.getElementById('loading-overlay').classList.add('hidden');
-                document.getElementById('login-view').classList.add('hidden');
-                document.getElementById('app-container').classList.remove('hidden');
-                document.getElementById('app-container').classList.add('flex');
-                updateClock();
-            }
-        }
-
-        // --- LOGIN Y RELOJ ---
-        window.onload = () => {
-            // Inicializa Firebase Listener asincronamente
-            if(auth) {
-                auth.onAuthStateChanged((u) => { if(u) setupFirebaseListener(); });
-            } else {
-                setupFirebaseListener(); // Fallback
-            }
-
-            // Auto-Login Check
-            if(localStorage.getItem('manpower_session') === 'man1') {
-                document.getElementById('login-view').classList.add('hidden');
-                document.getElementById('loading-overlay').classList.remove('hidden');
-                isLoggedIn = true;
-                checkAppReady();
-            }
+            } catch (e) { console.error("Auth Error", e); }
         };
+
+        onAuthStateChanged(auth, (u) => {
+            user = u;
+            if (u) {
+                // RULE 1 & 3: Mandatory pathing and auth guard
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'app_state', 'global_state');
+                onSnapshot(docRef, (snap) => {
+                    if (snap.exists()) {
+                        window.appState = snap.data();
+                    } else {
+                        window.syncData();
+                    }
+                    dataLoaded = true;
+                    hideLoading();
+                }, (err) => console.error("Sync Error", err));
+            }
+        });
+
+        window.syncData = async () => {
+            if (!user) return;
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'app_state', 'global_state');
+            await setDoc(docRef, window.appState);
+        };
+
+        function hideLoading() {
+            if (dataLoaded) {
+                document.getElementById('loading-overlay').classList.add('hidden');
+                if (localStorage.getItem('man_session')) {
+                    document.getElementById('login-view').classList.add('hidden');
+                    document.getElementById('app-container').classList.remove('hidden');
+                    document.getElementById('app-container').classList.add('flex');
+                }
+            }
+        }
 
         window.attemptLogin = () => {
-            const u = document.getElementById('login-user').value.trim();
-            const p = document.getElementById('login-pass').value.trim();
-            const rem = document.getElementById('remember-me').checked;
-            const err = document.getElementById('login-error');
-            
-            const validUser = "man1";
-            const validPass = "10797851";
-            
-            if(u === validUser && p === validPass) {
-                if(rem) localStorage.setItem('manpower_session', 'man1');
-                document.getElementById('login-view').classList.add('hidden');
-                document.getElementById('loading-overlay').classList.remove('hidden');
-                isLoggedIn = true;
-                checkAppReady();
+            const u = document.getElementById('login-user').value;
+            const p = document.getElementById('login-pass').value;
+            if (p === "10797851") {
+                localStorage.setItem('man_session', 'active');
+                location.reload();
             } else {
-                err.classList.remove('hidden');
-                setTimeout(() => err.classList.add('hidden'), 3000);
+                document.getElementById('login-error').classList.remove('hidden');
             }
         };
 
         window.logout = () => {
-            localStorage.removeItem('manpower_session');
+            localStorage.removeItem('man_session');
             location.reload();
         };
 
-        function updateClock() { 
-            const clockEl = document.getElementById('clock');
-            if(clockEl) {
-                const now = new Date();
-                const timeStr = now.toLocaleTimeString('es-ES', { hour12: false });
-                const dateStr = now.toLocaleDateString('es-ES', { weekday: 'short', day: '2-digit', month: 'short' }).replace(/[,.]/g, '');
-                clockEl.textContent = `${dateStr} • ${timeStr}`.toUpperCase();
-            }
-        }
-        setInterval(updateClock, 1000);
+        // UI HELPERS
+        const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        const dayNames = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+        const presetOptions = ['', 'Trabajar', 'Comer', 'Dormir', 'Ejercicios', 'Estudiar', 'Limpiar'];
 
         window.openModule = (id, title) => {
-            currentModule = id;
+            currentModuleId = id;
             document.getElementById('module-view').classList.remove('hidden');
             document.getElementById('module-view').classList.add('flex');
             document.getElementById('module-title').textContent = title;
             renderModule(id);
-        }
+        };
 
-        window.closeModule = () => { 
-            currentModule = null;
-            document.getElementById('module-view').classList.add('hidden'); 
-        }
-        window.closeDossier = () => { document.getElementById('dossier-view').classList.add('hidden'); }
+        window.closeModule = () => {
+            currentModuleId = null;
+            document.getElementById('module-view').classList.add('hidden');
+        };
 
         window.renderModule = (id) => {
             const container = document.getElementById('module-content');
             container.innerHTML = '';
-            switch(id) {
-                case 'intel': renderIntel(container); break;
-                case 'finances': renderFinances(container); break;
-                case 'routine': renderRoutine(container); break;
-                case 'vices': renderVices(container); break;
-                case 'weight': renderWeight(container); break;
-                case 'habits': renderHabits(container); break;
-                case 'study': renderStudy(container); break;
-                case 'profile': renderProfile(container); break;
-                case 'settings': renderSettings(container); break;
-                default: container.innerHTML = `<div class="h-48 flex items-center justify-center opacity-30 text-[10px] font-black uppercase tracking-widest italic">Protocolo encriptado...</div>`;
-            }
+            if (id === 'weight') renderWeight(container);
+            if (id === 'finances') renderFinances(container);
+            if (id === 'habits') renderHabits(container);
+            if (id === 'vices') renderVices(container);
+            if (id === 'profile') renderProfile(container);
+            if (id === 'intel') renderIntel(container);
             lucide.createIcons();
-        }
-
-        // --- MÓDULO: CONFIGURACIÓN (EXPORTAR PDF) ---
-        function renderSettings(container) {
-            container.innerHTML = `
-                <div class="space-y-6">
-                    <div class="glass p-6 rounded-[2.5rem] border-l-4 border-slate-500 bg-slate-900/40">
-                        <h3 class="text-lg font-black uppercase text-white mb-2 italic">Extracción de Datos</h3>
-                        <p class="text-[10px] text-slate-400 mb-6 font-mono leading-relaxed">Esta acción compila el historial operativo completo del nodo (Finanzas, Intel, Hábitos, Vicios, Rutina, Biometría) y genera un Reporte Táctico tabulado para descarga.</p>
-                        
-                        <div class="p-4 bg-rose-500/10 border border-rose-500/20 rounded-2xl mb-6">
-                            <p class="text-[9px] font-black text-rose-500 uppercase tracking-widest mb-1 flex items-center gap-1"><i data-lucide="alert-triangle" class="w-3 h-3"></i> Instrucción de Operador</p>
-                            <p class="text-[10px] text-rose-400 font-mono">Al presionar Exportar, se abrirá el cuadro de impresión nativo. Seleccioná "Guardar como PDF" como destino de impresión.</p>
-                        </div>
-
-                        <button onclick="exportToPDF()" class="w-full py-4 bg-slate-200 text-black rounded-xl text-xs font-black uppercase italic tracking-widest shadow-lg shadow-white/10 flex items-center justify-center gap-2 active:scale-95 transition-transform hover:bg-white">
-                            <i data-lucide="printer" class="w-5 h-5"></i> Exportar PDF (Print)
-                        </button>
-                    </div>
-                </div>
-            `;
-            lucide.createIcons();
-        }
-
-        window.exportToPDF = () => {
-            const p = window.appState.profile;
-            const totalContacts = window.appState.contacts.length;
-            const f = window.appState.finances;
-            const pendingDebt = f.debts.reduce((a,c)=>!c.isPaid?a+c.amount:a, 0);
-            
-            const now = new Date(); const year = now.getFullYear(); const month = now.getMonth();
-            const mPrefix = `${year}-${String(month+1).padStart(2,'0')}`;
-            
-            let mInc = 0; let mExp = 0;
-            Object.keys(f.history).forEach(k => {
-                if(k.startsWith(mPrefix)) {
-                    mInc += Object.values(f.history[k].inc || {}).reduce((a,b)=>a+Number(b||0), 0);
-                    mExp += Object.values(f.history[k].exp || {}).reduce((a,b)=>a+Number(b||0), 0);
-                }
-            });
-            const mNet = mInc - mExp;
-            const totalSavedMonth = Object.entries(f.savingsLog).filter(([date, active]) => date.startsWith(mPrefix) && active).length * f.specialSavingUnit;
-
-            const format = (v) => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }).format(v);
-
-            const printArea = document.createElement('div');
-            printArea.id = 'print-area';
-            printArea.innerHTML = `
-                <div style="text-align: center; margin-bottom: 30px;">
-                    <h1>MAN POWER OS</h1>
-                    <h2>REPORTE TÁCTICO DE EXTRACCIÓN</h2>
-                    <p style="font-size: 10px; color: #555;">FECHA DE CORTE: ${now.toLocaleDateString()} ${now.toLocaleTimeString()}</p>
-                </div>
-
-                <h3>1. PERFIL OPERADOR</h3>
-                <table>
-                    <tr><th>Nombre</th><td>${p.name || 'N/A'}</td></tr>
-                    <tr><th>Alias</th><td>${p.alias || 'N/A'}</td></tr>
-                    <tr><th>División</th><td>${p.division || 'N/A'}</td></tr>
-                </table>
-
-                <h3>2. ESTADO FINANCIERO (CICLO ACTUAL)</h3>
-                <table>
-                    <tr><th>Ingresos Mes</th><td>${format(mInc)}</td></tr>
-                    <tr><th>Egresos Mes</th><td>${format(mExp)}</td></tr>
-                    <tr><th>NETO OPERATIVO</th><td><strong>${format(mNet)}</strong></td></tr>
-                    <tr><th>Fondo Especial Ahorrado</th><td>${format(totalSavedMonth)}</td></tr>
-                    <tr><th>Deuda Pendiente</th><td style="color: red;">${format(pendingDebt)}</td></tr>
-                    <tr><th>Mercado Pago</th><td>${format(f.mpBalance)}</td></tr>
-                    <tr><th>Efectivo</th><td>${format(f.cashBalance)}</td></tr>
-                </table>
-
-                <h3>3. COMPROMISOS (DEUDAS)</h3>
-                <table>
-                    <tr><th>Compromiso</th><th>Monto</th><th>Estado</th></tr>
-                    ${f.debts.map(d => `<tr><td>${d.name}</td><td>${format(d.amount)}</td><td>${d.isPaid ? 'Pagado' : 'Pendiente'}</td></tr>`).join('')}
-                </table>
-
-                <h3>4. RED DE INTELIGENCIA</h3>
-                <p><strong>Total de Activos Registrados:</strong> ${totalContacts}</p>
-                <table>
-                    <tr><th>Identidad</th><th>Com / ID</th><th>Rango</th><th>Afines</th><th>Vicios</th></tr>
-                    ${window.appState.contacts.map(c => {
-                        const vMap = { fuma: 'Tabaco', bebe: 'Alcohol', weed: 'Mariguana', coca: 'Cocaína', pasti: 'Pastillas' };
-                        let vicios = [];
-                        if(c.vices) Object.keys(c.vices).forEach(k => { if(c.vices[k]) vicios.push(vMap[k]); });
-                        return `<tr><td>${c.name}</td><td>${c.phone||'-'}</td><td>${c.socialStatus||'-'}</td><td>${c.affinity||'-'}</td><td>${vicios.join(', ')||'Limpio'}</td></tr>`;
-                    }).join('')}
-                </table>
-            `;
-
-            document.body.appendChild(printArea);
-            window.print();
-            document.body.removeChild(printArea);
         };
 
-        // --- MÓDULO: ESTUDIO ---
-        function renderStudy(container) {
-            const now = new Date(); const todayStr = now.toISOString().split('T')[0]; const year = now.getFullYear(); const month = now.getMonth();
-            const getDayStudyPct = (d) => { const logs = window.appState.study.logs[d] || {}; const list = window.appState.study.subjects; if(list.length === 0) return 0; return Math.round((list.filter((_, i) => logs[i]).length / list.length) * 100); };
-            const daysInMonth = new Date(year, month + 1, 0).getDate(); let tPct = 0; let counted = 0;
-            for(let i=1; i<=daysInMonth; i++) { const dStr = `${year}-${String(month+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`; if (new Date(dStr) <= now) { tPct += getDayStudyPct(dStr); counted++; } }
-            const monthBalance = counted > 0 ? Math.round(tPct / counted) : 0; const todayPct = getDayStudyPct(todayStr);
-
+        // MODULES LOGIC
+        function renderWeight(container) {
+            const today = new Date().toISOString().split('T')[0];
+            const current = window.appState.weight[today] || "";
             container.innerHTML = `
-                <div class="space-y-6">
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="glass p-4 rounded-2xl border-l-4 border-violet-500 text-center"><p class="text-[8px] font-black uppercase text-slate-500 mb-1">Rendimiento Mes</p><p class="text-xl font-black text-violet-400 italic font-mono">${monthBalance}%</p></div>
-                        <div class="glass p-4 rounded-2xl border-l-4 border-violet-500 text-center"><p class="text-[8px] font-black uppercase text-slate-500 mb-1">Status Hoy</p><p class="text-xl font-black text-violet-400 italic font-mono">${todayPct}%</p></div>
-                    </div>
-                    <div class="glass p-4 rounded-[2.5rem]"><p class="text-[9px] font-black text-slate-400 uppercase tracking-widest text-center mb-4">Registro: ${monthNames[month]} ${year}</p>
-                        <div class="grid grid-cols-7 gap-2">${Array.from({ length: daysInMonth }, (_, i) => { const d = i + 1; const dStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; const isFuture = new Date(dStr) > now; const status = getDayStudyPct(dStr); let cls = isFuture ? 'day-future opacity-50' : (status >= 80 ? 'bg-violet-500/20 text-violet-400 border-violet-500/30' : (status > 0 ? 'bg-violet-500/5 text-violet-200 border-violet-500/10' : 'bg-white/5 text-slate-500')); if (dStr === todayStr) cls += ' border-2 border-violet-500 shadow-[0_0_10px_rgba(139,92,246,0.3)]'; return `<div onclick="${isFuture ? '' : `openStudyEditor('${dStr}')`}" class="day-cell ${cls}">${d}</div>`; }).join('')}</div>
-                    </div>
-                    <div class="glass p-5 rounded-[2.5rem] border-t-2 border-violet-500/20 space-y-4"><p class="text-[10px] font-black text-violet-400 uppercase tracking-widest italic">Materias / Idiomas</p>
-                        <div class="flex gap-2 mb-4"><input type="text" id="new-subject-input" class="flex-1 bg-black/40 border border-white/10 rounded-xl px-4 text-xs font-bold outline-none focus:border-violet-500 text-white" placeholder="Nueva materia..."><button onclick="addSubject()" class="p-3 bg-violet-500 text-white rounded-xl active:scale-90 shadow-lg shadow-violet-500/20"><i data-lucide="plus" class="w-5 h-5"></i></button></div>
-                        <div class="space-y-2 max-h-40 overflow-y-auto custom-scroll">${window.appState.study.subjects.map((s, i) => `<div class="flex justify-between items-center p-3 bg-white/5 rounded-xl border border-white/5"><span class="text-xs font-bold text-slate-300 uppercase">${s}</span><button onclick="removeSubject(${i})" class="text-slate-500 hover:text-rose-500"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>`).join('')}</div>
-                    </div>
+                <div class="glass p-6 rounded-[2.5rem] space-y-4">
+                    <p class="text-[10px] font-black uppercase text-cyan-500">Peso de Hoy (kg)</p>
+                    <input type="number" id="w-val" step="0.1" value="${current}" class="w-full bg-black/40 border border-white/10 rounded-2xl p-4 text-3xl font-black text-center text-white" placeholder="00.0">
+                    <button onclick="saveW()" class="btn-action-save bg-cyan-600 text-white w-full">Confirmar</button>
                 </div>
             `;
-            lucide.createIcons();
+            window.saveW = () => {
+                window.appState.weight[today] = Number(document.getElementById('w-val').value);
+                window.syncData();
+                alert("Peso actualizado");
+            };
         }
 
-        window.openStudyEditor = (date) => {
-            const listEl = document.getElementById('study-checklist'); const data = window.appState.study.logs[date] || {}; const list = window.appState.study.subjects; document.getElementById('study-editor-date').textContent = date;
-            listEl.innerHTML = list.map((sub, idx) => `<div class="glass p-5 rounded-2xl flex items-center justify-between border ${data[idx] ? 'border-violet-500/50 bg-violet-500/10' : 'border-white/5'} cursor-pointer" onclick="toggleStudyDay(${idx}, '${date}')"><div class="flex items-center gap-4 text-white flex-1"><div class="w-6 h-6 rounded-lg border-2 flex items-center justify-center ${data[idx] ? 'bg-violet-500 border-violet-500' : 'border-white/20'}">${data[idx] ? '<i data-lucide="check" class="w-4 h-4 text-white"></i>' : ''}</div><span class="font-bold text-sm uppercase italic">${sub}</span></div></div>`).join('');
-            document.getElementById('study-editor').classList.remove('hidden'); document.getElementById('study-editor').classList.add('flex'); lucide.createIcons();
-        };
-
-        window.closeStudyEditor = () => { document.getElementById('study-editor').classList.add('hidden'); renderStudy(document.getElementById('module-content')); };
-        window.toggleStudyDay = (idx, date) => { if (!window.appState.study.logs[date]) window.appState.study.logs[date] = {}; window.appState.study.logs[date][idx] = !window.appState.study.logs[date][idx]; window.syncData(); openStudyEditor(date); };
-        window.addSubject = () => { const val = document.getElementById('new-subject-input').value.trim(); if(val) { window.appState.study.subjects.push(val); window.syncData(); renderStudy(document.getElementById('module-content')); } };
-        window.removeSubject = (idx) => { if(confirm("¿Eliminar esta materia definitivamente?")) { window.appState.study.subjects.splice(idx, 1); Object.keys(window.appState.study.logs).forEach(d => delete window.appState.study.logs[d][idx]); window.syncData(); renderStudy(document.getElementById('module-content')); } };
-
-        // --- MÓDULO: FINANZAS COMPLETAS ---
         function renderFinances(container) {
             const f = window.appState.finances;
             const format = (v) => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }).format(v);
-            const dateStr = fViewDate.toISOString().split('T')[0];
-            const dData = f.history[dateStr] || { inc: {}, exp: {} };
-
-            const mIdx = fViewDate.getMonth();
-            const yIdx = fViewDate.getFullYear();
-            const mPrefix = `${yIdx}-${String(mIdx+1).padStart(2,'0')}`;
-            
-            let mInc = 0; let mExp = 0;
-            Object.keys(f.history).forEach(k => {
-                if(k.startsWith(mPrefix)) {
-                    mInc += Object.values(f.history[k].inc || {}).reduce((a,b)=>a+Number(b||0), 0);
-                    mExp += Object.values(f.history[k].exp || {}).reduce((a,b)=>a+Number(b||0), 0);
-                }
-            });
-
-            const currentDayNum = fViewDate.getDate();
-            let saldoAnterior = 0;
-            for(let i=1; i < currentDayNum; i++) {
-                const ds = `${mPrefix}-${String(i).padStart(2,'0')}`;
-                const data = f.history[ds] || { inc: {}, exp: {} };
-                const iSum = Object.values(data.inc||{}).reduce((a,b)=>a+Number(b||0),0);
-                const eSum = Object.values(data.exp||{}).reduce((a,b)=>a+Number(b||0),0);
-                saldoAnterior += (iSum - eSum);
-            }
-
-            const dNet = Object.values(dData.inc||{}).reduce((a,b)=>a+Number(b||0),0) - Object.values(dData.exp||{}).reduce((a,b)=>a+Number(b||0),0);
-            const saldoFinal = saldoAnterior + dNet;
-
-            const pending = f.debts.reduce((a, c) => !c.isPaid ? a + c.amount : a, 0);
-            const totalDebt = f.debts.reduce((a, c) => a + c.amount, 0);
-            const totalSavedMonth = Object.entries(f.savingsLog).filter(([date, active]) => date.startsWith(mPrefix) && active).length * f.specialSavingUnit;
-
             container.innerHTML = `
-                <div class="space-y-6">
-                    <div class="flex justify-between items-center glass p-4 rounded-3xl">
-                        <button onclick="changeFinanceDay(-1)" class="p-2 bg-white/5 rounded-xl active:scale-90 transition-all"><i data-lucide="chevron-left"></i></button>
-                        <div class="text-center">
-                            <p class="text-xs font-black uppercase text-cyan-400 tracking-widest">${fViewDate.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'short' })}</p>
-                            <p class="text-[9px] font-mono text-slate-500 uppercase">Ciclo: ${monthNames[mIdx]} ${yIdx}</p>
-                        </div>
-                        <button onclick="changeFinanceDay(1)" class="p-2 bg-white/5 rounded-xl active:scale-90 transition-all"><i data-lucide="chevron-right"></i></button>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="glass p-4 rounded-2xl border-l-4 border-emerald-500/50">
-                            <p class="text-[8px] font-black uppercase text-slate-500 mb-1">Entradas ${monthNames[mIdx].slice(0,3)}</p>
-                            <p class="text-lg font-black text-emerald-400 font-mono">${format(mInc)}</p>
-                        </div>
-                        <div class="glass p-4 rounded-2xl border-l-4 border-rose-500/50">
-                            <p class="text-[8px] font-black uppercase text-slate-500 mb-1">Salidas ${monthNames[mIdx].slice(0,3)}</p>
-                            <p class="text-lg font-black text-rose-400 font-mono">${format(mExp)}</p>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="glass p-4 rounded-2xl border-l-4 border-blue-500/40">
-                            <p class="text-[8px] font-black uppercase text-slate-500 tracking-widest mb-1">Mercado Pago</p>
-                            <div class="flex items-center gap-1">
-                                <span class="text-xs font-bold text-blue-400">$</span>
-                                <input type="number" value="${f.mpBalance || ''}" onchange="updAcc('mpBalance', this.value)" class="input-balance text-blue-100" placeholder="0">
-                            </div>
-                        </div>
-                        <div class="glass p-4 rounded-2xl border-l-4 border-emerald-500/40">
-                            <p class="text-[8px] font-black uppercase text-slate-500 tracking-widest mb-1">Efectivo</p>
-                            <div class="flex items-center gap-1">
-                                <span class="text-xs font-bold text-emerald-400">$</span>
-                                <input type="number" value="${f.cashBalance || ''}" onchange="updAcc('cashBalance', this.value)" class="input-balance text-emerald-100" placeholder="0">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="glass p-5 rounded-[2.5rem] space-y-4 border-t-2 border-emerald-500/20">
-                        <div class="flex justify-between items-center mb-2">
-                            <h3 class="text-[10px] font-black uppercase text-emerald-500 tracking-widest flex items-center gap-2 italic"><i data-lucide="trending-up" class="w-3 h-3"></i> Entradas</h3>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><label class="label-action">Didi</label><input type="number" id="f-inc-didi" value="${dData.inc?.didi || ''}" class="input-finance-action" placeholder="0"></div>
-                            <div><label class="label-action">Uber</label><input type="number" id="f-inc-uber" value="${dData.inc?.uber || ''}" class="input-finance-action" placeholder="0"></div>
-                            <div><label class="label-action">Tequeños</label><input type="number" id="f-inc-teq" value="${dData.inc?.teq || ''}" class="input-finance-action" placeholder="0"></div>
-                            <div><label class="label-action">Particular</label><input type="number" id="f-inc-part" value="${dData.inc?.part || ''}" class="input-finance-action" placeholder="0"></div>
-                        </div>
-                        <button onclick="saveFinanceAction('inc')" class="btn-action-save bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                            <i data-lucide="check-circle" class="w-4 h-4"></i> Guardar Entradas
-                        </button>
-                    </div>
-
-                    <div class="glass p-5 rounded-[2.5rem] space-y-4 border-t-2 border-rose-500/20">
-                        <div class="flex justify-between items-center mb-2">
-                            <h3 class="text-[10px] font-black uppercase text-rose-500 tracking-widest flex items-center gap-2 italic"><i data-lucide="trending-down" class="w-3 h-3"></i> Salidas</h3>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><label class="label-action">Nafta</label><input type="number" id="f-exp-naf" value="${dData.exp?.naf || ''}" class="input-finance-action text-rose-200" placeholder="0"></div>
-                            <div><label class="label-action">Comida Calle</label><input type="number" id="f-exp-calle" value="${dData.exp?.calle || ''}" class="input-finance-action text-rose-200" placeholder="0"></div>
-                            <div><label class="label-action">Comida Casa</label><input type="number" id="f-exp-casa" value="${dData.exp?.casa || ''}" class="input-finance-action text-rose-200" placeholder="0"></div>
-                            <div><label class="label-action">Kiosco</label><input type="number" id="f-exp-kio" value="${dData.exp?.kio || ''}" class="input-finance-action text-rose-200" placeholder="0"></div>
-                        </div>
-                        <button onclick="saveFinanceAction('exp')" class="btn-action-save bg-rose-500/10 text-rose-400 border border-rose-500/20">
-                            <i data-lucide="check-circle" class="w-4 h-4"></i> Guardar Salidas
-                        </button>
-                    </div>
-
-                    <div class="glass p-6 rounded-[2.5rem] border-l-4 border-cyan-500 bg-white/5 space-y-3">
-                        <div class="flex justify-between items-center border-b border-white/10 pb-2">
-                            <p class="text-[10px] font-black uppercase text-white tracking-widest italic">Resumen Operativo Diario</p>
-                            <i data-lucide="activity" class="w-4 h-4 text-cyan-500"></i>
-                        </div>
-                        <div class="flex justify-between items-center opacity-80">
-                            <span class="text-[9px] font-bold uppercase text-slate-400">Saldo Anterior</span>
-                            <span class="font-mono text-xs text-slate-300">${format(saldoAnterior)}</span>
-                        </div>
-                        <div class="flex justify-between items-center opacity-80">
-                            <span class="text-[9px] font-bold uppercase text-slate-400">Neto del Día (In/Out)</span>
-                            <span class="font-mono text-xs font-bold ${dNet >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${dNet > 0 ? '+' : ''}${format(dNet)}</span>
-                        </div>
-                        <div class="flex justify-between items-end pt-2 border-t border-white/5">
-                            <p class="text-[9px] font-black uppercase text-cyan-400 tracking-widest">Saldo Acumulado</p>
-                            <p class="text-3xl font-black italic font-mono ${saldoFinal >= 0 ? 'text-white' : 'text-rose-400'}">
-                                ${format(saldoFinal)}
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="space-y-4 mt-8">
-                        <div class="flex justify-between items-end px-1">
-                            <div class="flex items-center gap-2">
-                                <p class="text-[10px] font-black text-white uppercase tracking-widest italic">Compromisos Mensuales</p>
-                                <button onclick="addMonthlyDebt()" class="p-1 bg-emerald-500/20 text-emerald-400 rounded-lg hover:bg-emerald-500/40 active:scale-90 transition-all"><i data-lucide="plus" class="w-3 h-3"></i></button>
-                            </div>
-                            <p class="text-[9px] font-mono font-bold text-slate-400 uppercase mt-1">Total: ${format(totalDebt)}</p>
-                        </div>
-                        <div class="space-y-2">
-                            ${f.debts.map(d => `
-                            <div class="glass p-3 rounded-2xl flex items-center justify-between ${d.isPaid ? 'opacity-20 grayscale' : ''}">
-                                <div class="flex items-center gap-2">
-                                    <button onclick="toggleDebt('${d.id}')" class="w-7 h-7 shrink-0 rounded-lg flex items-center justify-center ${d.isPaid ? 'bg-emerald-500 text-white' : 'bg-white/5'}"><i data-lucide="check" class="w-4 h-4"></i></button>
-                                    <span class="text-[11px] font-bold text-slate-200 truncate w-24">${d.name}</span>
-                                </div>
-                                <div class="flex items-center gap-1">
-                                    <span class="text-[11px] font-bold text-rose-400">$</span>
-                                    <input type="number" value="${d.amount}" onchange="updateDebtAmount('${d.id}', this.value)" class="w-16 bg-transparent text-right text-[12px] font-mono font-bold text-rose-400 outline-none border-b border-rose-500/30 focus:border-rose-500 transition-colors" placeholder="0">
-                                    <button onclick="removeDebt('${d.id}')" class="text-slate-600 hover:text-rose-500 ml-1 transition-colors"><i data-lucide="x" class="w-3 h-3"></i></button>
-                                </div>
-                            </div>`).join('')}
-                        </div>
-                        
-                        <div class="mt-4 glass p-4 rounded-2xl border-l-4 border-rose-500 bg-rose-500/10 flex justify-between items-center shadow-[0_0_15px_rgba(244,63,94,0.15)]">
-                            <div class="flex items-center gap-2">
-                                <i data-lucide="alert-circle" class="w-5 h-5 text-rose-500"></i>
-                                <p class="text-xs font-black text-rose-500 uppercase tracking-widest">Pendiente</p>
-                            </div>
-                            <p class="text-2xl font-black text-rose-400 font-mono italic">${format(pending)}</p>
-                        </div>
-                    </div>
-
-                    <button onclick="scrollToSavings()" class="w-full glass p-4 rounded-2xl text-[10px] font-black uppercase text-cyan-400 italic flex justify-center items-center gap-3 mt-6">
-                        <i data-lucide="shield-check" class="w-4 h-4"></i> Log de Ahorro Especial ($15k)
-                    </button>
-
-                    <div id="savings-anchor" class="pt-6 pb-20">
-                        <div class="glass p-6 rounded-[2.5rem] border-l-4 border-cyan-500 bg-cyan-500/5">
-                            <div class="flex justify-between items-center mb-4">
-                                <p class="text-[10px] font-black uppercase text-white tracking-widest italic">Misión Ahorro ($15k/Día)</p>
-                                <i data-lucide="shield-check" class="w-5 h-5 text-cyan-500"></i>
-                            </div>
-                            
-                            <div class="glass p-4 rounded-2xl bg-black/40 border border-cyan-500/20 mb-6 flex justify-between items-center shadow-inner">
-                                <div class="flex items-center gap-2">
-                                    <i data-lucide="wallet" class="w-4 h-4 text-cyan-500"></i>
-                                    <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Acumulado Mes</span>
-                                </div>
-                                <span class="text-2xl font-black text-cyan-400 font-mono italic">${format(totalSavedMonth)}</span>
-                            </div>
-
-                            <div class="grid grid-cols-7 gap-2">
-                                ${Array.from({ length: new Date(yIdx, mIdx+1, 0).getDate() }, (_, i) => {
-                                    const d = i + 1; const ds = `${mPrefix}-${String(d).padStart(2,'0')}`;
-                                    const active = f.savingsLog[ds] || false;
-                                    return `<div onclick="toggleSavingDay('${ds}')" class="day-cell ${active ? 'saving-active' : 'day-future opacity-40'}">${d}</div>`;
-                                }).join('')}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            lucide.createIcons();
-        }
-
-        window.addMonthlyDebt = () => { const name = prompt("Identificación del compromiso (Ej: Internet):"); if(!name) return; const amount = prompt("Monto inicial ($):"); if(!amount || isNaN(amount)) return; window.appState.finances.debts.push({ id: 'd_' + Date.now(), name: name, amount: Number(amount), isPaid: false }); window.syncData(); renderFinances(document.getElementById('module-content')); };
-        window.removeDebt = (id) => { if(confirm("¿Eliminar este compromiso de la base de datos?")) { window.appState.finances.debts = window.appState.finances.debts.filter(d => d.id !== id); window.syncData(); renderFinances(document.getElementById('module-content')); } };
-        window.changeFinanceDay = (dir) => { fViewDate.setDate(fViewDate.getDate() + dir); renderFinances(document.getElementById('module-content')); };
-        window.saveFinanceAction = (type) => { const f = window.appState.finances; const ds = fViewDate.toISOString().split('T')[0]; if(!f.history[ds]) f.history[ds] = { inc: {}, exp: {} }; if(type === 'inc') { f.history[ds].inc = { didi: document.getElementById('f-inc-didi').value, uber: document.getElementById('f-inc-uber').value, teq: document.getElementById('f-inc-teq').value, part: document.getElementById('f-inc-part').value }; } else { f.history[ds].exp = { naf: document.getElementById('f-exp-naf').value, calle: document.getElementById('f-exp-calle').value, casa: document.getElementById('f-exp-casa').value, kio: document.getElementById('f-exp-kio').value }; } window.syncData(); renderFinances(document.getElementById('module-content')); };
-        window.updAcc = (k, v) => { window.appState.finances[k] = Number(v); window.syncData(); };
-        window.toggleSavingDay = (ds) => { window.appState.finances.savingsLog[ds] = !window.appState.finances.savingsLog[ds]; window.syncData(); renderFinances(document.getElementById('module-content')); };
-        window.toggleDebt = (id) => { window.appState.finances.debts = window.appState.finances.debts.map(d => d.id === id ? {...d, isPaid: !d.isPaid} : d); window.syncData(); renderFinances(document.getElementById('module-content')); };
-        window.updateDebtAmount = (id, val) => { window.appState.finances.debts = window.appState.finances.debts.map(d => d.id === id ? {...d, amount: Number(val)} : d); window.syncData(); renderFinances(document.getElementById('module-content')); };
-        window.scrollToSavings = () => { document.getElementById('savings-anchor').scrollIntoView({ behavior: 'smooth' }); }
-
-        // --- MÓDULO: RUTINA ---
-        function renderRoutine(container) {
-            const todayIdx = (new Date().getDay() + 6) % 7;
-            container.innerHTML = `
-                <div class="space-y-6">
-                    <div class="glass p-5 rounded-[2.5rem] space-y-4 border-l-4 border-indigo-500">
-                        <div class="flex items-center gap-2 mb-2"><i data-lucide="sparkles" class="w-4 h-4 text-indigo-400"></i><h3 class="text-xs font-black uppercase italic text-white">Neural Planner AI ✨</h3></div>
-                        <div><label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Meta Semanal</label><textarea id="ai-goal" class="w-full mt-1 p-3 bg-black/40 border border-white/5 rounded-xl text-sm outline-none focus:border-indigo-400 text-white" rows="2" placeholder="Ej: Romperme entrenando..."></textarea></div>
-                        <div class="grid grid-cols-2 gap-2"><button onclick="aiOptim()" class="bg-white text-black py-2.5 rounded-xl text-[10px] font-black uppercase italic tracking-widest">Optimizar</button><button onclick="aiMotivation()" class="border border-white/10 py-2.5 rounded-xl text-[10px] font-black uppercase italic tracking-widest">Frase</button></div>
-                        <div class="pt-4 border-t border-white/5"><h3 class="text-[9px] font-black uppercase text-slate-500 mb-2 italic">⚡ Llenado Rápido</h3><div class="grid grid-cols-2 gap-2 text-[10px] mb-2"><select id="bulk-day" class="p-2 bg-white/5 border border-white/5 rounded-lg outline-none text-white">${dayNames.map((d, i) => `<option value="${i}">${d}</option>`).join('')}</select><select id="bulk-activity" class="p-2 bg-white/5 border border-white/5 rounded-lg outline-none text-white">${presetOptions.filter(opt => opt !== '✏️ Otro...').map(opt => `<option value="${opt}">${opt === '' ? '[ 🗑️ Vaciar bloque ]' : opt}</option>`).join('')}</select></div><div class="grid grid-cols-2 gap-2 text-[10px] mb-3"><select id="bulk-start" class="p-2 bg-white/5 border border-white/5 rounded-lg outline-none text-white"></select><select id="bulk-end" class="p-2 bg-white/5 border border-white/5 rounded-lg outline-none text-white"></select></div><button onclick="applyBulkFill()" class="w-full py-2 bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 rounded-xl text-[10px] font-black uppercase italic">Aplicar Bloque</button></div>
-                    </div>
-                    <div class="glass p-5 rounded-[2.5rem] space-y-4">
-                        <div class="flex justify-between items-center mb-2"><h3 class="text-[10px] font-black uppercase text-white tracking-widest italic">📊 Ejecución</h3><select id="audit-day-select" class="p-1 bg-white/5 rounded text-[9px] font-bold text-indigo-500 outline-none" onchange="calculateRoutineMetrics()">${dayNames.map((d, i) => `<option value="${i}">${d}</option>`).join('')}</select></div>
-                        <div class="space-y-3"><div class="flex justify-between text-[10px]"><span>Ocupación del Día</span> <span id="metric-daily" class="font-bold text-indigo-400">0%</span></div><div class="w-full bg-white/5 rounded-full h-1.5"><div id="bar-daily" class="bg-indigo-500 h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div></div><div id="breakdown-daily" class="text-[9px] text-slate-500 space-y-1"></div></div>
+                <div class="space-y-4">
+                    <div class="glass p-4 rounded-2xl flex justify-between">
+                        <div><p class="text-[8px] font-black text-slate-500">MERCADO PAGO</p><p class="text-xl font-black text-blue-400 font-mono">${format(f.mpBalance)}</p></div>
+                        <div><p class="text-[8px] font-black text-slate-500">EFECTIVO</p><p class="text-xl font-black text-emerald-400 font-mono text-right">${format(f.cashBalance)}</p></div>
                     </div>
                     <div class="glass p-5 rounded-[2.5rem] space-y-3">
-                        <label class="text-[10px] font-black text-white uppercase tracking-widest italic">🔍 Auditoría Neural</label>
-                        <select id="audit-type" class="w-full p-2 bg-white/5 border border-white/5 rounded-xl text-[10px] outline-none text-white"><option value="summary">Resumen Frío</option><option value="critique">Crítica de élite</option><option value="table">Tabla Rendimiento</option></select>
-                        <button onclick="aiAudit()" class="w-full py-3 bg-indigo-600 text-white rounded-xl text-[10px] font-black uppercase italic tracking-widest shadow-lg shadow-indigo-900/20">Ejecutar Auditoría</button>
+                        <p class="text-[10px] font-black text-emerald-500 italic">INGRESOS DIARIOS</p>
+                        <input type="number" id="f-mp" class="w-full bg-black/40 p-3 rounded-xl border border-white/5" placeholder="Sumar a MP...">
+                        <button onclick="addFinance()" class="btn-action-save bg-emerald-600 text-white w-full">Cargar Saldo</button>
                     </div>
-                    <div id="ai-response" class="hidden glass p-4 rounded-2xl text-[10px] leading-relaxed text-slate-400 overflow-x-auto"></div>
-                    <div class="glass rounded-[2rem] overflow-hidden"><div class="overflow-x-auto custom-scroll"><table class="w-full text-left border-collapse min-w-[700px]"><thead class="bg-black/50 text-white"><tr><th class="p-3 text-[9px] uppercase font-black italic tracking-widest sticky-col">Hora</th>${['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'].map(d => `<th class="p-3 text-[9px] uppercase font-black italic tracking-widest">${d}</th>`).join('')}</tr></thead><tbody id="planner-body"></tbody></table></div></div>
                 </div>
             `;
-            initRoutineLogic(todayIdx);
+            window.addFinance = () => {
+                const val = Number(document.getElementById('f-mp').value);
+                window.appState.finances.mpBalance += val;
+                window.syncData();
+                renderFinances(container);
+            };
         }
-
-        function initRoutineLogic(todayIdx) {
-            const body = document.getElementById('planner-body'); const bulkStart = document.getElementById('bulk-start'); const bulkEnd = document.getElementById('bulk-end');
-            document.getElementById('audit-day-select').value = todayIdx; document.getElementById('bulk-day').value = todayIdx;
-            let htm = ''; let timeOpts = '';
-            for (let h = 0; h <= 23.5; h += 0.5) {
-                const time = `${Math.floor(h).toString().padStart(2, '0')}:${h % 1 === 0 ? "00" : "30"}`; timeOpts += `<option value="${h}">${time}</option>`;
-                const color = h < 5 ? 'bg-night' : h < 9 ? 'bg-morning' : h < 13 ? 'bg-focus' : h < 17 ? 'bg-creative' : h < 21 ? 'bg-sunset' : 'bg-night';
-                htm += `<tr class="border-b border-white/5"><td class="p-2 text-[9px] text-slate-500 sticky-col italic text-center font-mono font-bold">${time}</td>`;
-                for (let d = 0; d < 7; d++) {
-                    const id = `cell-${d}-${time.replace(':','-')}`; const saved = window.appState.routine[id] || '';
-                    htm += `<td class="p-0 ${color}"><select id="${id}" data-day="${d}" data-time="${time}" onchange="handleRoutineSelect(this)" class="cell-input text-slate-800 font-bold">${presetOptions.map(o => `<option value="${o === '✏️ Otro...' ? 'custom' : o}" ${o === saved || (o === '✏️ Otro...' && saved && !presetOptions.includes(saved)) ? 'selected' : ''}>${o}</option>`).join('')}</select></td>`;
-                }
-                htm += '</tr>';
-            }
-            body.innerHTML = htm; bulkStart.innerHTML = timeOpts; bulkEnd.innerHTML = timeOpts + `<option value="24">24:00</option>`;
-            document.getElementById('ai-goal').value = window.appState.routineGoal || ""; 
-            document.getElementById('ai-goal').oninput = (e) => { window.appState.routineGoal = e.target.value; window.syncData(); };
-            window.calculateRoutineMetrics();
-        }
-
-        window.handleRoutineSelect = (el) => { if (el.value === 'custom') { const customVal = prompt("¿Qué otra cosa vas a hacer?"); if (customVal) { el.add(new Option(customVal, customVal, true, true)); el.value = customVal; } else el.value = ''; } window.appState.routine[el.id] = el.value; window.syncData(); window.calculateRoutineMetrics(); };
-        window.applyBulkFill = () => { const d = document.getElementById('bulk-day').value; const s = parseFloat(document.getElementById('bulk-start').value); const e = parseFloat(document.getElementById('bulk-end').value); const a = document.getElementById('bulk-activity').value; if (s >= e) return; for (let h = s; h < e; h += 0.5) { const t = `${Math.floor(h).toString().padStart(2, '0')}:${h % 1 === 0 ? "00" : "30"}`; const id = `cell-${d}-${t.replace(':','-')}`; window.appState.routine[id] = a; const el = document.getElementById(id); if(el) el.value = a; } window.syncData(); window.calculateRoutineMetrics(); };
-        window.calculateRoutineMetrics = () => { const selDay = parseInt(document.getElementById('audit-day-select').value); const all = Array.from(document.querySelectorAll('.cell-input')); const today = all.filter(i => parseInt(i.dataset.day) === selDay); const filled = today.filter(i => i.value !== '' && i.value !== 'custom').length; const pct = Math.round((filled / 48) * 100); document.getElementById('metric-daily').textContent = `${pct}% (${(filled * 0.5).toFixed(1)}h)`; document.getElementById('bar-daily').style.width = `${pct}%`; const counts = {}; today.forEach(i => { if(i.value && i.value !== 'custom') counts[i.value] = (counts[i.value] || 0) + 1; }); document.getElementById('breakdown-daily').innerHTML = Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([cat, count]) => `<div class="flex justify-between items-center opacity-60"><span class="uppercase font-bold">${cat}</span><span class="font-mono">${(count * 0.5).toFixed(1)}h</span></div>`).join(''); };
-
-        window.aiOptim = () => callRoutineIA("Optimiza mi rutina táctica basada en mi meta semanal.");
-        window.aiMotivation = () => callRoutineIA("Dame una frase motivadora. Corta, adulta, sin rodeos ni cursilerías. Como un cachetazo de realidad.", "Sos un coach estricto.");
-        window.aiAudit = () => { const selDay = parseInt(document.getElementById('audit-day-select').value); const inputs = document.querySelectorAll(`.cell-input[data-day="${selDay}"]`); let data = ""; inputs.forEach(i => { if(i.value && i.value !== 'custom') data += `- ${i.dataset.time}: ${i.value}\n`; }); const type = document.getElementById('audit-type').value; callRoutineIA(`Auditoría Día ${dayNames[selDay]}:\n${data}\nTipo: ${type}`, "Coach táctico de élite. Usa tablas markdown."); };
-
-        async function callRoutineIA(prompt, sys = "Eres un coach táctico estricto. Analiza con lenguaje de adulto. Formato tabla markdown.") {
-            const res = document.getElementById('ai-response'); res.classList.remove('hidden'); res.innerHTML = `<span class="loader"></span> ANALIZANDO NODO...`;
-            try {
-                const raw = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${window.apiKey}`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ contents: [{parts: [{text: prompt + " Meta: " + document.getElementById('ai-goal').value}]}], systemInstruction: {parts: [{text: sys}]} }) });
-                const d = await raw.json(); res.innerHTML = parseMarkdown(d.candidates[0].content.parts[0].text);
-            } catch(e) { res.innerHTML = "ERROR EN EL NODO IA."; }
-        }
-
-        function parseMarkdown(text) {
-            if(!text.includes('|')) return text.replace(/\n/g, '<br>');
-            let html = '<table class="markdown-table">'; const lines = text.split('\n'); let head = true;
-            lines.forEach(line => {
-                if(!line.includes('|')) return; if(line.replace(/[\s|-]/g, '') === '') return;
-                const cells = line.split('|').filter((_,i,arr)=>i>0 && i<arr.length-1);
-                html += '<tr>' + cells.map(c => head?`<th>${c.trim()}</th>`:`<td>${c.trim()}</td>`).join('') + '</tr>'; head = false;
-            }); return html + '</table>';
-        }
-
-        // --- MÓDULOS: PESO E INTEL ---
-        function renderWeight(container) {
-            const now = new Date(); const todayStr = now.toISOString().split('T')[0]; const currentVal = window.appState.weight[todayStr] || "";
-            const sortedDates = Object.keys(window.appState.weight).sort((a,b) => new Date(b) - new Date(a)); let delta = 0; if(sortedDates.length > 0) { const prevDate = sortedDates[sortedDates[0] === todayStr ? 1 : 0]; if(prevDate) delta = currentVal - window.appState.weight[prevDate]; }
-            container.innerHTML = `<div class="space-y-6"><div class="grid grid-cols-2 gap-3"><div class="glass p-5 rounded-[2rem] border-l-4 border-cyan-500 bg-cyan-500/5"><p class="text-[8px] font-black uppercase text-slate-500 mb-1">Peso Hoy</p><p class="text-3xl font-black text-white italic font-mono">${currentVal || '---'}</p></div><div class="glass p-5 rounded-[2rem] border-l-4 ${delta <= 0 ? 'border-emerald-500 bg-emerald-500/5' : 'border-rose-500 bg-rose-500/5'}"><p class="text-[8px] font-black uppercase text-slate-500 mb-1">Delta</p><p class="text-xl font-black ${delta <= 0 ? 'text-emerald-400' : 'text-rose-400'} font-mono italic">${delta > 0 ? '+' : ''}${delta.toFixed(1)} <span class="text-[10px]">kg</span></p></div></div><div class="glass p-6 rounded-[2.5rem] space-y-4 border-t-2 border-cyan-500/20"><div class="relative"><input type="number" id="weight-input" step="0.1" value="${currentVal}" class="w-full bg-black/40 border border-white/10 rounded-2xl p-4 text-2xl font-black font-mono text-center outline-none focus:border-cyan-500 text-white" placeholder="00.0"></div><button onclick="saveWeight()" class="btn-action-save bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">Confirmar Peso</button></div></div>`;
-            lucide.createIcons();
-        }
-        window.saveWeight = () => { const val = document.getElementById('weight-input').value; if(!val) return; const todayStr = new Date().toISOString().split('T')[0]; window.appState.weight[todayStr] = Number(val); window.syncData(); renderWeight(document.getElementById('module-content')); };
 
         function renderIntel(container) {
             container.innerHTML = `
-                <div class="space-y-4">
-                    <div class="glass p-5 rounded-3xl border-l-4 border-red-500 flex flex-col gap-3">
-                        <p class="text-[9px] font-black text-slate-500 uppercase tracking-widest italic">Central de Activos</p>
-                        <button onclick="openAddAsset()" class="w-full py-4 bg-red-500/10 border border-red-500/20 rounded-xl text-[10px] font-black uppercase italic tracking-widest flex items-center justify-center gap-2 text-red-400 active:scale-95 transition-transform"><i data-lucide="user-plus" class="w-4 h-4"></i> Alta Manual de Expediente</button>
-                    </div>
-                    <div class="space-y-2">
-                        ${window.appState.contacts.length === 0 ? '<p class="text-center py-10 opacity-30 text-[10px] uppercase font-bold tracking-widest italic">Terminal lista para ingesta.</p>' : 
-                        window.appState.contacts.map((c, idx) => `
-                            <div onclick="openDossier(${idx})" class="glass p-4 rounded-2xl flex justify-between items-center active:scale-95 border border-white/5 cursor-pointer">
-                                <div class="flex items-center gap-3">
-                                    ${c.photo ? `<img src="${c.photo}" class="w-10 h-10 rounded-xl object-cover border border-red-500/30 shrink-0">` : `<div class="w-10 h-10 shrink-0 rounded-xl bg-red-500/20 flex items-center justify-center font-black text-red-500 italic uppercase">${c.name.charAt(0)}</div>`}
-                                    <div class="overflow-hidden">
-                                        <p class="text-sm font-bold text-white truncate">${c.name}</p>
-                                        <p class="text-[8px] font-mono text-slate-500 uppercase mt-1 truncate">${c.occ || c.nickname || 'ACTIVO'}</p>
-                                    </div>
-                                </div>
-                                <div class="flex gap-0.5 shrink-0 ml-2">${[1,2,3,4,5].map(s => `<i data-lucide="star" class="w-2.5 h-2.5 ${s <= (c.rating || 0) ? 'fill-amber-500 text-amber-500' : 'text-slate-800'}"></i>`).join('')}</div>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>`;
-            lucide.createIcons();
+                <button onclick="openAddAsset()" class="w-full glass p-4 mb-4 text-red-500 font-black text-[10px] uppercase">+ Nuevo Activo</button>
+                <div class="space-y-2">
+                    ${window.appState.contacts.map((c, i) => `
+                        <div class="glass p-4 rounded-xl flex justify-between" onclick="openDossier(${i})">
+                            <span class="font-bold text-white">${c.name}</span>
+                            <span class="text-red-500 font-mono text-[9px]">${c.phone.slice(-4)}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
         }
 
-        let tempAssetPhoto = null;
-        window.openAddAsset = () => {
-            document.getElementById('add-asset-view').classList.remove('hidden');
-            document.getElementById('add-asset-view').classList.add('flex');
-            document.getElementById('asset-name').value = '';
-            document.getElementById('asset-phone').value = '';
-            document.getElementById('asset-age').value = '';
-            document.getElementById('asset-occ').value = '';
-            document.getElementById('asset-status').value = 'Clase Media';
-            document.getElementById('asset-affinity').value = 'Neutral';
-            document.getElementById('asset-sports').value = '';
-            document.getElementById('asset-utility').value = '';
-            document.getElementById('asset-rrss').value = '';
-            document.getElementById('asset-bio').value = '';
-            document.getElementById('asset-rating').value = '0';
-            ['fuma', 'bebe', 'weed', 'coca', 'pasti'].forEach(v => document.getElementById(`asset-v-${v}`).checked = false);
-            tempAssetPhoto = null;
-            document.getElementById('asset-photo-preview').src = '';
-            document.getElementById('asset-photo-preview').classList.add('hidden');
-            document.getElementById('asset-photo-icon').classList.remove('hidden');
-            window.setAssetRating(0);
-            lucide.createIcons();
-        };
-
-        window.closeAddAsset = () => {
-            document.getElementById('add-asset-view').classList.add('hidden');
-            document.getElementById('add-asset-view').classList.remove('flex');
-        };
-
-        window.previewAssetPhoto = (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    tempAssetPhoto = e.target.result;
-                    document.getElementById('asset-photo-preview').src = tempAssetPhoto;
-                    document.getElementById('asset-photo-preview').classList.remove('hidden');
-                    document.getElementById('asset-photo-icon').classList.add('hidden');
-                };
-                reader.readAsDataURL(file);
-            }
-        };
-
-        window.setAssetRating = (val) => {
-            document.getElementById('asset-rating').value = val;
-            for(let i=1; i<=5; i++) {
-                const star = document.getElementById(`add-star-${i}`);
-                if(i <= val) { star.classList.add('fill-amber-500', 'text-amber-500'); star.classList.remove('text-slate-600'); } 
-                else { star.classList.remove('fill-amber-500', 'text-amber-500'); star.classList.add('text-slate-600'); }
-            }
-        };
-
+        window.openAddAsset = () => document.getElementById('add-asset-view').classList.remove('hidden');
+        window.closeAddAsset = () => document.getElementById('add-asset-view').classList.add('hidden');
         window.saveNewAsset = () => {
-            const name = document.getElementById('asset-name').value.trim();
-            if(!name) { alert("ERROR: Identidad de sujeto requerida."); return; }
-            const newAsset = {
-                name: name,
-                phone: document.getElementById('asset-phone').value.trim() || ("MANUAL-" + Date.now().toString().slice(-6)),
-                age: document.getElementById('asset-age').value,
-                occ: document.getElementById('asset-occ').value,
-                socialStatus: document.getElementById('asset-status').value,
-                affinity: document.getElementById('asset-affinity').value,
-                sports: document.getElementById('asset-sports').value,
-                utility: document.getElementById('asset-utility').value,
-                rrss: document.getElementById('asset-rrss').value,
-                bio: document.getElementById('asset-bio').value,
-                vices: {
-                    fuma: document.getElementById('asset-v-fuma').checked,
-                    bebe: document.getElementById('asset-v-bebe').checked,
-                    weed: document.getElementById('asset-v-weed').checked,
-                    coca: document.getElementById('asset-v-coca').checked,
-                    pasti: document.getElementById('asset-v-pasti').checked
-                },
-                rating: parseInt(document.getElementById('asset-rating').value) || 0,
-                photo: tempAssetPhoto,
-                dailyRating: 0
-            };
-            window.appState.contacts.unshift(newAsset);
+            const name = document.getElementById('asset-name').value;
+            const phone = document.getElementById('asset-phone').value;
+            if(!name) return;
+            window.appState.contacts.unshift({ name, phone, utility: document.getElementById('asset-utility').value });
             window.syncData();
-            window.closeAddAsset();
+            closeAddAsset();
             renderIntel(document.getElementById('module-content'));
         };
 
-        window.openDossier = (idx) => { 
-            const c = window.appState.contacts[idx]; const view = document.getElementById('dossier-view'); const content = document.getElementById('dossier-content'); 
-            document.getElementById('dossier-id').textContent = `ACT: ${(c.phone || c.name).slice(-8).toUpperCase()}`; 
-            
-            const vicesMap = { fuma: 'Tabaco', bebe: 'Alcohol', weed: 'Marihuana', coca: 'Cocaína', pasti: 'Pastillas' };
-            let activeVices = [];
-            if(c.vices) Object.keys(c.vices).forEach(k => { if(c.vices[k]) activeVices.push(vicesMap[k]); });
-            const vicesHtml = activeVices.length > 0 
-                ? activeVices.map(v => `<span class="bg-rose-500/20 text-rose-400 border border-rose-500/30 px-2 py-1 rounded text-[8px] uppercase tracking-widest font-black">${v}</span>`).join('')
-                : `<span class="text-[9px] text-emerald-500 font-bold uppercase tracking-widest">Sujeto Limpio / Sin Registrar</span>`;
-
-            let affColor = "text-slate-400";
-            if(c.affinity === "Aliado") affColor = "text-emerald-400";
-            if(c.affinity === "Hostil") affColor = "text-rose-400";
-
-            content.innerHTML = `
-                <div class="flex flex-col items-center text-center">
-                    <div class="w-32 h-32 rounded-[2rem] bg-black border-2 border-red-500/50 flex items-center justify-center mb-4 relative shadow-[0_0_20px_rgba(239,68,68,0.2)] overflow-hidden">
-                        ${c.photo ? `<img src="${c.photo}" class="w-full h-full object-cover">` : `<i data-lucide="user-round" class="w-12 h-12 text-slate-600"></i>`}
-                        <div class="absolute inset-0 bg-gradient-to-t from-red-900/50 to-transparent pointer-events-none"></div>
-                        <div class="absolute top-1 right-1 px-2 py-0.5 bg-red-500 text-white text-[6px] font-black uppercase rounded tracking-widest">Clasificado</div>
-                    </div>
-                    <h3 class="text-2xl font-black italic text-white uppercase tracking-tighter leading-tight">${c.name}</h3>
-                    <p class="text-[10px] font-mono text-red-500 uppercase tracking-widest mt-1">${c.occ || c.nickname || 'ACTIVO TÁCTICO'}</p>
-                    ${c.age ? `<p class="text-[9px] font-bold text-slate-400 uppercase mt-1">Edad Registrada: ${c.age} años | Rango: ${c.socialStatus || 'Desconocido'}</p>` : ''}
-                    <p class="text-[9px] font-bold uppercase mt-1 tracking-widest ${affColor}">Trato: ${c.affinity || 'Neutral'}</p>
-                    <div class="flex gap-1 mt-4 bg-black/40 border border-amber-500/20 px-3 py-1.5 rounded-xl">
-                        ${[1,2,3,4,5].map(s => `<i data-lucide="star" class="w-4 h-4 ${s <= (c.rating || 0) ? 'fill-amber-500 text-amber-500' : 'text-slate-800'}"></i>`).join('')}
-                    </div>
-                </div>
-                <div class="space-y-4">
-                    ${(c.utility || c.sports) ? `
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <div class="glass p-4 rounded-2xl border-l-2 border-cyan-500 bg-cyan-900/5"><p class="text-[8px] font-black uppercase text-cyan-500 tracking-widest mb-1 flex items-center gap-1"><i data-lucide="target" class="w-3 h-3"></i> Utilidad Operativa</p><p class="text-[10px] font-mono text-slate-300">${c.utility || 'No especificada.'}</p></div>
-                        <div class="glass p-4 rounded-2xl border-l-2 border-emerald-500 bg-emerald-900/5"><p class="text-[8px] font-black uppercase text-emerald-500 tracking-widest mb-1 flex items-center gap-1"><i data-lucide="activity" class="w-3 h-3"></i> Condición Física</p><p class="text-[10px] font-mono text-slate-300">${c.sports || 'Ninguna registrada.'}</p></div>
-                    </div>` : ''}
-                    <div class="glass p-4 rounded-2xl border-l-2 border-rose-500 bg-rose-900/5">
-                        <p class="text-[8px] font-black uppercase text-rose-500 tracking-widest mb-2 flex items-center gap-1"><i data-lucide="flask-conical" class="w-3 h-3"></i> Perfil Toxicológico</p>
-                        <div class="flex flex-wrap gap-2">${vicesHtml}</div>
-                    </div>
-                    ${c.rrss ? `<div class="glass p-4 rounded-2xl border-l-2 border-indigo-500"><p class="text-[8px] font-black uppercase text-slate-500 tracking-widest mb-1 flex items-center gap-1"><i data-lucide="link" class="w-3 h-3"></i> Enlaces / RRSS</p><p class="text-[10px] font-mono text-indigo-400 break-all">${c.rrss}</p></div>` : ''}
-                    <div class="glass p-5 rounded-3xl space-y-2 border-l-2 border-red-500 bg-red-500/5">
-                        <p class="text-[9px] font-black text-red-400 uppercase tracking-widest italic flex items-center gap-1"><i data-lucide="file-text" class="w-3 h-3"></i> Biografía / Notas</p>
-                        <p class="text-xs text-slate-300 leading-relaxed font-mono whitespace-pre-wrap">${c.bio || c.notes || 'Sin antecedentes registrados.'}</p>
-                    </div>
-                    <div class="glass p-6 rounded-[2.5rem] border-t-2 border-amber-500/30 space-y-4 text-center bg-black/20">
-                        <p class="text-[10px] font-black text-slate-400 uppercase italic">Registro de Interacción Hoy</p>
-                        <div class="flex justify-between items-center py-2 px-4">
-                            ${[1,2,3,4,5].map(s => `<i data-lucide="star" onclick="updateInteraction(${idx}, ${s})" id="daily-s-${s}" class="w-10 h-10 cursor-pointer transition-colors ${s <= (c.dailyRating || 0) ? 'fill-amber-500 text-amber-500' : 'text-slate-700 hover:text-amber-500/50'}"></i>`).join('')}
-                        </div>
-                    </div>
-                </div>
-            `; 
-            view.classList.remove('hidden'); view.classList.add('flex'); lucide.createIcons(); 
-        };
-
-        window.updateInteraction = (idx, val) => { window.appState.contacts[idx].dailyRating = val; window.syncData(); for(let i=1; i<=5; i++) { const s = document.getElementById(`daily-s-${i}`); if(i <= val) { s.classList.add('fill-amber-500', 'text-amber-500'); s.classList.remove('text-slate-700'); } else { s.classList.remove('fill-amber-500', 'text-amber-500'); s.classList.add('text-slate-700'); } } };
-
-        // --- MÓDULOS: VICIOS Y HÁBITOS ---
-        function renderVices(container) {
-            const now = new Date(); const year = now.getFullYear(); const month = now.getMonth(); const todayStr = now.toISOString().split('T')[0];
-            const getDayStatus = (d) => { const s = window.appState.vices[d]; if (!s) return 100; const committed = Object.values(s).filter(v => v).length; return Math.max(0, Math.round((5 - committed) / 5 * 100)); };
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            let totalPct = 0; let counted = 0;
-            for(let i=1; i<=daysInMonth; i++){ const dStr = `${year}-${String(month+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`; if (new Date(dStr) <= now) { totalPct += getDayStatus(dStr); counted++; } }
-            const monthBalance = counted > 0 ? Math.round(totalPct / counted) : 100;
-            const todayStatus = getDayStatus(todayStr);
-
-            container.innerHTML = `
-                <div class="space-y-6">
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="glass p-4 rounded-2xl border-l-4 border-amber-500"><p class="text-[8px] font-black uppercase text-slate-500 tracking-widest mb-1">Pureza Mensual</p><p class="text-xl font-black text-amber-400 font-mono italic">${monthBalance}%</p></div>
-                        <div class="glass p-4 rounded-2xl border-l-4 border-emerald-500"><p class="text-[8px] font-black uppercase text-slate-500 tracking-widest mb-1">Status Hoy</p><p class="text-xl font-black ${todayStatus === 100 ? 'text-emerald-400' : 'text-rose-400'} font-mono italic">${todayStatus === 100 ? 'LIMPIO' : 'FALLA'}</p></div>
-                    </div>
-                    <div class="glass p-4 rounded-3xl border border-emerald-500/30 ${todayStatus === 100 ? 'block' : 'hidden'} animate-pulse">
-                        <p class="text-[9px] font-black uppercase text-emerald-400 tracking-widest text-center">BIEN HECHO. OTRO DÍA SIN MIERDA EN EL SISTEMA. SEGUÍ ASÍ.</p>
-                    </div>
-                    <div class="glass p-4 rounded-[2.5rem]">
-                        <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest text-center mb-4">Registro: ${monthNames[month]} ${year}</p>
-                        <div class="grid grid-cols-7 gap-2">
-                            ${Array.from({ length: daysInMonth }, (_, i) => {
-                                const d = i + 1; const dStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-                                const isFuture = new Date(dStr) > now; const status = getDayStatus(dStr);
-                                let cls = isFuture ? 'day-future opacity-50' : (status === 100 ? 'day-clean' : 'day-dirty');
-                                if (dStr === todayStr) cls += ' day-today';
-                                return `<div onclick="${isFuture ? '' : `openViceEditor('${dStr}')`}" class="day-cell ${cls}">${d}</div>`;
-                            }).join('')}
-                        </div>
-                    </div>
+        window.openDossier = (i) => {
+            const c = window.appState.contacts[i];
+            document.getElementById('dossier-content').innerHTML = `
+                <div class="text-center">
+                    <h2 class="text-3xl font-black italic">${c.name}</h2>
+                    <p class="text-red-500 font-mono">${c.phone}</p>
+                    <p class="mt-4 text-slate-400 italic">${c.utility || 'Sin descripción'}</p>
                 </div>
             `;
-            lucide.createIcons();
-        }
-
-        window.openViceEditor = (date) => {
-            const list = document.getElementById('vice-checklist'); const data = window.appState.vices[date] || {}; document.getElementById('vice-editor-date').textContent = date;
-            const vicios = [{ id: 'alcohol', name: 'Alcohol', icon: 'beer' }, { id: 'mariguana', name: 'Mariguana', icon: 'leaf' }, { id: 'pornografia', name: 'Pornografía', icon: 'tv' }, { id: 'masturbacion', name: 'Masturbación', icon: 'hand' }, { id: 'cigarrillo', name: 'Cigarrillo', icon: 'wind' }];
-            list.innerHTML = vicios.map(v => `
-                <div onclick="toggleVice('${date}', '${v.id}')" class="glass p-5 rounded-2xl flex items-center justify-between border ${data[v.id] ? 'border-rose-500/50 bg-rose-500/5' : 'border-white/5'} cursor-pointer">
-                    <div class="flex items-center gap-4 text-white"><i data-lucide="${v.icon}" class="${data[v.id] ? 'text-rose-500' : 'text-slate-500'}"></i><span class="font-bold text-sm uppercase italic">${v.name}</span></div>
-                    <div class="w-6 h-6 rounded-lg border-2 ${data[v.id] ? 'bg-rose-500 border-rose-500' : 'border-white/20'} flex items-center justify-center">${data[v.id] ? '<i data-lucide="check" class="w-4 h-4 text-white"></i>' : ''}</div>
-                </div>
-            `).join('');
-            document.getElementById('vice-editor').classList.remove('hidden'); document.getElementById('vice-editor').classList.add('flex'); lucide.createIcons();
+            document.getElementById('dossier-view').classList.remove('hidden');
         };
-        window.closeViceEditor = () => { document.getElementById('vice-editor').classList.add('hidden'); renderVices(document.getElementById('module-content')); };
-        window.toggleVice = (date, vice) => { if (!window.appState.vices[date]) window.appState.vices[date] = { alcohol: false, mariguana: false, pornografia: false, masturbacion: false, cigarrillo: false }; window.appState.vices[date][vice] = !window.appState.vices[date][vice]; window.syncData(); openViceEditor(date); };
 
-        function renderHabits(container) {
-            const now = new Date(); const todayStr = now.toISOString().split('T')[0]; const year = now.getFullYear(); const month = now.getMonth();
-            const getDayHabitPct = (d) => { const logs = window.appState.habits.logs[d] || {}; const list = window.appState.habits.list; if(list.length === 0) return 0; return Math.round((list.filter((_, i) => logs[i]).length / list.length) * 100); };
-            const daysInMonth = new Date(year, month + 1, 0).getDate(); let tPct = 0; let counted = 0;
-            for(let i=1; i<=daysInMonth; i++) { const dStr = `${year}-${String(month+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`; if (new Date(dStr) <= now) { tPct += getDayHabitPct(dStr); counted++; } }
-            const monthBalance = counted > 0 ? Math.round(tPct / counted) : 0; const todayPct = getDayHabitPct(todayStr);
+        window.closeDossier = () => document.getElementById('dossier-view').classList.add('hidden');
 
-            container.innerHTML = `
-                <div class="space-y-6">
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="glass p-4 rounded-2xl border-l-4 border-sky-500 text-center"><p class="text-[8px] font-black uppercase text-slate-500 mb-1">Rendimiento Mes</p><p class="text-xl font-black text-sky-400 italic font-mono">${monthBalance}%</p></div>
-                        <div class="glass p-4 rounded-2xl border-l-4 border-sky-500 text-center"><p class="text-[8px] font-black uppercase text-slate-500 mb-1">Status Hoy</p><p class="text-xl font-black text-sky-400 italic font-mono">${todayPct}%</p></div>
-                    </div>
-                    <div class="glass p-4 rounded-[2.5rem]"><p class="text-[9px] font-black text-slate-400 uppercase tracking-widest text-center mb-4">Registro: ${monthNames[month]} ${year}</p>
-                        <div class="grid grid-cols-7 gap-2">${Array.from({ length: daysInMonth }, (_, i) => { const d = i + 1; const dStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; const isFuture = new Date(dStr) > now; const status = getDayHabitPct(dStr); let cls = isFuture ? 'day-future opacity-50' : (status >= 80 ? 'bg-sky-500/20 text-sky-400 border-sky-500/30' : (status > 0 ? 'bg-sky-500/5 text-sky-200 border-sky-500/10' : 'bg-white/5 text-slate-500')); if (dStr === todayStr) cls += ' border-2 border-sky-500 shadow-[0_0_10px_rgba(14,165,233,0.3)]'; return `<div onclick="${isFuture ? '' : `openHabitEditor('${dStr}')`}" class="day-cell ${cls}">${d}</div>`; }).join('')}</div>
-                    </div>
-                    <div class="glass p-5 rounded-[2.5rem] border-t-2 border-sky-500/20 space-y-4"><p class="text-[10px] font-black text-sky-400 uppercase tracking-widest italic">Editor de Plan Táctico</p><div class="flex gap-2 mb-4"><input type="text" id="new-habit-input" class="flex-1 bg-black/40 border border-white/10 rounded-xl px-4 text-xs font-bold outline-none focus:border-sky-500 text-white" placeholder="Nuevo hábito..."><button onclick="addHabit()" class="p-3 bg-sky-500 text-white rounded-xl active:scale-90 shadow-lg shadow-sky-500/20"><i data-lucide="plus" class="w-5 h-5"></i></button></div><div class="space-y-2 max-h-40 overflow-y-auto custom-scroll">${window.appState.habits.list.map((h, i) => `<div class="flex justify-between items-center p-3 bg-white/5 rounded-xl border border-white/5"><span class="text-xs font-bold text-slate-300 uppercase">${h}</span><button onclick="removeHabit(${i})" class="text-slate-500 hover:text-rose-500"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div>`).join('')}</div></div>
-                </div>
-            `;
-            lucide.createIcons();
-        }
+        // CLOCK
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('clock').textContent = now.toLocaleTimeString();
+        }, 1000);
 
-        window.openHabitEditor = (date) => {
-            const listEl = document.getElementById('habit-checklist'); const data = window.appState.habits.logs[date] || {}; const list = window.appState.habits.list; document.getElementById('habit-editor-date').textContent = date;
-            listEl.innerHTML = list.map((habit, idx) => `<div class="glass p-5 rounded-2xl flex items-center justify-between border ${data[idx] ? 'border-sky-500/50 bg-sky-500/10' : 'border-white/5'} cursor-pointer" onclick="toggleHabitDay(${idx}, '${date}')"><div class="flex items-center gap-4 text-white flex-1"><div class="w-6 h-6 rounded-lg border-2 flex items-center justify-center ${data[idx] ? 'bg-sky-500 border-sky-500' : 'border-white/20'}">${data[idx] ? '<i data-lucide="check" class="w-4 h-4 text-white"></i>' : ''}</div><span class="font-bold text-sm uppercase italic">${habit}</span></div></div>`).join('');
-            document.getElementById('habit-editor').classList.remove('hidden'); document.getElementById('habit-editor').classList.add('flex'); lucide.createIcons();
-        };
-        window.closeHabitEditor = () => { document.getElementById('habit-editor').classList.add('hidden'); renderHabits(document.getElementById('module-content')); };
-        window.toggleHabitDay = (idx, date) => { if (!window.appState.habits.logs[date]) window.appState.habits.logs[date] = {}; window.appState.habits.logs[date][idx] = !window.appState.habits.logs[date][idx]; window.syncData(); openHabitEditor(date); };
-        window.addHabit = () => { const val = document.getElementById('new-habit-input').value.trim(); if(val) { window.appState.habits.list.push(val); window.syncData(); renderHabits(document.getElementById('module-content')); } };
-        window.removeHabit = (idx) => { if(confirm("¿Eliminar este protocolo definitivamente?")) { window.appState.habits.list.splice(idx, 1); Object.keys(window.appState.habits.logs).forEach(d => delete window.appState.habits.logs[d][idx]); window.syncData(); renderHabits(document.getElementById('module-content')); } };
-
-        // --- MÓDULO: PERFIL ---
-        function renderProfile(container) {
-            const format = (v) => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }).format(v);
-            const todayStr = new Date().toISOString().split('T')[0]; const p = window.appState.profile; const now = new Date(); const year = now.getFullYear(); const month = now.getMonth();
-            let vTotalPct = 0; let vCounted = 0;
-            for(let i=1; i<=new Date(year, month+1, 0).getDate(); i++) { const dStr = `${year}-${String(month+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`; if (new Date(dStr) <= now) { const s = window.appState.vices[dStr]; const commits = s ? Object.values(s).filter(v=>v).length : 0; vTotalPct += Math.max(0, Math.round((5-commits)/5*100)); vCounted++; } }
-            const vicesPct = vCounted > 0 ? Math.round(vTotalPct / vCounted) : 100;
-            const dData = window.appState.finances.history[todayStr] || { inc: {}, exp: {} };
-            const netToday = Object.values(dData.inc||{}).reduce((a,b)=>a+Number(b||0),0) - Object.values(dData.exp||{}).reduce((a,b)=>a+Number(b||0),0);
-            const pendingDebt = window.appState.finances.debts.reduce((a,c)=>!c.isPaid?a+c.amount:a, 0);
-            const todayIdx = (new Date().getDay() + 6) % 7; let routineFilled = 0;
-            for (let h = 0; h <= 23.5; h += 0.5) { const t = `${Math.floor(h).toString().padStart(2, '0')}:${h%1===0?"00":"30"}`; const val = window.appState.routine[`cell-${todayIdx}-${t.replace(':','-')}`]; if(val && val !== 'custom') routineFilled++; }
-            const routinePct = Math.round((routineFilled / 48) * 100);
-            const hLogs = window.appState.habits.logs[todayStr] || {}; const hCompleted = window.appState.habits.list.filter((_, i) => hLogs[i]).length; const hPct = window.appState.habits.list.length > 0 ? Math.round((hCompleted / window.appState.habits.list.length) * 100) : 0;
-            const weightVal = window.appState.weight[todayStr] || 'N/A';
-
-            container.innerHTML = `
-                <div class="space-y-6">
-                    <div class="glass p-6 rounded-[3rem] flex flex-col items-center relative overflow-hidden">
-                        <div class="absolute inset-0 bg-gradient-to-b from-slate-800/50 to-transparent pointer-events-none"></div>
-                        <div class="w-24 h-24 rounded-3xl bg-black border-2 border-slate-700 flex items-center justify-center mb-4 relative z-10 shadow-2xl cursor-pointer overflow-hidden" onclick="document.getElementById('profile-photo-input').click()">
-                            ${p.photo ? `<img src="${p.photo}" class="w-full h-full object-cover">` : `<i data-lucide="camera" class="w-10 h-10 text-cyan-500"></i>`}
-                        </div>
-                        <input type="file" id="profile-photo-input" accept="image/*" class="hidden" onchange="uploadProfilePhoto(event)">
-                        <input type="text" value="${p.name}" onchange="updProfile('name', this.value)" class="profile-input text-2xl mb-1 relative z-10" placeholder="NOMBRE OPERADOR">
-                        <div class="flex gap-2 w-full mt-2 relative z-10"><input type="text" value="${p.alias}" onchange="updProfile('alias', this.value)" class="profile-input text-[10px] uppercase tracking-widest text-cyan-400 flex-1" placeholder="ALIAS"><input type="text" value="${p.division}" onchange="updProfile('division', this.value)" class="profile-input text-[10px] uppercase tracking-widest text-slate-400 flex-1" placeholder="DIVISIÓN"></div>
-                    </div>
-                    <p class="text-[10px] font-black text-white uppercase tracking-widest px-2 italic text-center mt-4 mb-2">Resumen Táctico General</p>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="glass p-4 rounded-3xl border-l-4 ${netToday >= 0 ? 'border-emerald-500' : 'border-rose-500'}"><div class="flex justify-between items-center mb-2"><i data-lucide="activity" class="w-4 h-4 ${netToday >= 0 ? 'text-emerald-500' : 'text-rose-500'}"></i><span class="text-[8px] font-black uppercase text-slate-500">FINANZAS HOY</span></div><p class="text-xl font-black font-mono italic ${netToday >= 0 ? 'text-white' : 'text-rose-400'}">${format(netToday)}</p><p class="text-[8px] font-bold text-slate-400 uppercase mt-1">Deuda: ${format(pendingDebt)}</p></div>
-                        <div class="glass p-4 rounded-3xl border-l-4 border-amber-500"><div class="flex justify-between items-center mb-2"><i data-lucide="shield" class="w-4 h-4 text-amber-500"></i><span class="text-[8px] font-black uppercase text-slate-500">PUREZA MES</span></div><p class="text-2xl font-black font-mono italic text-amber-400">${vicesPct}%</p></div>
-                        <div class="glass p-4 rounded-3xl border-l-4 border-indigo-500"><div class="flex justify-between items-center mb-2"><i data-lucide="clock" class="w-4 h-4 text-indigo-500"></i><span class="text-[8px] font-black uppercase text-slate-500">FOCO RUTINA</span></div><p class="text-2xl font-black font-mono italic text-indigo-400">${routinePct}%</p></div>
-                        <div class="glass p-4 rounded-3xl border-l-4 border-sky-500"><div class="flex justify-between items-center mb-2"><i data-lucide="check-square" class="w-4 h-4 text-sky-500"></i><span class="text-[8px] font-black uppercase text-slate-500">HÁBITOS HOY</span></div><p class="text-2xl font-black font-mono italic text-sky-400">${hPct}%</p></div>
-                        <div class="glass p-4 rounded-3xl border-l-4 border-cyan-500"><div class="flex justify-between items-center mb-2"><i data-lucide="scale" class="w-4 h-4 text-cyan-500"></i><span class="text-[8px] font-black uppercase text-slate-500">BIOMETRÍA</span></div><p class="text-xl font-black font-mono italic text-cyan-400">${weightVal} <span class="text-xs">kg</span></p></div>
-                        <div class="glass p-4 rounded-3xl border-l-4 border-red-500"><div class="flex justify-between items-center mb-2"><i data-lucide="users" class="w-4 h-4 text-red-500"></i><span class="text-[8px] font-black uppercase text-slate-500">RED INTEL</span></div><p class="text-xl font-black font-mono italic text-red-400">${window.appState.contacts.length} <span class="text-xs">activos</span></p></div>
-                    </div>
-                </div>
-            `;
-            lucide.createIcons();
-        }
-
-        window.updProfile = (key, val) => { window.appState.profile[key] = val; window.syncData(); };
-        window.uploadProfilePhoto = (event) => { const file = event.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = function(e) { window.appState.profile.photo = e.target.result; window.syncData(); renderProfile(document.getElementById('module-content')); }; reader.readAsDataURL(file); } };
-<form name="contact" netlify>
+        initAuth();
+        lucide.createIcons();
     </script>
 </body>
 </html>
