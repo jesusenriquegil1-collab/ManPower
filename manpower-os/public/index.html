@@ -3,393 +3,694 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MAN POWER - Control Total Cloud</title>
+    <title>MAN POWER - Control Total</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root { --glass: rgba(10, 15, 30, 0.96); --border: rgba(255, 255, 255, 0.08); }
         body { font-family: 'Inter', sans-serif; background-color: #020617; color: #f1f5f9; overflow: hidden; height: 100vh; }
-        .glass { background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--border); }
+        .glass { background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--border); }
         .app-card:active { transform: scale(0.92); transition: transform 0.1s; }
         
         .gradient-cyan { background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%); }
+        .gradient-indigo { background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%); }
         .gradient-emerald { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
         .gradient-red { background: linear-gradient(135deg, #ef4444 0%, #991b1b 100%); }
         .gradient-amber { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
-        .gradient-indigo { background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%); }
+        .gradient-violet { background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); }
+        .gradient-sky { background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%); }
+        .gradient-night { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); }
 
-        .cell-input { width: 100%; height: 100%; padding: 4px; border: none; background: transparent; font-size: 0.7rem; outline: none; }
+        .bg-morning { background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 30%); color: #92400e; } 
+        .bg-focus { background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 30%); color: #1e40af; }   
+        .bg-creative { background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 30%); color: #166534; } 
+        .bg-sunset { background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 30%); color: #9a3412; }  
+        .bg-night { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #94a3b8; }   
+        
+        .cell-input { width: 100%; height: 100%; min-height: 42px; padding: 4px; border: none; background: transparent; font-size: 0.7rem; outline: none; appearance: none; }
+        .sticky-col { position: sticky; left: 0; background: #0f172a; z-index: 10; font-weight: 700; border-right: 1px solid rgba(255,255,255,0.1); }
+        
         .custom-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
 
         .day-cell { aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 900; border-radius: 12px; cursor: pointer; transition: all 0.2s; border: 1px solid rgba(255,255,255,0.03); }
         .day-clean { background: rgba(16, 185, 129, 0.2); color: #10b981; }
         .day-dirty { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+        .day-future { background: rgba(255, 255, 255, 0.02); color: rgba(255,255,255,0.1); }
         .day-today { border: 2px solid #06b6d4; box-shadow: 0 0 10px rgba(6, 182, 212, 0.3); }
+        .saving-active { background: #06b6d4 !important; color: white !important; box-shadow: 0 0 15px rgba(6, 182, 212, 0.3); border: none; }
 
-        .loader { border: 2px solid #f3f3f3; border-top: 2px solid #3b82f6; border-radius: 50%; width: 16px; height: 16px; animation: spin 1s linear infinite; }
+        .star-active { color: #fbbf24 !important; fill: #fbbf24 !important; }
+        
+        .input-finance-action { background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: white; outline: none; width: 100%; text-align: right; }
+        .input-finance-action:focus { border-color: #06b6d4; }
+        .input-balance { background: transparent; border: none; font-family: 'JetBrains Mono', monospace; font-weight: 900; font-size: 1.1rem; color: white; outline: none; width: 100%; text-align: right; }
+        .label-action { font-size: 0.65rem; font-weight: 900; color: #64748b; text-transform: uppercase; margin-bottom: 4px; display: block; }
+        .btn-action-save { width: 100%; padding: 12px; border-radius: 14px; font-size: 0.75rem; font-weight: 900; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; }
+        .btn-action-save:active { transform: scale(0.95); opacity: 0.8; }
+
+        .markdown-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.75rem; }
+        .markdown-table th, .markdown-table td { border: 1px solid rgba(255,255,255,0.1); padding: 6px; text-align: left; }
+        .markdown-table th { background-color: rgba(255,255,255,0.05); font-weight: bold; }
+        .loader { border: 2px solid #f3f3f3; border-top: 2px solid #3b82f6; border-radius: 50%; width: 16px; height: 16px; animation: spin 1s linear infinite; display: inline-block; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        .profile-input { background: transparent; border-bottom: 1px solid rgba(255,255,255,0.2); color: white; font-weight: 900; outline: none; width: 100%; text-align: center; }
+        .profile-input { background: transparent; border-bottom: 1px solid rgba(255,255,255,0.2); color: white; font-weight: 900; outline: none; width: 100%; text-align: center; transition: border-color 0.2s; }
+        .profile-input:focus { border-bottom-color: #06b6d4; }
+
         .glitch-effect { text-shadow: 0 0 10px rgba(6,182,212,0.8); }
 
-        .cloud-syncing { color: #06b6d4; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+        /* Estilos de Impresión */
+        @media print {
+            body * { visibility: hidden; }
+            #print-area, #print-area * { visibility: visible; }
+            #print-area { position: absolute; left: 0; top: 0; width: 100%; background: white !important; color: black !important; padding: 20px; font-family: 'JetBrains Mono', monospace; }
+            #print-area table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 12px; }
+            #print-area th, #print-area td { border: 1px solid #000; padding: 8px; text-align: left; }
+            #print-area th { background-color: #f0f0f0 !important; -webkit-print-color-adjust: exact; }
+            #print-area h1, #print-area h2 { font-family: 'Inter', sans-serif; text-transform: uppercase; font-weight: 900; margin-bottom: 10px; border-bottom: 2px solid black; padding-bottom: 5px; }
+            .no-print { display: none !important; }
+        }
     </style>
 </head>
 <body class="flex flex-col select-none overflow-hidden text-slate-200 bg-[#020617]">
 
-    <!-- PANTALLA DE CARGA -->
-    <div id="loading-overlay" class="fixed inset-0 z-[200] bg-[#020617] flex flex-col justify-center items-center p-6">
-        <div id="loading-content" class="flex flex-col items-center">
-            <div class="loader mb-4 border-t-cyan-500 w-10 h-10 border-4"></div>
-            <p class="text-[10px] font-black text-cyan-500 uppercase tracking-widest italic">Estableciendo Enlace con la Nube...</p>
-        </div>
+    <!-- PANTALLA DE CARGA GLOBAL -->
+    <div id="loading-overlay" class="absolute inset-0 z-[200] bg-[#020617] flex flex-col justify-center items-center transition-opacity duration-300">
+        <div class="loader mb-4 border-t-cyan-500 w-10 h-10 border-4"></div>
+        <p class="text-[10px] font-black text-cyan-500 uppercase tracking-widest italic animate-pulse">Sincronizando Módulos Tácticos...</p>
     </div>
 
-    <!-- LOGIN -->
-    <div id="login-view" class="absolute inset-0 z-[100] bg-[#020617] flex flex-col justify-center items-center p-6 hidden">
-        <div class="w-full max-w-sm glass p-8 rounded-[3rem] border-t-4 border-cyan-500 flex flex-col items-center">
-            <i data-lucide="shield-check" class="w-12 h-12 text-cyan-400 mb-4"></i>
-            <h1 class="text-2xl font-black italic uppercase text-white mb-8 glitch-effect">MAN POWER CLOUD</h1>
-            <div class="w-full space-y-4">
-                <input type="password" id="login-pass" class="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-sm font-bold text-white text-center outline-none focus:border-cyan-500" placeholder="CLAVE DE ENCRIPTACIÓN">
-                <button onclick="attemptLogin()" class="w-full py-4 bg-cyan-600 rounded-xl text-xs font-black uppercase italic tracking-widest active:scale-95">Verificar Identidad</button>
+    <!-- PANTALLA DE INGRESO (LOGIN) -->
+    <div id="login-view" class="hidden absolute inset-0 z-[100] bg-[#020617] flex flex-col justify-center items-center p-6 animate-in fade-in duration-500">
+        <div class="w-full max-w-sm glass p-8 rounded-[3rem] border-t-4 border-cyan-500 flex flex-col items-center shadow-[0_0_50px_rgba(6,182,212,0.1)]">
+            <div class="w-20 h-20 rounded-full bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(6,182,212,0.2)]">
+                <i data-lucide="cpu" class="w-10 h-10 text-cyan-400"></i>
             </div>
-            <p id="login-error" class="hidden mt-4 text-[10px] font-black text-rose-500 uppercase">CREDENCIALES INVÁLIDAS</p>
+            <h1 class="text-2xl font-black italic tracking-tighter uppercase text-white mb-1 glitch-effect">MAN POWER</h1>
+            <p class="text-[10px] font-mono text-cyan-500 uppercase tracking-widest mb-8 text-center">Protocolo de Seguridad<br>Nivel de Acceso: Crítico</p>
+            
+            <div class="w-full space-y-4">
+                <div>
+                    <input type="password" id="login-pass" class="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-sm font-bold text-white outline-none focus:border-cyan-500 transition-colors text-center tracking-[0.3em]" placeholder="••••••••">
+                </div>
+                
+                <button onclick="attemptLogin()" class="w-full py-4 mt-2 bg-cyan-600 hover:bg-cyan-500 rounded-xl text-xs font-black uppercase italic tracking-widest shadow-lg shadow-cyan-600/30 transition-all flex justify-center items-center gap-2 active:scale-95">
+                    <i data-lucide="unlock" class="w-4 h-4"></i> Iniciar Enlace
+                </button>
+            </div>
+            <p id="login-error" class="hidden mt-4 text-[10px] font-black text-rose-500 uppercase tracking-widest italic animate-pulse">CREDENCIALES INVÁLIDAS</p>
         </div>
     </div>
 
-    <!-- APP CONTAINER -->
+    <!-- CONTENEDOR PRINCIPAL DE LA APP -->
     <div id="app-container" class="hidden flex-col h-full w-full">
-        <header class="z-50 px-5 py-4 glass border-b border-white/5 flex justify-between items-center">
+        <header class="z-50 px-5 py-4 glass border-b border-white/5 flex justify-between items-center shrink-0">
             <div class="flex items-center gap-3">
-                <div id="cloud-status-dot" class="w-2 h-2 rounded-full bg-slate-500"></div>
-                <h1 class="text-sm font-black italic uppercase text-white">MAN <span class="text-cyan-500 text-[10px]">POWER OS</span></h1>
+                <div id="status-indicator" class="w-2 h-2 rounded-full bg-amber-500 animate-pulse shadow-[0_0_8px_#f59e0b]"></div>
+                <h1 class="text-sm font-black italic tracking-tighter uppercase leading-none text-white">MAN <span class="text-cyan-500 text-[10px]">POWER OS</span></h1>
             </div>
             <div class="flex items-center gap-2">
-                <i id="cloud-icon" data-lucide="cloud-check" class="w-4 h-4 text-slate-500"></i>
-                <div id="clock" class="text-[10px] font-mono font-bold text-slate-400">00:00</div>
+                <i id="cloud-icon" data-lucide="database" class="w-4 h-4 text-slate-500"></i>
+                <div id="clock" class="text-[10px] font-mono font-bold text-slate-300 italic tracking-widest text-right">00:00:00</div>
             </div>
         </header>
 
         <main class="flex-1 p-4 relative overflow-hidden flex flex-col">
+            
+            <!-- DASHBOARD / MENÚ -->
             <div id="dashboard-view" class="grid grid-cols-2 gap-3 pb-24 overflow-y-auto custom-scroll">
-                <div onclick="openModule('finances', 'Bóveda Financiera')" class="app-card glass rounded-[2.2rem] p-5 flex flex-col items-center border-t-2 border-emerald-500/30">
-                    <div class="w-12 h-12 rounded-2xl gradient-emerald flex items-center justify-center mb-2"><i data-lucide="wallet" class="w-6 h-6 text-white"></i></div>
+                <div onclick="openModule('weight', 'Peso Diario')" class="app-card glass rounded-[2.2rem] p-5 flex flex-col items-center justify-center text-center">
+                    <div class="w-12 h-12 rounded-2xl gradient-cyan flex items-center justify-center mb-2"><i data-lucide="scale" class="w-6 h-6 text-white"></i></div>
+                    <span class="text-[11px] font-black uppercase italic">Peso Diario</span>
+                </div>
+                <div onclick="openModule('routine', 'Rutina 24 Horas')" class="app-card glass rounded-[2.2rem] p-5 flex flex-col items-center justify-center text-center">
+                    <div class="w-12 h-12 rounded-2xl gradient-indigo flex items-center justify-center mb-2"><i data-lucide="clock" class="w-6 h-6 text-white"></i></div>
+                    <span class="text-[11px] font-black uppercase italic">Rutina 24h</span>
+                </div>
+                <div onclick="openModule('finances', 'Bóveda Financiera')" class="app-card glass rounded-[2.2rem] p-5 flex flex-col items-center justify-center text-center border-t-2 border-emerald-500/30">
+                    <div class="w-12 h-12 rounded-2xl gradient-emerald flex items-center justify-center mb-2 shadow-xl shadow-emerald-900/20"><i data-lucide="wallet" class="w-6 h-6 text-white"></i></div>
                     <span class="text-[11px] font-black uppercase italic text-emerald-400">Finanzas</span>
                 </div>
-                <div onclick="openModule('intel', 'Red de Inteligencia')" class="app-card glass rounded-[2.2rem] p-5 flex flex-col items-center border-t-2 border-red-500/30">
-                    <div class="w-12 h-12 rounded-2xl gradient-red flex items-center justify-center mb-2"><i data-lucide="eye" class="w-6 h-6 text-white"></i></div>
-                    <span class="text-[11px] font-black uppercase italic text-red-500">Intel</span>
+                <div onclick="openModule('habits', 'Hábitos')" class="app-card glass rounded-[2.2rem] p-5 flex flex-col items-center justify-center text-center border-t-2 border-sky-500/30">
+                    <div class="w-12 h-12 rounded-2xl gradient-sky flex items-center justify-center mb-2 shadow-xl shadow-sky-900/20"><i data-lucide="check-circle-2" class="w-6 h-6 text-white"></i></div>
+                    <span class="text-[11px] font-black uppercase italic text-sky-400">Hábitos</span>
                 </div>
-                <div onclick="openModule('weight', 'Biometría')" class="app-card glass rounded-[2.2rem] p-5 flex flex-col items-center border-t-2 border-cyan-500/30">
-                    <div class="w-12 h-12 rounded-2xl gradient-cyan flex items-center justify-center mb-2"><i data-lucide="activity" class="w-6 h-6 text-white"></i></div>
-                    <span class="text-[11px] font-black uppercase italic text-cyan-400">Biometría</span>
-                </div>
-                <div onclick="openModule('vices', 'Pureza de Sistema')" class="app-card glass rounded-[2.2rem] p-5 flex flex-col items-center border-t-2 border-amber-500/30">
-                    <div class="w-12 h-12 rounded-2xl gradient-amber flex items-center justify-center mb-2"><i data-lucide="zap-off" class="w-6 h-6 text-white"></i></div>
+                <div onclick="openModule('vices', 'Pureza de Sistema')" class="app-card glass rounded-[2.2rem] p-5 flex flex-col items-center justify-center text-center border-t-2 border-amber-500/30">
+                    <div class="w-12 h-12 rounded-2xl gradient-amber flex items-center justify-center mb-2 shadow-xl shadow-amber-900/20"><i data-lucide="zap-off" class="w-6 h-6 text-white"></i></div>
                     <span class="text-[11px] font-black uppercase italic text-amber-500">Vicios</span>
                 </div>
-                <div onclick="openModule('profile', 'Perfil Operador')" class="col-span-2 app-card glass rounded-[2.2rem] p-5 flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-full bg-slate-800 border border-white/10 overflow-hidden" id="dash-photo"></div>
-                    <div>
-                        <p class="text-xs font-black uppercase italic text-white" id="dash-name">Operador Desconocido</p>
-                        <p class="text-[9px] font-mono text-cyan-500" id="dash-alias">ALFA-01</p>
-                    </div>
+                <div onclick="openModule('study', 'Módulo Estudio')" class="app-card glass rounded-[2.2rem] p-5 flex flex-col items-center justify-center text-center border-t-2 border-violet-500/30">
+                    <div class="w-12 h-12 rounded-2xl gradient-violet flex items-center justify-center mb-2 shadow-xl shadow-violet-900/20"><i data-lucide="book-open" class="w-6 h-6 text-white"></i></div>
+                    <span class="text-[11px] font-black uppercase italic text-violet-400">Estudio</span>
+                </div>
+                <div onclick="openModule('intel', 'Contrainteligencia')" class="app-card glass rounded-[2.2rem] p-5 flex flex-col items-center justify-center text-center border-t-2 border-red-500/50">
+                    <div class="w-12 h-12 rounded-2xl gradient-red flex items-center justify-center mb-2 shadow-xl shadow-red-900/40"><i data-lucide="shield-alert" class="w-6 h-6 text-white"></i></div>
+                    <span class="text-[11px] font-black uppercase italic text-red-500">Intel</span>
+                </div>
+                <div onclick="openModule('settings', 'Extracción PDF')" class="app-card glass rounded-[2.2rem] p-5 flex flex-col items-center justify-center text-center border-t-2 border-slate-500/50">
+                    <div class="w-12 h-12 rounded-2xl gradient-night flex items-center justify-center mb-2 shadow-xl shadow-slate-900/40"><i data-lucide="printer" class="w-6 h-6 text-white"></i></div>
+                    <span class="text-[11px] font-black uppercase italic text-white">Reporte PDF</span>
                 </div>
             </div>
 
-            <!-- MODAL DINÁMICO -->
-            <div id="module-view" class="hidden absolute inset-0 glass bg-[#020617]/98 z-40 p-5 flex-col">
-                <div class="flex items-center justify-between mb-4">
-                    <button onclick="closeModule()" class="p-2 bg-white/5 rounded-xl"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
-                    <h2 id="module-title" class="text-lg font-black italic uppercase">MÓDULO</h2>
+            <div id="module-view" class="hidden absolute inset-0 glass bg-[#020617]/98 z-40 p-5 flex-col animate-in slide-in-from-bottom duration-200">
+                <div class="flex items-center justify-between mb-4 shrink-0">
+                    <button onclick="closeModule()" class="p-2 bg-white/5 rounded-xl text-slate-400 active:scale-90"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
+                    <h2 id="module-title" class="text-lg font-black italic uppercase tracking-tighter">MÓDULO</h2>
                 </div>
                 <div id="module-content" class="flex-1 overflow-y-auto custom-scroll pb-24"></div>
             </div>
+
+            <!-- MODAL: DOSSIER INTEL -->
+            <div id="dossier-view" class="hidden absolute inset-0 glass bg-[#050a18] z-50 p-6 flex-col animate-in zoom-in-95 duration-200 overflow-y-auto custom-scroll text-white">
+                <div class="flex justify-between items-start mb-6 shrink-0">
+                    <button onclick="closeDossier()" class="p-3 bg-white/5 rounded-2xl active:scale-90"><i data-lucide="x" class="w-6 h-6"></i></button>
+                    <div class="text-right">
+                        <p class="text-[10px] font-black text-red-500 uppercase italic">Intel Dossier</p>
+                        <p id="dossier-id" class="text-[8px] font-mono text-slate-600 tracking-widest uppercase font-bold">ID: ACT-000</p>
+                    </div>
+                </div>
+                <div id="dossier-content" class="space-y-8"></div>
+            </div>
+
+            <!-- MODAL: FORMULARIO DE ALTA INTEL -->
+            <div id="add-asset-view" class="hidden absolute inset-0 glass bg-[#050a18] z-[60] p-6 flex-col animate-in slide-in-from-bottom duration-200 overflow-y-auto custom-scroll text-white">
+                <div class="flex justify-between items-start mb-6 shrink-0 border-b border-red-500/30 pb-4">
+                    <div>
+                        <h2 class="text-xl font-black italic tracking-tighter text-red-500 uppercase">Nuevo Expediente</h2>
+                        <p class="text-[9px] font-mono text-slate-500 tracking-widest">ALTA DE ACTIVO TÁCTICO</p>
+                    </div>
+                    <button onclick="closeAddAsset()" class="p-2 bg-white/5 rounded-xl active:scale-90"><i data-lucide="x" class="w-5 h-5"></i></button>
+                </div>
+                
+                <div class="space-y-5">
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="relative w-28 h-28 rounded-2xl bg-black/50 border-2 border-dashed border-red-500/40 flex items-center justify-center overflow-hidden cursor-pointer transition-transform active:scale-95" onclick="document.getElementById('asset-photo').click()">
+                            <img id="asset-photo-preview" class="hidden w-full h-full object-cover">
+                            <i data-lucide="camera" id="asset-photo-icon" class="w-8 h-8 text-slate-600"></i>
+                        </div>
+                        <input type="file" id="asset-photo" accept="image/*" class="hidden" onchange="previewAssetPhoto(event)">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="col-span-2">
+                            <label class="text-[8px] font-black uppercase text-red-400 tracking-widest">Identidad</label>
+                            <input type="text" id="asset-name" class="w-full bg-black/40 border border-red-500/20 rounded-xl p-3 text-sm font-bold text-white outline-none focus:border-red-500" placeholder="Nombre completo...">
+                        </div>
+                        <div class="col-span-2">
+                            <label class="text-[8px] font-black uppercase text-red-400 tracking-widest">Contacto</label>
+                            <input type="tel" id="asset-phone" class="w-full bg-black/40 border border-red-500/20 rounded-xl p-3 text-sm font-mono text-white outline-none focus:border-red-500" placeholder="+54 9 11...">
+                        </div>
+                        <div class="col-span-2">
+                            <label class="text-[8px] font-black uppercase text-cyan-400 tracking-widest flex items-center gap-1"><i data-lucide="target" class="w-3 h-3"></i> Utilidad Operativa</label>
+                            <textarea id="asset-utility" rows="2" class="w-full bg-cyan-900/10 border border-cyan-500/30 rounded-xl p-3 text-xs font-medium text-white outline-none focus:border-cyan-500" placeholder="¿En qué te es útil este activo?"></textarea>
+                        </div>
+                    </div>
+                    <button onclick="saveNewAsset()" class="w-full py-4 bg-red-600 rounded-xl text-xs font-black uppercase italic tracking-widest flex items-center justify-center gap-2 active:scale-95">Archivar Expediente</button>
+                </div>
+            </div>
+
+            <div id="vice-editor" class="hidden absolute inset-0 glass bg-slate-950/95 z-50 p-6 flex-col animate-in fade-in duration-200 rounded-3xl text-white">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-lg font-black italic uppercase" id="vice-editor-date">DÍA</h3>
+                    <button onclick="closeViceEditor()" class="p-2 bg-white/5 rounded-xl"><i data-lucide="x" class="w-5 h-5"></i></button>
+                </div>
+                <div class="space-y-4" id="vice-checklist"></div>
+            </div>
+
+            <div id="habit-editor" class="hidden absolute inset-0 glass bg-slate-950/95 z-50 p-6 flex-col animate-in fade-in duration-200 rounded-3xl text-white">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-lg font-black italic uppercase" id="habit-editor-date">DÍA</h3>
+                    <button onclick="closeHabitEditor()" class="p-2 bg-white/5 rounded-xl"><i data-lucide="x" class="w-5 h-5"></i></button>
+                </div>
+                <div class="space-y-4 overflow-y-auto custom-scroll" id="habit-checklist"></div>
+            </div>
+            
+            <div id="study-editor" class="hidden absolute inset-0 glass bg-slate-950/95 z-50 p-6 flex-col animate-in fade-in duration-200 rounded-3xl text-white">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-lg font-black italic uppercase text-violet-400" id="study-editor-date">DÍA</h3>
+                    <button onclick="closeStudyEditor()" class="p-2 bg-white/5 rounded-xl"><i data-lucide="x" class="w-5 h-5"></i></button>
+                </div>
+                <div class="space-y-4 overflow-y-auto custom-scroll" id="study-checklist"></div>
+            </div>
+
         </main>
 
-        <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[85%] max-w-xs glass rounded-[2rem] p-2 flex justify-around items-center">
-            <button onclick="closeModule()" class="p-4 rounded-2xl text-cyan-400 bg-cyan-500/10"><i data-lucide="layout-grid" class="w-6 h-6"></i></button>
-            <button onclick="logout()" class="p-4 rounded-2xl text-rose-500"><i data-lucide="log-out" class="w-6 h-6"></i></button>
+        <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[85%] max-w-xs glass rounded-[2rem] p-1.5 flex justify-around items-center z-50">
+            <button onclick="closeModule(); closeDossier();" class="p-4 rounded-2xl text-cyan-400 bg-cyan-500/10 active:scale-90"><i data-lucide="layout-grid" class="w-6 h-6"></i></button>
+            <button onclick="openModule('profile', 'Resumen Táctico')" class="p-4 rounded-2xl text-slate-500 active:scale-90"><i data-lucide="user" class="w-6 h-6"></i></button>
+            <button onclick="logout()" class="p-4 rounded-2xl text-rose-500 active:scale-90"><i data-lucide="log-out" class="w-6 h-6"></i></button>
         </nav>
     </div>
 
+    <!-- MOTOR CORE (HÍBRIDO: NUBE + LOCAL) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        let app, auth, db, appId;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'manpower-os';
+        const rawConfig = typeof __firebase_config !== 'undefined' ? __firebase_config : null;
+        
+        let app, auth, db;
+        let isOfflineMode = false;
+        let user = null;
+        let currentModule = null;
 
-        try {
-            // DETECCIÓN DE ENTORNO: Canvas vs Netlify
-            const envConfig = typeof __firebase_config !== 'undefined' ? __firebase_config : null;
-            appId = typeof __app_id !== 'undefined' ? __app_id : 'manpower-os';
-
-            // =====================================================================
-            // ¡OPERADOR! SI DESPLEGÁS EN NETLIFY, PEGÁ TU CONFIG DE FIREBASE ACÁ:
-            // =====================================================================
-            const manualConfig = {
-                apiKey: "TU_API_KEY",
-                authDomain: "TU_PROYECTO.firebaseapp.com",
-                projectId: "TU_PROYECTO",
-                storageBucket: "TU_PROYECTO.appspot.com",
-                messagingSenderId: "TU_SENDER",
-                appId: "TU_APP_ID"
-            };
-
-            const firebaseConfig = envConfig ? JSON.parse(envConfig) : manualConfig;
-
-            // Freno de emergencia si estás en Netlify y no pusiste la config
-            if (!envConfig && (!firebaseConfig.apiKey || firebaseConfig.apiKey === "TU_API_KEY")) {
-                throw new Error("FALTAN CREDENCIALES DE FIREBASE. REEMPLAZÁ 'manualConfig' EN EL CÓDIGO.");
+        // Estado Global (Mantenemos toda tu estructura intacta)
+        const defaultAppState = {
+            profile: { name: 'Operador Alfa', alias: 'Alfa-01', division: 'División Operativa', photo: null },
+            contacts: [],
+            vices: {},
+            weight: {},
+            routine: {},
+            routineGoal: "",
+            habits: { list: ['Lectura', 'Gym', 'Running', 'Limpieza', 'Mantenimiento'], logs: {} },
+            study: { subjects: ['Inglés', 'Hebreo', 'Inteligencia'], logs: {} },
+            finances: {
+                specialSavingUnit: 15000, savingsLog: {}, mpBalance: 0, cashBalance: 0, history: {}, 
+                debts: [
+                    { id: 'alquiler', name: 'Alquiler', amount: 250000, isPaid: false },
+                    { id: 'tdc', name: 'Tarjeta Crédito', amount: 325000, isPaid: false }
+                ]
             }
+        };
 
+        window.appState = JSON.parse(JSON.stringify(defaultAppState));
+        let fViewDate = new Date();
+
+        // 1. CARGA RÁPIDA LOCAL (LocalStorage)
+        const localData = localStorage.getItem('manpower_data_v2');
+        if (localData) {
+            try {
+                window.appState = { ...defaultAppState, ...JSON.parse(localData) };
+            } catch (e) { console.error("Error leyendo local:", e); }
+        }
+
+        // 2. INICIALIZACIÓN DE ENTORNO (Intenta Nube, si falla usa Local)
+        try {
+            if (!rawConfig) throw new Error("Entorno externo detectado (Netlify/Local). Activando Bóveda Local.");
+            
+            const firebaseConfig = JSON.parse(rawConfig);
             app = initializeApp(firebaseConfig);
             auth = getAuth(app);
             db = getFirestore(app);
 
-        } catch (error) {
-            console.error(error);
-            document.getElementById('loading-content').innerHTML = `
-                <div class="glass p-6 rounded-3xl text-center border border-rose-500 bg-rose-950/20 max-w-sm">
-                    <i data-lucide="alert-triangle" class="w-12 h-12 text-rose-500 mx-auto mb-4"></i>
-                    <h2 class="text-rose-500 font-black uppercase text-xl mb-2">Nodo Desconectado</h2>
-                    <p class="text-xs text-slate-300 font-mono mb-4">Para correr esta app fuera del entorno de pruebas (ej: Netlify), necesitás enlazar tu propia base de datos.</p>
-                    <p class="text-[10px] text-rose-400 font-mono bg-black/50 p-2 rounded">${error.message}</p>
-                </div>
-            `;
-            lucide.createIcons();
-            throw error; // Detiene la ejecución para no causar loops
-        }
-
-        const defaultState = {
-            profile: { name: 'Operador Alfa', alias: 'ALFA-01', photo: null },
-            finances: { mpBalance: 0, cashBalance: 0, debts: [] },
-            contacts: [],
-            weight: {},
-            vices: {}
-        };
-
-        window.appState = JSON.parse(JSON.stringify(defaultState));
-        let user = null;
-
-        // MOTOR DE NUBE
-        const initCloudAuth = async () => {
-            try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-            } catch (e) {
-                console.error("Fallo de Autenticación Crítico:", e);
-                document.getElementById('loading-content').innerHTML = `
-                    <div class="glass p-6 rounded-3xl text-center border border-rose-500">
-                        <p class="text-rose-500 font-black uppercase text-xs">Error de Permisos al Autenticar.</p>
-                        <p class="text-[10px] text-slate-400 mt-2">${e.message}</p>
-                    </div>
-                `;
+            // Auth Protocol
+            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                signInWithCustomToken(auth, __initial_auth_token).catch(fallbackToOffline);
+            } else {
+                signInAnonymously(auth).catch(fallbackToOffline);
             }
-        };
 
-        // Listener de Estado de Auth
-        if (auth) {
             onAuthStateChanged(auth, (u) => {
                 user = u;
                 if (u) {
-                    // RULE 1: Ruta estricta PRIVADA vinculada a tu ID único
                     const docRef = doc(db, 'artifacts', appId, 'users', user.uid, 'app_state', 'global_state');
-                    
                     onSnapshot(docRef, (snap) => {
                         if (snap.exists()) {
                             window.appState = snap.data();
-                            updateUI();
-                        } else {
-                            window.saveToCloud();
+                            saveToLocal(); // Backup
                         }
-                        
-                        // Si carga bien, ocultamos el loader y vamos al login/app
-                        document.getElementById('loading-overlay').classList.add('hidden');
-                        document.getElementById('login-view').classList.remove('hidden');
-                        checkSession();
-                        
-                    }, (error) => {
-                        console.error("Error en Snapshot de Firestore:", error);
-                        if (error.code === 'permission-denied') {
-                            document.getElementById('loading-content').innerHTML = `
-                                <div class="glass p-6 rounded-3xl text-center border border-amber-500">
-                                    <p class="text-amber-500 font-black uppercase text-xs mb-2">PERMISO DENEGADO EN FIRESTORE</p>
-                                    <p class="text-[10px] text-slate-300">Asegurate de haber configurado las Reglas de Firestore en tu consola de Firebase.</p>
-                                </div>
-                            `;
-                        }
-                    });
+                        finalizeLoad(true);
+                    }, fallbackToOffline);
                 }
             });
+
+        } catch (error) {
+            fallbackToOffline(error);
         }
 
-        // Guardado en la Nube
-        window.saveToCloud = async () => {
-            if (!user) return; 
-            
-            const statusIcon = document.getElementById('cloud-icon');
-            const statusDot = document.getElementById('cloud-status-dot');
-            statusIcon.classList.add('cloud-syncing');
-            
-            const docRef = doc(db, 'artifacts', appId, 'users', user.uid, 'app_state', 'global_state');
-            try {
-                await setDoc(docRef, window.appState);
-                statusIcon.classList.remove('cloud-syncing');
-                statusIcon.style.color = "#10b981";
-                statusDot.style.backgroundColor = "#10b981";
-                lucide.createIcons();
-            } catch (e) {
-                console.error("Fallo de Escritura Cloud:", e);
-                statusIcon.style.color = "#ef4444";
-                statusDot.style.backgroundColor = "#ef4444";
-            }
-        };
+        function fallbackToOffline(err) {
+            console.warn("MODO SUPERVIVENCIA ACTIVADO:", err.message || "Fallo de conexión");
+            isOfflineMode = true;
+            finalizeLoad(false);
+        }
 
-        const updateUI = () => {
-            if (!window.appState.profile) return;
-            document.getElementById('dash-name').textContent = window.appState.profile.name || 'Operador Desconocido';
-            document.getElementById('dash-alias').textContent = window.appState.profile.alias || 'ALFA-01';
-            if (window.appState.profile.photo) {
-                document.getElementById('dash-photo').innerHTML = `<img src="${window.appState.profile.photo}" class="w-full h-full object-cover">`;
+        function finalizeLoad(isCloud) {
+            document.getElementById('loading-overlay').classList.add('hidden');
+            document.getElementById('login-view').classList.remove('hidden');
+            
+            const dot = document.getElementById('status-indicator');
+            const icon = document.getElementById('cloud-icon');
+            
+            if (isCloud) {
+                dot.className = "w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]";
+                icon.setAttribute('data-lucide', 'cloud-check');
+                icon.className = "w-4 h-4 text-emerald-500";
             } else {
-                document.getElementById('dash-photo').innerHTML = `<div class="w-full h-full bg-slate-800 flex items-center justify-center"><i data-lucide="user" class="w-6 h-6 text-slate-500"></i></div>`;
-                lucide.createIcons();
+                dot.className = "w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_8px_#f59e0b]";
+                icon.setAttribute('data-lucide', 'database');
+                icon.className = "w-4 h-4 text-amber-500";
+            }
+            lucide.createIcons();
+            
+            if (localStorage.getItem('man_session') === 'auth') {
+                proceedToApp();
+            }
+        }
+
+        // MOTOR DE GUARDADO UNIVERSAL
+        window.saveData = async () => {
+            // 1. Siempre guardamos local (Respaldo blindado)
+            saveToLocal();
+
+            // 2. Si hay nube disponible, empujamos
+            if (!isOfflineMode && user && db) {
+                const icon = document.getElementById('cloud-icon');
+                icon.classList.add('animate-pulse', 'text-cyan-500');
+                try {
+                    const docRef = doc(db, 'artifacts', appId, 'users', user.uid, 'app_state', 'global_state');
+                    await setDoc(docRef, window.appState);
+                    setTimeout(() => icon.classList.remove('animate-pulse', 'text-cyan-500'), 500);
+                } catch (e) {
+                    console.error("Fallo Cloud:", e);
+                }
             }
         };
 
+        function saveToLocal() {
+            localStorage.setItem('manpower_data_v2', JSON.stringify(window.appState));
+        }
+
+        // CONTROL DE ACCESO
         window.attemptLogin = () => {
             const p = document.getElementById('login-pass').value;
             if (p === "10797851") {
                 localStorage.setItem('man_session', 'auth');
-                checkSession();
+                proceedToApp();
             } else {
-                document.getElementById('login-error').classList.remove('hidden');
+                const err = document.getElementById('login-error');
+                err.classList.remove('hidden');
+                setTimeout(() => err.classList.add('hidden'), 2000);
             }
         };
 
-        const checkSession = () => {
-            if (localStorage.getItem('man_session') === 'auth') {
-                document.getElementById('login-view').classList.add('hidden');
-                document.getElementById('app-container').classList.remove('hidden');
-                document.getElementById('app-container').classList.add('flex');
-            }
-        };
+        function proceedToApp() {
+            document.getElementById('login-view').classList.add('hidden');
+            document.getElementById('app-container').classList.remove('hidden');
+            document.getElementById('app-container').classList.add('flex');
+            if(currentModule) renderModule(currentModule);
+        }
 
         window.logout = () => { localStorage.removeItem('man_session'); location.reload(); };
 
-        // MÓDULOS (Actualizados para persistencia)
+        // HERRAMIENTAS GLOBALES
+        const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        const dayNames = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+        const presetOptions = ['', 'Trabajar', 'Comer', 'Dormir', 'Ejercicios', 'Correr', 'Limpiar', 'Compras', 'Mantenimiento', 'Estudiar', 'Ocio', 'Otro'];
+
+        setInterval(() => {
+            document.getElementById('clock').textContent = new Date().toLocaleTimeString('es-AR', { hour12: false });
+        }, 1000);
+
+        // NAVEGACIÓN MÓDULOS
         window.openModule = (id, title) => {
+            currentModule = id;
             document.getElementById('module-view').classList.remove('hidden');
             document.getElementById('module-view').classList.add('flex');
             document.getElementById('module-title').textContent = title;
-            const content = document.getElementById('module-content');
-            
-            if (id === 'weight') {
-                const today = new Date().toISOString().split('T')[0];
-                content.innerHTML = `
-                    <div class="glass p-6 rounded-3xl space-y-4">
-                        <p class="text-xs font-black text-cyan-500 uppercase">Registro Biométrico (kg)</p>
-                        <input type="number" id="w-input" step="0.1" value="${window.appState.weight[today] || ''}" class="w-full bg-black/40 p-5 rounded-2xl text-4xl font-black text-center text-white outline-none focus:border-cyan-500" placeholder="00.0">
-                        <button onclick="saveW()" class="w-full py-4 bg-cyan-600 rounded-xl font-black uppercase active:scale-95 transition-transform">Confirmar en Nube</button>
-                    </div>
-                `;
-                window.saveW = () => {
-                    const val = document.getElementById('w-input').value;
-                    if (!val) return;
-                    window.appState.weight[today] = Number(val);
-                    window.saveToCloud();
-                };
-            }
+            renderModule(id);
+        };
+        window.closeModule = () => { currentModule = null; document.getElementById('module-view').classList.add('hidden'); };
+        window.closeDossier = () => document.getElementById('dossier-view').classList.add('hidden');
 
-            if (id === 'finances') {
-                const f = window.appState.finances;
-                content.innerHTML = `
-                    <div class="space-y-4">
-                        <div class="glass p-5 rounded-3xl flex justify-between">
-                            <div><p class="text-[8px] font-black text-slate-500">MERCADO PAGO</p><p class="text-2xl font-black text-blue-400 font-mono">$${f.mpBalance}</p></div>
-                            <div class="text-right"><p class="text-[8px] font-black text-slate-500">EFECTIVO</p><p class="text-2xl font-black text-emerald-400 font-mono">$${f.cashBalance}</p></div>
-                        </div>
-                        <div class="glass p-5 rounded-3xl space-y-4">
-                            <p class="text-xs font-black text-emerald-500 uppercase italic">Ajuste de Saldo Directo</p>
-                            <div class="grid grid-cols-2 gap-2">
-                                <input type="number" id="new-mp" class="bg-black/40 p-3 rounded-xl text-white text-center outline-none" placeholder="MP">
-                                <input type="number" id="new-cash" class="bg-black/40 p-3 rounded-xl text-white text-center outline-none" placeholder="Cash">
-                            </div>
-                            <button onclick="saveFin()" class="w-full py-4 bg-emerald-600 rounded-xl font-black uppercase active:scale-95">Actualizar Bóveda</button>
-                        </div>
-                    </div>
-                `;
-                window.saveFin = () => {
-                    const mp = document.getElementById('new-mp').value;
-                    const cash = document.getElementById('new-cash').value;
-                    if(mp !== "") window.appState.finances.mpBalance = Number(mp);
-                    if(cash !== "") window.appState.finances.cashBalance = Number(cash);
-                    window.saveToCloud();
-                    renderModule('finances');
-                };
-            }
-
-            if (id === 'profile') {
-                const p = window.appState.profile;
-                content.innerHTML = `
-                    <div class="glass p-6 rounded-[3rem] flex flex-col items-center gap-4">
-                        <div class="w-24 h-24 rounded-3xl bg-slate-800 border-2 border-cyan-500 flex items-center justify-center overflow-hidden cursor-pointer" onclick="document.getElementById('p-file').click()">
-                             ${p.photo ? `<img src="${p.photo}" class="w-full h-full object-cover">` : `<i data-lucide="camera" class="w-8 h-8 text-cyan-500"></i>`}
-                        </div>
-                        <input type="file" id="p-file" class="hidden" accept="image/*" onchange="upPhoto(event)">
-                        <input type="text" id="p-name" value="${p.name}" class="profile-input text-xl" placeholder="NOMBRE">
-                        <input type="text" id="p-alias" value="${p.alias}" class="profile-input text-xs text-cyan-400" placeholder="ALIAS">
-                        <button onclick="saveProf()" class="w-full py-4 bg-slate-100 text-black rounded-xl font-black uppercase mt-4 active:scale-95">Sincronizar Perfil</button>
-                    </div>
-                `;
-                window.upPhoto = (e) => {
-                    const reader = new FileReader();
-                    reader.onload = (ev) => { 
-                        window.appState.profile.photo = ev.target.result; 
-                        window.saveToCloud();
-                        renderModule('profile');
-                    };
-                    if(e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
-                };
-                window.saveProf = () => {
-                    window.appState.profile.name = document.getElementById('p-name').value;
-                    window.appState.profile.alias = document.getElementById('p-alias').value;
-                    window.saveToCloud();
-                };
-            }
-
-            if (id === 'intel') {
-                content.innerHTML = `
-                    <div class="space-y-4">
-                        <button onclick="alert('Funcionalidad de Intel en desarrollo')" class="w-full glass p-4 text-red-500 font-black text-xs uppercase tracking-widest border-red-500/20">Añadir Activo (Beta)</button>
-                        <p class="text-center text-[10px] text-slate-500 italic uppercase">El módulo de Intel requiere limpieza de nodo para alta disponibilidad.</p>
-                    </div>
-                `;
-            }
-
+        window.renderModule = (id) => {
+            const container = document.getElementById('module-content');
+            container.innerHTML = '';
+            if (id === 'weight') renderWeight(container);
+            if (id === 'finances') renderFinances(container);
+            if (id === 'intel') renderIntel(container);
+            if (id === 'vices') renderVices(container);
+            if (id === 'habits') renderHabits(container);
+            if (id === 'study') renderStudy(container);
+            if (id === 'routine') renderRoutine(container);
+            if (id === 'profile') renderProfile(container);
+            if (id === 'settings') renderSettings(container);
             lucide.createIcons();
         };
 
-        window.closeModule = () => document.getElementById('module-view').classList.add('hidden');
+        // --- MÓDULO: PESO ---
+        function renderWeight(container) {
+            const today = new Date().toISOString().split('T')[0];
+            const current = window.appState.weight[today] || "";
+            container.innerHTML = `
+                <div class="glass p-6 rounded-[2.5rem] space-y-4">
+                    <p class="text-xs font-black text-cyan-500 uppercase tracking-widest text-center mb-6">Masa Corporal Actual</p>
+                    <input type="number" id="w-input" step="0.1" value="${current}" class="w-full bg-black/40 border border-cyan-500/30 rounded-3xl p-6 text-5xl font-black font-mono text-center text-white outline-none focus:border-cyan-500 shadow-inner" placeholder="00.0">
+                    <button onclick="saveW()" class="w-full py-4 mt-4 bg-cyan-600 hover:bg-cyan-500 rounded-xl font-black uppercase tracking-widest active:scale-95 transition-all text-white shadow-lg shadow-cyan-900/50">Grabar Biometría</button>
+                </div>
+            `;
+            window.saveW = () => {
+                const val = document.getElementById('w-input').value;
+                if(val) { window.appState.weight[today] = Number(val); window.saveData(); alert("Dato registrado correctamente."); }
+            };
+        }
 
-        // Clock Update
-        setInterval(() => {
-            const now = new Date();
-            document.getElementById('clock').textContent = now.toLocaleTimeString('es-AR', { hour12: false });
-        }, 1000);
+        // --- MÓDULO: FINANZAS COMPLETAS ---
+        function renderFinances(container) {
+            const f = window.appState.finances;
+            const format = (v) => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }).format(v);
+            const dateStr = fViewDate.toISOString().split('T')[0];
+            const dData = f.history[dateStr] || { inc: {}, exp: {} };
+            const mPrefix = `${fViewDate.getFullYear()}-${String(fViewDate.getMonth()+1).padStart(2,'0')}`;
+            
+            let mInc = 0; let mExp = 0;
+            Object.keys(f.history).forEach(k => {
+                if(k.startsWith(mPrefix)) {
+                    mInc += Object.values(f.history[k].inc || {}).reduce((a,b)=>a+Number(b||0), 0);
+                    mExp += Object.values(f.history[k].exp || {}).reduce((a,b)=>a+Number(b||0), 0);
+                }
+            });
 
-        // Inicializar Autenticación
-        if(auth) initCloudAuth();
-        lucide.createIcons();
+            const pending = f.debts.reduce((a, c) => !c.isPaid ? a + c.amount : a, 0);
+
+            container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="flex justify-between items-center glass p-4 rounded-3xl">
+                        <button onclick="changeFDay(-1)" class="p-2 bg-white/5 rounded-xl"><i data-lucide="chevron-left"></i></button>
+                        <div class="text-center">
+                            <p class="text-xs font-black uppercase text-emerald-400 tracking-widest">${fViewDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</p>
+                        </div>
+                        <button onclick="changeFDay(1)" class="p-2 bg-white/5 rounded-xl"><i data-lucide="chevron-right"></i></button>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="glass p-4 rounded-2xl border-l-4 border-blue-500/40">
+                            <p class="text-[8px] font-black uppercase text-slate-500 tracking-widest mb-1">Mercado Pago</p>
+                            <input type="number" value="${f.mpBalance || ''}" onchange="updAcc('mpBalance', this.value)" class="input-balance text-blue-300" placeholder="0">
+                        </div>
+                        <div class="glass p-4 rounded-2xl border-l-4 border-emerald-500/40">
+                            <p class="text-[8px] font-black uppercase text-slate-500 tracking-widest mb-1">Efectivo</p>
+                            <input type="number" value="${f.cashBalance || ''}" onchange="updAcc('cashBalance', this.value)" class="input-balance text-emerald-300" placeholder="0">
+                        </div>
+                    </div>
+
+                    <div class="glass p-5 rounded-[2.5rem] space-y-4 border-t-2 border-emerald-500/20">
+                        <h3 class="text-[10px] font-black uppercase text-emerald-500 tracking-widest flex items-center gap-2"><i data-lucide="trending-up" class="w-3 h-3"></i> Entradas Hoy</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div><label class="label-action">Didi</label><input type="number" id="f-in-didi" value="${dData.inc?.didi || ''}" class="input-finance-action"></div>
+                            <div><label class="label-action">Uber</label><input type="number" id="f-in-uber" value="${dData.inc?.uber || ''}" class="input-finance-action"></div>
+                            <div><label class="label-action">Tequeños</label><input type="number" id="f-in-teq" value="${dData.inc?.teq || ''}" class="input-finance-action"></div>
+                            <div><label class="label-action">Particular</label><input type="number" id="f-in-part" value="${dData.inc?.part || ''}" class="input-finance-action"></div>
+                        </div>
+                        <button onclick="saveFin('inc')" class="btn-action-save bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Grabar Ingresos</button>
+                    </div>
+
+                    <div class="glass p-5 rounded-[2.5rem] space-y-4 border-t-2 border-rose-500/20">
+                        <h3 class="text-[10px] font-black uppercase text-rose-500 tracking-widest flex items-center gap-2"><i data-lucide="trending-down" class="w-3 h-3"></i> Salidas Hoy</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div><label class="label-action">Nafta</label><input type="number" id="f-out-naf" value="${dData.exp?.naf || ''}" class="input-finance-action text-rose-200"></div>
+                            <div><label class="label-action">Comida</label><input type="number" id="f-out-com" value="${dData.exp?.com || ''}" class="input-finance-action text-rose-200"></div>
+                            <div><label class="label-action">Kiosco</label><input type="number" id="f-out-kio" value="${dData.exp?.kio || ''}" class="input-finance-action text-rose-200"></div>
+                            <div><label class="label-action">Otros</label><input type="number" id="f-out-otr" value="${dData.exp?.otr || ''}" class="input-finance-action text-rose-200"></div>
+                        </div>
+                        <button onclick="saveFin('exp')" class="btn-action-save bg-rose-500/10 text-rose-400 border border-rose-500/20">Grabar Egresos</button>
+                    </div>
+                    
+                    <div class="mt-4 glass p-4 rounded-2xl border-l-4 border-rose-500 bg-rose-500/10 flex justify-between items-center">
+                        <p class="text-xs font-black text-rose-500 uppercase tracking-widest">Deuda Pendiente</p>
+                        <p class="text-2xl font-black text-rose-400 font-mono italic">${format(pending)}</p>
+                    </div>
+                </div>
+            `;
+            window.changeFDay = (d) => { fViewDate.setDate(fViewDate.getDate()+d); renderModule('finances'); };
+            window.updAcc = (k, v) => { window.appState.finances[k] = Number(v); window.saveData(); };
+            window.saveFin = (type) => {
+                const ds = fViewDate.toISOString().split('T')[0];
+                if(!f.history[ds]) f.history[ds] = { inc: {}, exp: {} };
+                if(type==='inc') {
+                    f.history[ds].inc = { didi: document.getElementById('f-in-didi').value, uber: document.getElementById('f-in-uber').value, teq: document.getElementById('f-in-teq').value, part: document.getElementById('f-in-part').value };
+                } else {
+                    f.history[ds].exp = { naf: document.getElementById('f-out-naf').value, com: document.getElementById('f-out-com').value, kio: document.getElementById('f-out-kio').value, otr: document.getElementById('f-out-otr').value };
+                }
+                window.saveData(); renderModule('finances');
+            };
+        }
+
+        // --- MÓDULO: INTEL ---
+        let tempAssetPhoto = null;
+        function renderIntel(container) {
+            container.innerHTML = `
+                <div class="space-y-4">
+                    <div class="glass p-5 rounded-3xl border-l-4 border-red-500">
+                        <button onclick="openAddAsset()" class="w-full py-3 bg-red-500/10 border border-red-500/20 rounded-xl text-[10px] font-black uppercase text-red-400"><i data-lucide="user-plus" class="inline w-4 h-4 mr-1"></i> Alta de Expediente</button>
+                    </div>
+                    <div class="space-y-2">
+                        ${window.appState.contacts.length === 0 ? '<p class="text-center py-10 opacity-30 text-[10px] uppercase font-bold italic">Sin activos registrados.</p>' : 
+                        window.appState.contacts.map((c, i) => `
+                            <div onclick="openDossier(${i})" class="glass p-4 rounded-2xl flex justify-between items-center border border-white/5 cursor-pointer active:scale-95">
+                                <div class="flex items-center gap-3">
+                                    ${c.photo ? `<img src="${c.photo}" class="w-10 h-10 rounded-xl object-cover">` : `<div class="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center font-black text-red-500">${c.name.charAt(0)}</div>`}
+                                    <div><p class="text-sm font-bold text-white">${c.name}</p><p class="text-[8px] font-mono text-slate-500 uppercase">${c.phone || 'S/N'}</p></div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            window.openAddAsset = () => {
+                document.getElementById('add-asset-view').classList.remove('hidden'); document.getElementById('add-asset-view').classList.add('flex');
+            };
+            window.closeAddAsset = () => {
+                document.getElementById('add-asset-view').classList.add('hidden'); document.getElementById('add-asset-view').classList.remove('flex');
+            };
+            window.previewAssetPhoto = (e) => {
+                const file = e.target.files[0]; if(file) { const reader = new FileReader(); reader.onload = (ev) => { tempAssetPhoto = ev.target.result; document.getElementById('asset-photo-preview').src = tempAssetPhoto; document.getElementById('asset-photo-preview').classList.remove('hidden'); document.getElementById('asset-photo-icon').classList.add('hidden'); }; reader.readAsDataURL(file); }
+            };
+            window.saveNewAsset = () => {
+                const name = document.getElementById('asset-name').value.trim(); if(!name) return;
+                window.appState.contacts.unshift({ name: name, phone: document.getElementById('asset-phone').value, utility: document.getElementById('asset-utility').value, photo: tempAssetPhoto });
+                window.saveData(); window.closeAddAsset(); renderModule('intel');
+            };
+            window.openDossier = (idx) => {
+                const c = window.appState.contacts[idx];
+                document.getElementById('dossier-id').textContent = `ACT: ${(c.phone || c.name).slice(-6).toUpperCase()}`;
+                document.getElementById('dossier-content').innerHTML = `
+                    <div class="flex flex-col items-center text-center">
+                        <div class="w-32 h-32 rounded-[2rem] bg-black border-2 border-red-500/50 mb-4 overflow-hidden shadow-[0_0_20px_rgba(239,68,68,0.2)]">
+                            ${c.photo ? `<img src="${c.photo}" class="w-full h-full object-cover">` : `<i data-lucide="user" class="w-12 h-12 text-slate-600 mt-10 mx-auto"></i>`}
+                        </div>
+                        <h3 class="text-2xl font-black italic text-white uppercase">${c.name}</h3>
+                        <p class="text-[10px] font-mono text-red-500 mt-1">${c.phone}</p>
+                    </div>
+                    <div class="glass p-4 rounded-2xl border-l-2 border-cyan-500 bg-cyan-900/5 mt-6">
+                        <p class="text-[8px] font-black uppercase text-cyan-500 mb-1"><i data-lucide="target" class="w-3 h-3 inline"></i> Utilidad</p>
+                        <p class="text-[10px] font-mono text-slate-300">${c.utility || 'No especificada.'}</p>
+                    </div>
+                `;
+                document.getElementById('dossier-view').classList.remove('hidden'); document.getElementById('dossier-view').classList.add('flex'); lucide.createIcons();
+            };
+        }
+
+        // --- MÓDULOS TRACKERS (Hábitos, Vicios, Estudio) ---
+        function renderTracker(container, type, title, colorClass, borderClass, bgLightClass) {
+            const today = new Date().toISOString().split('T')[0];
+            const getPct = (d) => {
+                if(type === 'vices') {
+                    const s = window.appState.vices[d]; if(!s) return 100; const bad = Object.values(s).filter(v=>v).length; return Math.max(0, Math.round((5-bad)/5*100));
+                } else {
+                    const logs = window.appState[type].logs[d] || {}; const list = type === 'habits' ? window.appState.habits.list : window.appState.study.subjects;
+                    if(list.length === 0) return 0; return Math.round((list.filter((_,i)=>logs[i]).length / list.length) * 100);
+                }
+            };
+            const stat = getPct(today);
+            
+            container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="glass p-5 rounded-3xl border-l-4 ${borderClass} text-center">
+                        <p class="text-[8px] font-black uppercase text-slate-500 mb-1">Status Hoy</p>
+                        <p class="text-3xl font-black ${colorClass} font-mono italic">${stat}%</p>
+                    </div>
+                    <button onclick="openEditor('${today}', '${type}')" class="w-full py-4 ${bgLightClass} ${colorClass} rounded-2xl font-black uppercase tracking-widest border ${borderClass} active:scale-95">Checklist Diario</button>
+                </div>
+            `;
+        }
+
+        function renderVices(c) { renderTracker(c, 'vices', 'Pureza', 'text-amber-400', 'border-amber-500', 'bg-amber-500/10'); }
+        function renderHabits(c) { renderTracker(c, 'habits', 'Hábitos', 'text-sky-400', 'border-sky-500', 'bg-sky-500/10'); }
+        function renderStudy(c) { renderTracker(c, 'study', 'Estudio', 'text-violet-400', 'border-violet-500', 'bg-violet-500/10'); }
+
+        window.openEditor = (date, type) => {
+            const modal = document.getElementById(`${type === 'vices' ? 'vice' : type === 'habits' ? 'habit' : 'study'}-editor`);
+            const listEl = document.getElementById(`${type === 'vices' ? 'vice' : type === 'habits' ? 'habit' : 'study'}-checklist`);
+            document.getElementById(`${type === 'vices' ? 'vice' : type === 'habits' ? 'habit' : 'study'}-editor-date`).textContent = date;
+            
+            if(type === 'vices') {
+                const data = window.appState.vices[date] || {};
+                const vicios = [{id:'alc',name:'Alcohol'},{id:'weed',name:'Marihuana'},{id:'porno',name:'Pornografía'},{id:'fap',name:'Masturbación'},{id:'cig',name:'Cigarrillo'}];
+                listEl.innerHTML = vicios.map(v => `<div onclick="toggleV('${date}','${v.id}')" class="glass p-5 rounded-2xl flex justify-between items-center border ${data[v.id] ? 'border-rose-500 bg-rose-500/10' : 'border-white/5'}"><span class="font-bold text-white uppercase italic">${v.name}</span><div class="w-6 h-6 rounded border-2 ${data[v.id] ? 'bg-rose-500 border-rose-500' : 'border-white/20'}"></div></div>`).join('');
+            } else {
+                const data = window.appState[type].logs[date] || {}; const list = type === 'habits' ? window.appState.habits.list : window.appState.study.subjects;
+                listEl.innerHTML = list.map((item, i) => `<div onclick="toggleT('${date}',${i},'${type}')" class="glass p-5 rounded-2xl flex justify-between items-center border ${data[i] ? 'border-cyan-500 bg-cyan-500/10' : 'border-white/5'}"><span class="font-bold text-white uppercase italic">${item}</span><div class="w-6 h-6 rounded border-2 ${data[i] ? 'bg-cyan-500 border-cyan-500' : 'border-white/20'}"></div></div>`).join('');
+            }
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+        };
+
+        window.toggleV = (d, id) => { if(!window.appState.vices[d]) window.appState.vices[d] = {}; window.appState.vices[d][id] = !window.appState.vices[d][id]; window.saveData(); window.openEditor(d, 'vices'); };
+        window.toggleT = (d, i, t) => { if(!window.appState[t].logs[d]) window.appState[t].logs[d] = {}; window.appState[t].logs[d][i] = !window.appState[t].logs[d][i]; window.saveData(); window.openEditor(d, t); };
+        window.closeViceEditor = () => { document.getElementById('vice-editor').classList.add('hidden'); renderModule('vices'); };
+        window.closeHabitEditor = () => { document.getElementById('habit-editor').classList.add('hidden'); renderModule('habits'); };
+        window.closeStudyEditor = () => { document.getElementById('study-editor').classList.add('hidden'); renderModule('study'); };
+
+        // --- MÓDULO: RUTINA 24H ---
+        function renderRoutine(container) {
+            const todayIdx = (new Date().getDay() + 6) % 7;
+            let htm = '<div class="glass rounded-3xl overflow-hidden"><div class="overflow-x-auto custom-scroll"><table class="w-full text-left"><thead class="bg-black/50"><tr><th class="p-3 text-[9px] uppercase font-black text-white sticky-col">Hora</th>';
+            ['Lun','Mar','Mie','Jue','Vie','Sab','Dom'].forEach(d => htm += `<th class="p-3 text-[9px] uppercase font-black text-white">${d}</th>`);
+            htm += '</tr></thead><tbody>';
+            for(let h=0; h<24; h+=0.5) {
+                const t = `${Math.floor(h).toString().padStart(2,'0')}:${h%1===0?"00":"30"}`;
+                htm += `<tr class="border-b border-white/5"><td class="p-2 text-[9px] text-slate-500 sticky-col font-mono">${t}</td>`;
+                for(let d=0; d<7; d++) {
+                    const id = `c-${d}-${t.replace(':','-')}`; const val = window.appState.routine[id] || '';
+                    htm += `<td class="p-0"><select id="${id}" onchange="saveR(this)" class="cell-input text-slate-300 bg-white/5 font-bold">${presetOptions.map(o => `<option value="${o}" ${o===val?'selected':''}>${o}</option>`).join('')}</select></td>`;
+                }
+                htm += '</tr>';
+            }
+            htm += '</tbody></table></div></div>';
+            container.innerHTML = htm;
+            window.saveR = (el) => { window.appState.routine[el.id] = el.value; window.saveData(); };
+        }
+
+        // --- MÓDULO: PERFIL ---
+        function renderProfile(container) {
+            const p = window.appState.profile;
+            container.innerHTML = `
+                <div class="glass p-6 rounded-[3rem] flex flex-col items-center gap-4">
+                    <div class="w-24 h-24 rounded-3xl bg-slate-800 border-2 border-cyan-500 flex items-center justify-center overflow-hidden cursor-pointer shadow-[0_0_20px_rgba(6,182,212,0.3)]" onclick="document.getElementById('p-file').click()">
+                         ${p.photo ? `<img src="${p.photo}" class="w-full h-full object-cover">` : `<i data-lucide="camera" class="w-8 h-8 text-cyan-500"></i>`}
+                    </div>
+                    <input type="file" id="p-file" class="hidden" accept="image/*" onchange="upPhoto(event)">
+                    <input type="text" id="p-name" value="${p.name}" class="profile-input text-2xl font-black italic uppercase" placeholder="NOMBRE">
+                    <input type="text" id="p-alias" value="${p.alias}" class="profile-input text-xs text-cyan-400 uppercase tracking-widest" placeholder="ALIAS">
+                    <button onclick="saveProf()" class="w-full py-4 bg-slate-200 text-black rounded-xl font-black uppercase mt-4 active:scale-95">Grabar Perfil</button>
+                </div>
+            `;
+            window.upPhoto = (e) => { const r = new FileReader(); r.onload = (ev) => { window.appState.profile.photo = ev.target.result; window.saveData(); renderModule('profile'); }; if(e.target.files[0]) r.readAsDataURL(e.target.files[0]); };
+            window.saveProf = () => { window.appState.profile.name = document.getElementById('p-name').value; window.appState.profile.alias = document.getElementById('p-alias').value; window.saveData(); alert("Perfil guardado"); };
+        }
+
+        // --- MÓDULO: EXPORTAR PDF ---
+        function renderSettings(container) {
+            container.innerHTML = `
+                <div class="glass p-6 rounded-[3rem] border-l-4 border-slate-500 space-y-4">
+                    <h3 class="text-lg font-black uppercase text-white italic">Extracción de Datos</h3>
+                    <p class="text-[10px] text-slate-400 font-mono">Compila el historial de Finanzas, Intel y Biometría en un documento imprimible.</p>
+                    <button onclick="exportToPDF()" class="w-full py-4 bg-white text-black rounded-xl text-xs font-black uppercase flex items-center justify-center gap-2"><i data-lucide="printer" class="w-4 h-4"></i> Generar PDF (Print)</button>
+                </div>
+            `;
+            window.exportToPDF = () => {
+                const pr = document.createElement('div'); pr.id = 'print-area';
+                pr.innerHTML = `<h1 style="text-align:center">MAN POWER OS - REPORTE</h1><p style="text-align:center">${new Date().toLocaleString()}</p>
+                <h3>FINANZAS</h3><p>Efectivo: $${window.appState.finances.cashBalance} | MP: $${window.appState.finances.mpBalance}</p>
+                <h3>RED INTEL (${window.appState.contacts.length})</h3><ul>${window.appState.contacts.map(c=>`<li>${c.name} - ${c.phone}</li>`).join('')}</ul>`;
+                document.body.appendChild(pr); window.print(); document.body.removeChild(pr);
+            };
+        }
+
     </script>
 </body>
 </html>
